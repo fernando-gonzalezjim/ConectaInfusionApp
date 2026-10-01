@@ -1,5 +1,7 @@
 # Architecture and implementation roadmap
 
+These notes describe the initial scaffold and tentative roadmap. The later [confirmed product intent](intent/conecta-infusion.md) and [agreed business rules](requirements/agreed-business-rules.md) take precedence for release scope and business behavior, including instructor payroll and family credits. Their open questions remain for specification.
+
 ## Database recommendation
 
 Use PostgreSQL: this domain has linked records and needs transactions for booking capacity, membership credits, payments, and inventory movements. Relational constraints help preserve consistency.

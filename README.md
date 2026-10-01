@@ -49,6 +49,6 @@ Run migrations explicitly with npm run db:migrate. The runner records the initia
 
 npm test verifies database-unavailable behavior without needing PostgreSQL. Live integration still requires a running PostgreSQL instance: migrate twice, verify readiness, and load the dashboard. PostgreSQL and Docker were unavailable during setup, so live verification remains outstanding.
 
-See [architecture and roadmap](docs/architecture.md) for planned business workflows.
+See the [confirmed product intent](docs/intent/conecta-infusion.md) and [agreed business rules](docs/requirements/agreed-business-rules.md) for the first-release requirements. These describe intended behavior, not completed features. The [architecture notes](docs/architecture.md) describe the initial scaffold.
 
 Project MCP connections for Codex are configured in `.codex/config.toml`. See [MCP setup](docs/mcp-setup.md) for OpenAI Docs and GitHub authentication.
