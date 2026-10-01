@@ -1,6 +1,6 @@
 # Implementation plan: Foundation
 
-Status: plan and tasks approved by the user on October 1, 2026; implementation in progress.
+Status: plan and tasks approved by the user on October 1, 2026; implementation and technical verification complete; see foundation-verification.md. This document preserves the approved plan.
 Module: `foundation`. Date: October 1, 2026.
 Source: [approved specification](../SPEC-foundation.md), [visual direction](../docs/design/visual-direction.md), [capability map](../CAPABILITY-MAP.md).
 Task list: [tasks/todo.md](todo.md). No existing plan or task list was present. GitHub issue #1 remains deferred product work, not this plan's task tracker.

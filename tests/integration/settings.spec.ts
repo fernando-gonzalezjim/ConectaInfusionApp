@@ -2,6 +2,10 @@ import { test, expect } from '@playwright/test';
 
 for (const port of [5173, 5174]) {
   test(`${port}: PostgreSQL settings reach the screen through the development proxy`, async ({ page, request }) => {
+    await expect.poll(async () => {
+      try { return (await request.get(`http://localhost:${port}/api/v1/ready`)).status(); }
+      catch { return 0; }
+    }).toBe(200);
     const response = await request.get(`http://localhost:${port}/api/v1/settings/public`);
     expect(response.status()).toBe(200);
     const settings = await response.json();

@@ -1,7 +1,7 @@
 # Spec: Foundation
 
 Module id: `foundation`.
-Status: specification approved by the user on October 1, 2026. The subsequent plan and tasks were also approved; implementation is in progress. See tasks/foundation-verification.md for evidence and outstanding checks. Descriptions of the initial scaffold below record the pre-implementation baseline.
+Status: specification approved by the user on October 1, 2026. The subsequent plan and tasks were also approved; Foundation is implemented and technically verified, ready for user review. See [verification evidence](tasks/foundation-verification.md). Descriptions of the initial scaffold below record the pre-implementation baseline.
 Date: October 1, 2026.
 Dependencies: none. Consumers: all downstream modules through the [approved capability map](CAPABILITY-MAP.md).
 
@@ -125,13 +125,13 @@ npm run build
 npm test
 ```
 
-`db:up` currently needs Docker; `db:migrate` currently invokes the custom TypeScript runner, not Flyway. `npm test` currently runs only API tests. These commands must be updated/documented when tooling changes. No lint, UI-test, or Flyway command is claimed to exist yet; the plan must select tooling and define executable commands before the corresponding implementation tasks.
+`db:up` needs Docker; `db:migrate` now invokes Flyway after verified migration acceptance. `npm test` runs API, client and localization checks. `npm run test:integration` runs isolated PostgreSQL and live browser checks; `npm run test:e2e` runs controlled UI/accessibility checks. See README.md for prerequisites. No lint command is configured.
 
 ## Project structure
 
 Existing: `apps/api/src`, `apps/api/test`, `apps/web/src`, `packages/contracts`, `database`, and `compose.yaml`.
 
-Approved target layout (not yet implemented):
+Approved layout (now implemented):
 
 ```text
 apps/

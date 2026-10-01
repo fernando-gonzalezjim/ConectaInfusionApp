@@ -17,6 +17,7 @@ services:
     image: redgate/flyway:13.9.0
     profiles: ["tools"]
     environment:
+      FLYWAY_URL: jdbc:postgresql://db:5432/foundation_browser
       FLYWAY_USER: foundation_test
       FLYWAY_PASSWORD: foundation_test_only
       FLYWAY_LOCATIONS: filesystem:/flyway/sql

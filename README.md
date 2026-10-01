@@ -1,6 +1,6 @@
 ﻿# Conecta Infusion
 
-Two React/Vite frontends, a Node.js/Express API, PostgreSQL, and npm workspaces for a studio and café. Foundation implementation is in progress. Bilingual branded shells and shared packages are implemented; live database/Flyway verification is blocked by Docker availability. See [verification evidence](tasks/foundation-verification.md).
+Two React/Vite frontends, a Node.js/Express API, PostgreSQL, and npm workspaces for a studio and café. Foundation includes bilingual branded shells, shared packages, validated settings and transactional audit infrastructure. PostgreSQL/Flyway and live browser verification now run through the isolated integration suite. See [verification evidence](tasks/foundation-verification.md).
 
 ## Local setup
 
@@ -17,14 +17,14 @@ Match the API DATABASE_URL to the Compose credentials. Read [migration instructi
 
 ```powershell
 npm run db:up
-npm run db:flyway:migrate
+npm run db:migrate
 npm run db:validate
 npm run dev
 ```
 
 Customer: http://localhost:5173. Management: http://localhost:5174. API: http://localhost:3001. Both frontend development servers proxy /api to the backend. Ports are strict. Without a migrated database the shells show an unavailable state with retry.
 
-**Transition:** db:migrate still runs the legacy initializer pending live Flyway acceptance. Never run it on a Flyway-managed database. Existing databases require schema comparison and explicit baseline approval; never reset data to resolve migration errors.
+`db:migrate` uses Flyway. The legacy executable has been retired; original SQL and existing history remain provenance. Existing databases require schema comparison and explicit baseline approval; never reset data to resolve migration errors. `db:flyway:migrate` remains an alias for compatibility.
 
 ## Structure
 
@@ -45,12 +45,12 @@ Customer: http://localhost:5173. Management: http://localhost:5174. API: http://
 npm run typecheck
 npm run build
 npm test
-npm run test:integration
 npx playwright install chromium
+npm run test:integration
 npm run test:e2e -- --project=chromium
 ```
 
-Unit tests need no PostgreSQL. Integration tests require Docker and use isolated temporary storage on port 55432. Browser tests start both frontends and intercept API responses; passing them does not prove live database integration. No lint command is configured.
+Unit tests need no PostgreSQL. Integration tests require Docker and Chromium, use isolated temporary storage on port 55432, and run both frontends against the real API/database. The separate test:e2e suite intercepts API responses to exercise controlled loading/error states and accessibility. Ports 3001, 5173 and 5174 must be free. No lint command is configured.
 
 npm start runs the compiled backend. Frontend outputs are apps/customer-web/dist and apps/management-web/dist. Production hosting and authentication are not configured. Development component fixtures are not application entry points or included in production builds.
 

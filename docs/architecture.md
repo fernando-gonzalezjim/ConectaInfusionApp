@@ -16,7 +16,7 @@ Settings validation rejects unknown keys, unsupported country/currency/locales, 
 
 No unauthenticated settings write or audit read routes exist. Separating frontends and restricting CORS do not provide authorization. Identity must supply server-side session and permission enforcement before protected workflows ship.
 
-PostgreSQL runs in Compose; apps run on the host. Flyway migrations are configured, but live verification and retirement of the original runner remain pending. Follow [migration transition instructions](database-migrations.md); do not treat both runners as authorities. Initial domain tables remain a scaffold, not the final booking/credit/payroll schema.
+PostgreSQL runs in Compose; apps run on the host. Flyway is the sole migration runner after successful live verification; the original executable was removed. Follow [migration transition instructions](database-migrations.md) for existing databases. Initial domain tables remain a scaffold, not the final booking/credit/payroll schema.
 
 ## Language, money and dates
 
@@ -24,4 +24,4 @@ Spanish is the default, English an explicit choice stored separately for each br
 
 ## Verification boundaries
 
-Node tests cover validation, formatting, transport and API outage behavior. Browser tests exercise shared controls and both frontends using intercepted responses. Isolated PostgreSQL integration tests cover migration and transactional behavior, but need Docker. Deployment, production authentication, financial workflows and full WCAG review remain future work or explicit outstanding checks.
+Node tests cover validation, formatting, transport and API outage behavior. Browser tests exercise shared controls and both frontends using intercepted responses. The Docker integration suite verifies real migrations, audit atomicity, both development proxies, live browser screens and root server shutdown. Deployment, production authentication, financial workflows and full WCAG certification are outside Foundation acceptance.

@@ -25,6 +25,14 @@ for (const port of [5173,5174]) {
       await page.route('**/api/v1/studio/overview',route=>route.fulfill({json:overview}));
       await page.goto(`http://localhost:${port}`);
       await expect(page.locator('html')).toHaveAttribute('lang','es-MX');
+      await page.keyboard.press('Tab');
+      await expect(page.getByRole('link',{name:'Ir al contenido'})).toBeFocused();
+      await page.keyboard.press('Tab');
+      await expect(page.getByRole('link',{name:'Conecta Infusion',exact:true})).toBeFocused();
+      await page.keyboard.press('Tab');
+      await expect(page.getByLabel('Idioma',{exact:true})).toBeFocused();
+      await expect(page.getByLabel('Idioma',{exact:true})).toHaveCSS('outline-style','solid');
+      await page.screenshot({path:`test-results/${port}-${width}-keyboard.png`,fullPage:true});
       if(port===5173) {
         await page.getByLabel('Buscar una clase').fill('Yoga');
         await expect(page.getByText('Llena',{exact:true})).toBeVisible();
