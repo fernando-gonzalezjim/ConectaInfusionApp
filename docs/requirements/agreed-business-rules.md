@@ -2,6 +2,9 @@
 
 Status: confirmed interview decisions, recorded October 1, 2026.
 Parent document: [confirmed product intent](../intent/conecta-infusion.md).
+Language: **English** | [Español](agreed-business-rules.es.md).
+
+Keep both versions equivalent and update them in the same change. Preserve numbering, examples, exceptions, and open questions; neither translation introduces new decisions.
 
 These are requirements for future implementation. Examples illustrate the rules; they are not a full catalog or evidence that functionality already exists. Later explicit corrections in the interview replace earlier assumptions.
 
