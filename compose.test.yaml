@@ -1,0 +1,25 @@
+# Isolated disposable test service: no host database or persistent volume.
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: foundation_test
+      POSTGRES_PASSWORD: foundation_test_only
+      POSTGRES_DB: postgres
+    ports: ["127.0.0.1:55432:5432"]
+    tmpfs: ["/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U foundation_test -d postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  flyway:
+    image: redgate/flyway:13.9.0
+    profiles: ["tools"]
+    environment:
+      FLYWAY_USER: foundation_test
+      FLYWAY_PASSWORD: foundation_test_only
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_CLEAN_DISABLED: "true"
+      FLYWAY_BASELINE_ON_MIGRATE: "false"
+    volumes: ["./database/migrations:/flyway/sql:ro"]

@@ -1,0 +1,21 @@
+{
+  "name": "@conecta/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "dependencies": {
+    "@conecta/contracts": "*"
+  },
+  "exports": {
+    ".": "./src/index.tsx",
+    "./format": "./src/format.ts"
+  }
+}

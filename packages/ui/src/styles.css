@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+@source './';
+@source '../../../apps/customer-web/src';
+@source '../../../apps/management-web/src';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: white;
+  --color-secondary: #fbeff7;
+  --color-secondary-foreground: #332b36;
+  --color-muted: #f7f4f7;
+  --color-muted-foreground: #65566a;
+  --color-accent: #fbeff7;
+  --color-accent-foreground: #332b36;
+  --color-border: #d7cad9;
+  --color-input: #88768d;
+  --color-ring: #704678;
+  --color-destructive: #a12636;
+  --color-destructive-foreground: white;
+  --color-popover: white;
+  --color-popover-foreground: #332b36;
+  --color-peach: #ffb6a3;
+  --color-lilac: #d8acd0;
+  --color-leaf: #aed8a0;
+  --radius-sm: .375rem;
+  --radius-md: .5rem;
+  --radius-lg: .75rem;
+  --radius-xl: 1.5rem;
+}
+:root { --background: #fff; --foreground: #332b36; --primary: #704678; font-family: 'Segoe UI', system-ui, sans-serif; color: var(--foreground); background: var(--background); font-synthesis: none; }
+@layer base {
+  * { @apply border-border; }
+  body { margin: 0; min-width: 320px; }
+  button, select { cursor: pointer; }
+  :focus-visible { outline: 3px solid #704678; outline-offset: 3px; }
+}

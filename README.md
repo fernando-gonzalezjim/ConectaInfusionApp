@@ -1,34 +1,43 @@
-# Conecta Infusion
+﻿# Conecta Infusion
 
-React + Vite web app, Node.js + Express API, TypeScript, and PostgreSQL.
+Two React/Vite frontends, a Node.js/Express API, PostgreSQL, and npm workspaces for a studio and café. Foundation implementation is in progress. Bilingual branded shells and shared packages are implemented; live database/Flyway verification is blocked by Docker availability. See [verification evidence](tasks/foundation-verification.md).
 
-## Run locally
+## Local setup
 
-Requires Node.js 24 and PostgreSQL 17+ (local, Docker Desktop, or hosted).
+Use Node.js 24 and Docker Desktop with Linux containers. From the project root:
 
 ```powershell
-npm install
-# Only if apps/api/.env does not already exist:
+npm ci
+# Copy only if each file does not already exist:
+Copy-Item .env.example .env
 Copy-Item apps/api/.env.example apps/api/.env
-# With Docker Desktop installed and running:
+```
+
+Match the API DATABASE_URL to the Compose credentials. Read [migration instructions](docs/database-migrations.md) before initializing or adopting a database. After isolated integration checks pass, a fresh empty database can use:
+
+```powershell
 npm run db:up
-npm run db:migrate
+npm run db:flyway:migrate
+npm run db:validate
 npm run dev
 ```
 
-For an existing or hosted database, set DATABASE_URL in apps/api/.env and skip db:up. Follow the provider's TLS configuration; certificate verification is not disabled. The included credentials are only for local development.
+Customer: http://localhost:5173. Management: http://localhost:5174. API: http://localhost:3001. Both frontend development servers proxy /api to the backend. Ports are strict. Without a migrated database the shells show an unavailable state with retry.
 
-Open http://localhost:5173. The dashboard reads upcoming classes and active products from PostgreSQL. A new database starts empty. Authentication, booking, sales, and editing screens are future work. The API currently exposes read-only studio data.
+**Transition:** db:migrate still runs the legacy initializer pending live Flyway acceptance. Never run it on a Flyway-managed database. Existing databases require schema comparison and explicit baseline approval; never reset data to resolve migration errors.
 
 ## Structure
 
-- apps/web: React frontend, with /api proxied to port 3001 during development.
-- apps/api/src/db.ts: PostgreSQL connection pool and query timeouts.
-- apps/api/src/migrate.ts: transactional initial migration runner.
-- apps/api/src/modules/studio: PostgreSQL queries.
-- packages/contracts: shared API types for web and future mobile clients.
-- database/001_initial.sql: members, instructors, classes, bookings, products, sales.
-- compose.yaml: local PostgreSQL with a persistent volume.
+| Location | Responsibility |
+| --- | --- |
+| apps/customer-web | Customer shell and future public/customer workflows |
+| apps/management-web | Separate staff shell; protected operations await Identity |
+| apps/api | PostgreSQL access, public settings/overview, internal settings/audit service |
+| packages/ui | Tailwind tokens and shadcn/ui components |
+| packages/i18n | Spanish/English messages, locale, money and timezone formatting |
+| packages/contracts | Shared API types |
+| packages/api-client | React-independent HTTP client |
+| database/migrations | Versioned Flyway SQL; original SQL retained as provenance |
 
 ## Verification and operations
 
@@ -36,19 +45,17 @@ Open http://localhost:5173. The dashboard reads upcoming classes and active prod
 npm run typecheck
 npm run build
 npm test
-npm start
+npm run test:integration
+npx playwright install chromium
+npm run test:e2e -- --project=chromium
 ```
 
-npm start runs the compiled backend. Deploy apps/web/dist through a static host with /api routed to the backend. Changing the API port also requires updating the Vite proxy.
+Unit tests need no PostgreSQL. Integration tests require Docker and use isolated temporary storage on port 55432. Browser tests start both frontends and intercept API responses; passing them does not prove live database integration. No lint command is configured.
 
-- /api/v1/health: process liveness.
-- /api/v1/ready: database and initial schema readiness; 503 when unavailable.
-- /api/v1/studio/overview: up to 20 upcoming classes and 100 active products; 503 rather than demo data on database errors.
+npm start runs the compiled backend. Frontend outputs are apps/customer-web/dist and apps/management-web/dist. Production hosting and authentication are not configured. Development component fixtures are not application entry points or included in production builds.
 
-Run migrations explicitly with npm run db:migrate. The runner records the initial migration and uses a transaction and advisory lock to prevent concurrent initialization. Compose only creates the database. If you previously applied the SQL manually, compare and baseline that schema before using the runner, or use a new empty development database. Do not delete existing data to resolve migration errors.
+Public GET endpoints: /api/v1/health, /api/v1/ready, /api/v1/settings/public and /api/v1/studio/overview. Settings writes and audit reads have no public HTTP endpoints. Language preference persists independently per frontend origin. Business timezone is America/Mexico_City; switching language never converts MXN amounts.
 
-npm test verifies database-unavailable behavior without needing PostgreSQL. Live integration still requires a running PostgreSQL instance: migrate twice, verify readiness, and load the dashboard. PostgreSQL and Docker were unavailable during setup, so live verification remains outstanding.
+See [architecture](docs/architecture.md), [toolchain](tasks/toolchain.md), [Foundation specification](SPEC-foundation.md), [tasks](tasks/todo.md), [visual direction](docs/design/visual-direction.md), [intent](docs/intent/conecta-infusion.md), and business rules in [English](docs/requirements/agreed-business-rules.md) / [Spanish](docs/requirements/agreed-business-rules.es.md). The Spanish PDF is regenerated only on request.
 
-See the [confirmed product intent](docs/intent/conecta-infusion.md) and [agreed business rules](docs/requirements/agreed-business-rules.md) for the first-release requirements. These describe intended behavior, not completed features. The [architecture notes](docs/architecture.md) describe the initial scaffold.
-
-Project MCP connections for Codex are configured in `.codex/config.toml`. See [MCP setup](docs/mcp-setup.md) for OpenAI Docs and GitHub authentication.
+Project MCP connections are in .codex/config.toml; see [MCP setup](docs/mcp-setup.md).

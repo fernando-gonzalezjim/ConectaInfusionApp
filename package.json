@@ -9,15 +9,22 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "concurrently -k -n api,web \"npm run dev -w @conecta/api\" \"npm run dev -w @conecta/web\"",
+    "dev": "concurrently -k -n api,customer,management \"npm run dev -w @conecta/api\" \"npm run dev -w @conecta/customer-web\" \"npm run dev -w @conecta/management-web\"",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "start": "npm run start -w @conecta/api",
     "db:migrate": "npm run db:migrate -w @conecta/api",
-    "db:up": "docker compose up -d db",
-    "test": "npm run test -w @conecta/api"
+    "db:up": "docker compose up -d --wait db",
+    "test": "npm run test --workspaces --if-present",
+    "test:integration": "npm run build -w @conecta/api && node scripts/test-integration.mjs",
+    "test:e2e": "playwright test",
+    "db:flyway:migrate": "docker compose run --rm flyway migrate",
+    "db:validate": "docker compose run --rm flyway validate",
+    "db:info": "docker compose run --rm flyway info"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "concurrently": "^10.0.5",
     "typescript": "^7.0.2"
   }

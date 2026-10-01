@@ -20,9 +20,15 @@ test('database outage preserves liveness and returns unavailable responses', asy
     const overview = await fetch(`${base}/api/v1/studio/overview`);
     assert.equal(overview.status, 503);
     const body = await overview.json();
+    assert.equal(body.code, 'UNAVAILABLE');
     assert.match(body.error, /database connection/);
     assert.equal(body.classes, undefined);
     assert.equal(JSON.stringify(body).includes('test:test'), false);
+    const settings = await fetch(`${base}/api/v1/settings/public`);
+    assert.equal(settings.status, 503);
+    assert.deepEqual(await settings.json(), { code: 'UNAVAILABLE' });
+    assert.equal((await fetch(`${base}/api/v1/settings/public`, { method: 'POST' })).status, 404);
+    assert.equal((await fetch(`${base}/api/v1/audit`)).status, 404);
   } finally {
     await new Promise(resolve => server.close(resolve));
     await pool.end();
