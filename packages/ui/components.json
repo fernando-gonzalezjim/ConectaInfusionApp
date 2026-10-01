@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@conecta/ui/components",
+    "ui": "@conecta/ui/components",
+    "utils": "@conecta/ui/lib/utils",
+    "lib": "@conecta/ui/lib",
+    "hooks": "@conecta/ui/hooks"
+  }
+}

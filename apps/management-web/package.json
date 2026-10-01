@@ -1,5 +1,5 @@
 {
-  "name": "@conecta/web",
+  "name": "@conecta/management-web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,14 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@conecta/api-client": "*",
     "@conecta/contracts": "*",
+    "@conecta/i18n": "*",
+    "@conecta/ui": "*",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.3",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.1.1",
     "vite": "^8.3.1"
   }

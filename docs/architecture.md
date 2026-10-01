@@ -1,37 +1,27 @@
-# Architecture and implementation roadmap
+﻿# Architecture
 
-These notes describe the initial scaffold and tentative roadmap. The later [confirmed product intent](intent/conecta-infusion.md) and [agreed business rules](requirements/agreed-business-rules.md) take precedence for release scope and business behavior, including instructor payroll and family credits. Their open questions remain for specification.
+The [approved Foundation spec](../SPEC-foundation.md), [capability map](../CAPABILITY-MAP.md), and [business rules](requirements/agreed-business-rules.md) define scope. See [implementation evidence](../tasks/foundation-verification.md) for current limitations.
 
-## Database recommendation
+## Frontend boundaries
 
-Use PostgreSQL: this domain has linked records and needs transactions for booking capacity, membership credits, payments, and inventory movements. Relational constraints help preserve consistency.
+Customer and management are independent React/Vite applications in one npm workspace. They can evolve separate navigation and deployment while sharing design components, translations, API types and transport. Neither app imports the other. Both use Tailwind v4 and shared shadcn/ui source components, with logo-derived accents and darker accessible functional colors. The finished public homepage belongs to public-home.
 
-| Option | Best fit | Considerations |
-| --- | --- | --- |
-| PostgreSQL | Recommended primary database for the studio and café | Requires database hosting and backups |
-| Supabase (managed PostgreSQL) | A hosted database with optional authentication and storage services | Keep privileged credentials on the backend; define access policies before exposing tables to clients |
-| SQLite | A disposable prototype or local single-device tool | Revisit deployment and concurrent writes before multi-device production use |
+Shared packages have explicit exports. UI/provider packages declare React peers. Vite compiles shared TypeScript source; the API consumes contracts only as types. Future native clients can reuse compatible contracts/transport, but web components are not native components.
 
-Start with local PostgreSQL through Docker and choose hosting when deployment requirements are known. PostgreSQL is now selected. The backend uses the pg driver, a bounded connection pool, query timeouts, and a transactional initial migration. Use parameterized queries for future user-supplied values.
+## API and persistence
 
-References: [PostgreSQL transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [Supabase database](https://supabase.com/docs/guides/database), [SQLite use cases](https://www.sqlite.org/whentouse.html).
+One Express backend owns PostgreSQL and business behavior. GET /api/v1/settings/public exposes only display name, currency, timezone, supported/default locales and translated business-unit labels. Capacity and payment credentials are not public settings. The existing overview endpoint reads classes/products. Missing data infrastructure returns failure, not sample business data.
 
-## Boundaries
+Settings validation rejects unknown keys, unsupported country/currency/locales, invalid timezones and nonpositive capacities. Internal updates lock the singleton and append allowlisted before/after audit data in the same transaction. The current writer is settings-specific; later modules must supply typed allowed payloads and trusted actor context. Audit records support correction references and mutation-rejection triggers. This is not a financial ledger or protection against a database administrator.
 
-Web and future mobile clients call the versioned `/api/v1` API. Database credentials, authorization, payment verification, and business rules belong in the backend. Shared contracts define response shapes; they do not replace runtime input validation.
+No unauthenticated settings write or audit read routes exist. Separating frontends and restricting CORS do not provide authorization. Identity must supply server-side session and permission enforcement before protected workflows ship.
 
-The initial SQL provides members, instructors, class sessions, bookings, products, sales, and sale items. It is a foundation, not a complete production schema. Bookings require a transaction that locks the session before checking capacity and inserting a reservation; a count followed by an unprotected insert can overbook. Cancelled bookings can be reactivated using their existing unique member/session record.
+PostgreSQL runs in Compose; apps run on the host. Flyway is the sole migration runner after successful live verification; the original executable was removed. Follow [migration transition instructions](database-migrations.md) for existing databases. Initial domain tables remain a scaffold, not the final booking/credit/payroll schema.
 
-Store timestamps with time zones and render in the studio's configured time zone. Store MXN amounts as integer centavos, snapshot prices on sale items, and define tax and refund rules before taking payments. Currency must be validated across a sale and its line items.
+## Language, money and dates
 
-## Suggested feature order
+Spanish is the default, English an explicit choice stored separately for each browser origin. Switching language preserves screen state and updates document language. Money is integer minor units plus currency; formatting never performs conversion. Dates render in the business timezone regardless of device timezone. UI translation does not automatically translate class descriptions or media metadata.
 
-1. Staff authentication and roles: owner, receptionist, instructor, barista. Add server-side authorization, input validation, and audit records before exposing customer data.
-2. Members and class scheduling: instructor availability, room capacity, booking, cancellation, attendance, and waitlists.
-3. Memberships: monthly plans, class packs, credit ledger, expiration, and booking policies.
-4. Café sales: menu, order tickets, checkout, payment records, and refunds. Use payment-provider tokens and webhooks; do not store card details.
-5. Inventory: ingredients, recipes, suppliers, purchases, and stock movement history rather than only a mutable stock number.
-6. Reports: class occupancy, membership renewal, café revenue, and product consumption.
-7. Mobile access: decide between an installable web app (PWA) and a native React Native/Expo client based on offline, notification, and device integration requirements.
+## Verification boundaries
 
-Before production, extend the migration runner for future schema changes and add transactional integration tests, backups with restore checks, rate limiting, secrets management, and deployment configuration. Business write workflows are not implemented yet. The dashboard reads PostgreSQL through the API and shows empty states for a new database.
+Node tests cover validation, formatting, transport and API outage behavior. Browser tests exercise shared controls and both frontends using intercepted responses. The Docker integration suite verifies real migrations, audit atomicity, both development proxies, live browser screens and root server shutdown. Deployment, production authentication, financial workflows and full WCAG certification are outside Foundation acceptance.
