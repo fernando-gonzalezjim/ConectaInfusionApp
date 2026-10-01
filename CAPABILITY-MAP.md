@@ -49,6 +49,6 @@ All modules are in first-release scope. This ordering is a dependency outline, n
 
 ## Approval and next step
 
-The map is approved. [SPEC-foundation.md](SPEC-foundation.md) and its linked visual direction are approved and ready for implementation planning; the other listed specs have not been written. Each spec must include testable acceptance criteria, commands, source/test locations, code conventions, boundaries, and unresolved decisions. Plans and implementation follow their own review gates.
+The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](SPEC-identity.md) is now a draft, including development fixtures and the newly confirmed account-management permissions; its open policy questions and approval remain outstanding. Other listed specs have not been written. Plans and implementation follow their own review gates.
 
 Deferred scope remains unchanged: ingredient inventory, waitlists, mixed studio/café packages, multiple independent businesses, automated instructor payouts, and the shared time-slot demand view.

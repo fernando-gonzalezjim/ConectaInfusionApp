@@ -44,11 +44,16 @@ Estos son requisitos para una implementación futura. Los ejemplos ilustran las 
 
 ## 4. Reservas, cancelaciones y cupo
 
+- Todo el personal y los instructores pueden asistir gratuitamente a cualquier clase y reservar un lugar. Sus reservas gratuitas pueden ser desplazadas cuando la clase se llena; la persona afectada debe recibir una notificación.
+- Cuando una clase alcanza su cupo pero incluye una reserva gratuita del personal o de un instructor, un cliente que paga todavía puede reservar y reemplazar automáticamente una de esas reservas. Se notifica a la persona desplazada. La asistencia pagada incluye reservas con créditos de paquetes comprados, no solo compras de clases individuales.
+- Si hay varias reservas gratuitas del personal o de instructores que puedan reemplazarse, se desplaza primero la reserva realizada más recientemente, conservando la prioridad de las reservas anteriores.
+- El envío de notificaciones y el tratamiento determinista de reservas con la misma fecha y hora se definirán en créditos y reservas. También debe especificarse si estas reservas gratuitas afectan los ingresos del instructor; no se debe atribuir un valor de crédito pagado a la asistencia gratuita.
+
 - Los clientes pueden reservar y cancelar desde la primera versión.
 - Cancelar con al menos dos horas de anticipación libera el crédito apartado sin consumirlo.
 - Cancelar con menos de dos horas de anticipación consume el crédito. La inasistencia también consume un crédito.
 - Las excepciones especiales se atienden mediante ajustes manuales de créditos realizados por el personal.
-- Una clase sin lugares disponibles sigue visible y aparece como Llena / Full; se deshabilitan las nuevas reservas.
+- Una clase sin lugares disponibles ni reservas gratuitas del personal o de instructores que puedan reemplazarse sigue visible y aparece como Llena / Full; se deshabilitan las nuevas reservas. Las clases que alcanzan su cupo pero tienen una reserva gratuita reemplazable deben permitir la reserva del cliente que paga descrita anteriormente; el texto que se muestra se definirá en la especificación de reservas.
 - La primera versión no requiere lista de espera. Una cancelación que libera un lugar permite una nueva reserva.
 - Los clientes pueden enviar comentarios privados al personal para solicitar sesiones adicionales de una clase llena.
 - Una función posterior podría mostrar los horarios seleccionados por otros miembros. Su audiencia y funcionamiento detallado siguen pendientes; consultar la [incidencia #1](https://github.com/LFGJ-personal/ConectaInfusionApp/issues/1).
@@ -106,7 +111,21 @@ Estos son requisitos para una implementación futura. Los ejemplos ilustran las 
 | Instructor | Clases asignadas, asistencia y finalización, ingresos propios, historial de pagos propio y confirmación de pagos recibidos; no a los ingresos privados de otros instructores |
 | Cliente | Reservas propias e información pertinente de su cuenta, saldo familiar compartido cuando corresponda; no a la información financiera del personal |
 
-La matriz exacta de permisos, los usuarios con varios roles, los permisos para invitar familiares y los roles que administran cada tipo de contenido se definirán en la especificación. Esta tabla no otorga acceso financiero ilimitado a todo el personal.
+### 9.1. Administración de cuentas y perfiles
+
+- Solo los administradores o la gerencia pueden crear, actualizar o eliminar a otros instructores.
+- Solo los administradores o la gerencia pueden crear, editar o desactivar cuentas de otros integrantes del personal que no son instructores. El personal conserva el permiso para actualizar sus propios datos personales, sin cambiar sus roles ni permisos.
+- El personal puede actualizar únicamente su propio perfil personal; esto no autoriza cambiar su propio rol, permisos ni porcentaje de pago como instructor.
+- Los administradores, la gerencia y el personal, incluidos los instructores, pueden crear clientes mediante el flujo de invitación por correo electrónico. Los instructores no reciben permisos adicionales para editar o desactivar a esos clientes.
+- Un cliente creado por administradores, gerencia o personal debe proporcionar un correo electrónico y recibir una invitación para confirmarlo y establecer su propia contraseña. Este flujo no admite crear registros de clientes sin correo electrónico; el personal no asigna la contraseña del cliente.
+- Solo los administradores o la gerencia pueden eliminar la cuenta de otro cliente; el personal no puede eliminar clientes.
+- Los clientes pueden registrarse por su cuenta con confirmación de correo electrónico, actualizar sus propios datos personales y eliminar su propia cuenta.
+- Solo los administradores o la gerencia pueden editar los datos personales de otro cliente. El personal sin funciones administrativas puede crear clientes, pero editar únicamente su propio perfil personal; el permiso para crear clientes no autoriza modificar posteriormente el perfil de ese cliente.
+- Estos permisos sobre cuentas no amplían el acceso operativo a finanzas, créditos ni registros privados de otras personas.
+- Eliminar a un cliente o instructor significa desactivar su acceso y conservar el historial de reservas, pagos y auditoría; no significa borrar físicamente esos registros.
+- El tratamiento de reservas futuras, créditos restantes y pertenencia familiar durante la desactivación debe especificarse por separado. No se presupone la cancelación automática ni la pérdida o transferencia de créditos.
+
+El resto de la matriz de permisos, la autoridad para asignar roles, los usuarios con varios roles y los permisos para invitar familiares se definirán en la especificación. Esta tabla no otorga acceso financiero ilimitado a todo el personal.
 
 ## 10. Cafetería
 
@@ -122,7 +141,7 @@ La matriz exacta de permisos, los usuarios con varios roles, los permisos para i
 Estas preguntas no invalidan la intención confirmada y no deben resolverse de forma implícita durante la implementación:
 
 - Contenido de la página pública de inicio, identidad visual, pantallas detalladas, gestión de medios y flujo de traducción.
-- Registro de cuentas, autenticación, creación de familias e invitaciones, menores de edad y manejo de créditos cedidos previamente cuando se cierra un grupo.
+- Autenticación y detalles de envío y vencimiento de invitaciones, tratamiento de obligaciones durante la desactivación de cuentas, permisos restantes sobre perfiles, creación de familias e invitaciones, menores de edad y manejo de créditos cedidos previamente cuando se cierra un grupo. El registro de clientes por su cuenta requiere confirmación de correo electrónico; los clientes creados por el personal requieren una invitación por correo para confirmar su dirección y establecer una contraseña; la eliminación desactiva el acceso conservando el historial, conforme a la sección 9.1.
 - Cálculo exacto de la vigencia de 30 días, zona horaria y horas de corte, y qué créditos se renuevan al comprar dentro de una familia, incluidos los ya reservados.
 - Vencimiento de créditos restablecidos, excepciones por cancelación tardía y créditos liberados cuya fecha de vencimiento original ya pasó.
 - Selección del proveedor, conexión de cuentas, confirmaciones y fallos de pago, reembolsos y conciliación financiera.

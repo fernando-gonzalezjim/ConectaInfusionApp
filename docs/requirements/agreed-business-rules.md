@@ -44,11 +44,16 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 ## 4. Booking, cancellation, and capacity
 
+- All staff and instructors may attend any class for free and may reserve a place. Their complimentary reservations can be displaced when the class fills; the affected person must receive a notification.
+- When a class is at capacity but includes a complimentary staff/instructor reservation, a paying customer may still book and automatically replace one such reservation. Notify the displaced person. Paid attendance includes bookings backed by purchased package credits, not just single-class purchases.
+- If several complimentary staff/instructor reservations can be replaced, displace the most recently made reservation first, preserving earlier reservations' priority.
+- Specify notification delivery and deterministic handling of identical reservation timestamps in credits-bookings. Also specify whether these complimentary reservations affect instructor earnings; do not infer a paid-credit value from free attendance.
+
 - Customers can book and cancel in the first release.
 - Cancellation at least two hours before the class releases the reserved credit without consuming it.
 - Cancellation less than two hours before the class consumes the credit. No-shows also consume a credit.
 - Special exceptions are handled through manual staff credit adjustments.
-- A full class remains visible and is marked Full / Llena; new bookings are disabled.
+- A class with no available place and no replaceable complimentary staff/instructor reservation remains visible and is marked Full / Llena; new bookings are disabled. At-capacity classes with a replaceable complimentary reservation must still allow the paying-customer booking described above; their display wording belongs in the booking specification.
 - No waitlist is required for the first release. A cancellation that frees a place allows another booking.
 - Customers can leave private feedback for staff requesting additional sessions for a full class.
 - A later feature may show time slots selected by other members. Its audience and detailed mechanics remain open; see [issue #1](https://github.com/LFGJ-personal/ConectaInfusionApp/issues/1).
@@ -106,7 +111,21 @@ These are requirements for future implementation. Examples illustrate the rules;
 | Instructor | Assigned classes, attendance and completion, own earnings, own pay history, and acknowledgment of received payments; no other instructor's private earnings |
 | Customer | Own bookings and relevant account information, shared family credit balance when applicable; no staff financial information |
 
-The precise permission matrix, multi-role users, family invitation rights, and which roles manage each type of content remain for specification. This table must not be interpreted as granting all staff unrestricted financial access.
+### 9.1. Account and profile management
+
+- Only admins/management may create, update, or delete other instructors.
+- Only admins/management may create, edit, or deactivate other non-instructor staff accounts. Staff retain permission to update their own personal details, without changing their roles or permissions.
+- Staff may update their own personal profile only; this does not authorize changing their own role, permissions, or instructor pay percentage.
+- Admins/management and staff, including instructors, may create customers through the email-invitation flow. Instructors receive no additional permission to edit or deactivate those customers.
+- A customer created by admins/management or staff must provide an email address and receive an invitation to confirm it and set their own password. Creating customer records without email is not supported by this flow; personnel do not assign the customer's password.
+- Only admins/management may delete another customer's account; staff may not delete customers.
+- Customers may register themselves with email confirmation, update their own personal details, and delete their own account.
+- Only admins/management may edit another customer's personal details. Ordinary staff may create customers but edit only their own personal profile; customer-creation permission does not authorize later edits to that customer's profile.
+- These account permissions do not broaden operational access to finances, credits, or other users' private records.
+- Deleting a customer or instructor means deactivating access while preserving booking, payment, and audit history; it does not mean physically erasing those records.
+- Handling of future bookings, remaining credits, and family membership during deactivation must be specified separately. No automatic cancellation, credit forfeiture, or transfer is implied.
+
+The remaining permission matrix, role-assignment authority, multi-role users, and family invitation rights remain for specification. This table must not be interpreted as granting all staff unrestricted financial access.
 
 ## 10. Café
 
@@ -122,7 +141,7 @@ The precise permission matrix, multi-role users, family invitation rights, and w
 These questions do not invalidate the confirmed intent and should not be answered silently during implementation:
 
 - Public home page content, visual identity, detailed screens, media management, and translation workflow.
-- Account registration, authentication, family creation/invitations, minors, and how to handle previously donated family credits when a group closes.
+- Authentication and invitation delivery/expiration details, handling of obligations during account deactivation, remaining profile-management permissions, family creation/invitations, minors, and how to handle previously donated family credits when a group closes. Customer self-registration requires email confirmation; personnel-created customers require an email invitation to confirm their address and set a password; deletion deactivates access while preserving history, as agreed in section 9.1.
 - Exact 30-day timestamp calculation, timezone/cutoff behavior, and which credits are extended by purchases within a family, including already-reserved credits.
 - Restored-credit expiry, late-cancellation exceptions, and a released credit whose original expiration has passed.
 - Provider selection, account connection, payment confirmation/failure handling, refunds, and financial reconciliation.
