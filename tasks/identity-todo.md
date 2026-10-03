@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01 is complete; subsequent tasks are pending. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I03 are complete; the first human-review checkpoint is pending. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -17,8 +17,8 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I02: Account persistence
 
-- [ ] **Acceptance:** Add forward migration for people/accounts/roles and explicit legacy links; preserve IDs and produce collision/reconciliation report without automatic claiming.
-- [ ] **Verification:** Fresh/repeated/populated PostgreSQL migration tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Add forward migration for people/accounts/roles and explicit legacy links; preserve IDs and produce collision/reconciliation report without automatic claiming.
+- [x] **Verification:** Fresh/repeated/populated PostgreSQL migration tests. Run focused checks and typecheck/build for affected work. See [verification evidence](identity-verification.md).
 
 **Dependencies:** I01. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -26,8 +26,8 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I03: Identity audit
 
-- [ ] **Acceptance:** Permit customer actors through a forward migration; sanitized identity events use the caller transaction and retain append-only protection.
-- [ ] **Verification:** Rollback, forbidden mutation and secret-exclusion integration tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Permit customer actors through a forward migration; sanitized identity events use the caller transaction and retain append-only protection.
+- [x] **Verification:** Rollback, forbidden mutation and secret-exclusion integration tests. Run focused checks and typecheck/build for affected work. See [verification evidence](identity-verification.md).
 
 **Dependencies:** I02. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -35,8 +35,8 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### Checkpoint after I03
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated through isolated persistence/audit scenarios.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
 - [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
 
 ### I04: Password and bootstrap
