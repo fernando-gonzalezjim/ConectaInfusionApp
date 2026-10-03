@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. All tasks are pending. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01 is complete; subsequent tasks are pending. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -8,8 +8,8 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I01: Resolve technical choices
 
-- [ ] **Acceptance:** Pin compatible hashing/mail/photo dependencies and local image; record password, recent-auth, upload limits and storage decisions without changing product rules.
-- [ ] **Verification:** Windows/Linux dependency smoke checks; review chosen limits. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Pin compatible hashing/mail/photo dependencies and local image; record password, recent-auth, upload limits and storage decisions without changing product rules.
+- [x] **Verification:** Windows/Linux dependency smoke checks; review chosen limits. Run focused checks and typecheck/build for affected work. See [decisions](../docs/identity-decisions.md) and [evidence](identity-verification.md).
 
 **Dependencies:** None. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
