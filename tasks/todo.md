@@ -157,3 +157,8 @@ See [current verification evidence](foundation-verification.md) and [toolchain](
 ### Final checkpoint — Human review
 
 - [ ] Present runnable Foundation, verification evidence, remaining identity/design dependencies and any environment limitations. Do not mark blocked checks passed or begin the next module without its specification.
+
+## Follow-up after Identity implementation
+
+- [x] Install [Graphify](https://github.com/Graphify-Labs/graphify). Installed official `graphifyy` 0.9.74 via `uv tool install` on October 3, 2026, with the packaged Codex skill and references in `.agents/skills/graphify`. No Graphify execution, project analysis or automatic hooks were enabled.
+- [x] Run Graphify only after explicit instruction and Identity specification approval. The user invoked `$graphify` on October 3, 2026; generated `graphify-out/graph.html`, `graph.json` and `GRAPH_REPORT.md` (840 nodes, 1,051 edges, 50 communities). PDF and SQL extraction support added to 0.9.74. Integrity limitations are recorded in `graph-health.json` and the report. No automatic hooks enabled. The graph is a snapshot; this completion note was added afterward.

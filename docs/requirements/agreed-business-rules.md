@@ -47,7 +47,8 @@ These are requirements for future implementation. Examples illustrate the rules;
 - All staff and instructors may attend any class for free and may reserve a place. Their complimentary reservations can be displaced when the class fills; the affected person must receive a notification.
 - When a class is at capacity but includes a complimentary staff/instructor reservation, a paying customer may still book and automatically replace one such reservation. Notify the displaced person. Paid attendance includes bookings backed by purchased package credits, not just single-class purchases.
 - If several complimentary staff/instructor reservations can be replaced, displace the most recently made reservation first, preserving earlier reservations' priority.
-- Specify notification delivery and deterministic handling of identical reservation timestamps in credits-bookings. Also specify whether these complimentary reservations affect instructor earnings; do not infer a paid-credit value from free attendance.
+- Specify notification delivery and deterministic handling of identical reservation timestamps in credits-bookings.
+- Free staff/instructor attendance generates no instructor pay because no paid credit is consumed. Do not assign a paid-credit value to this attendance benefit.
 
 - Customers can book and cancel in the first release.
 - Cancellation at least two hours before the class releases the reserved credit without consuming it.
@@ -60,17 +61,33 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 ## 5. Family sharing and leaving a family
 
-- Each family member has their own login and can book using the shared family credit pool.
+- When a member is removed from a family group, their own eligible unused/unreserved purchased credits return to their account unless they explicitly choose to leave them with the family. The person removing them cannot donate their credits on their behalf. Credits reserved for valid bookings remain attached, and credit value and expiration remain unchanged.
+
+- Any active independent family member may invite another member; acceptance is required before joining. Members may leave voluntarily. Only the current group responsible person or admins/management may remove another member. Removal follows the existing credit-departure rules and is recorded in audit history; it does not grant authority over dependent guardianship.
+
+- Parents can turn saved child details into a dependent profile while preserving linked booking history. An authorized guardian may request an independent account for the dependent. The dependent confirms their email and sets a password, then the transition completes automatically without admin/management approval. Independent accounts have no minimum age requirement. Preserve profile identity, booking history and family membership; end all guardian management access to the now-independent profile while retaining historical authorization records.
+
+- Independent family members have their own login and can book using the shared family credit pool. Children may have a dependent profile without their own email or login; a parent manages the profile and books classes for them through the parent account. The booking identifies the child as attendee and the parent as the acting user.
+- A dependent profile may have multiple authorized parents/guardians who can manage it and book for the child. A parent/guardian may also book a children's class (for example, Yoga Kids) directly through their own account without first creating a dependent profile. The attendee is still the child, not the booking parent/guardian. These bookings require the child's name and age so staff know who will attend. The customer can enter these details through simple text fields, save them to their account and reuse them for later bookings without creating a dependent profile. Later linking to a dependent profile preserves booking history.
+- Customers may create their own family group and invite members. Every invitation requires acceptance before the person joins and shares credits. Admins/management may help manage the group; this assistance does not remove the acceptance requirement.
+- An existing authorized parent/guardian may invite another guardian to a dependent profile. The invited guardian must accept before gaining access to manage the profile or book for that child. Admins/management may assist with these invitations; acceptance is still required. Family-group membership alone does not grant guardian access.
+- Only admins/management may remove another guardian from a dependent profile. A guardian may remove themselves. Removal must leave at least one active authorized guardian for an active dependent; a pending invitation does not satisfy this requirement.
+- When deleting their account, a guardian may transfer guardianship to someone who accepts first, or choose to deactivate both their account and the dependent profile, preserving history. This joint deactivation is an explicit exception because the dependent also becomes inactive. If another active authorized guardian remains, deleting one guardian account leaves the dependent active and preserves access for the remaining guardians. Joint guardian/dependent deactivation applies only when no other active authorized guardian remains.
 - While a customer belongs to a family, sharing is automatic. To stop sharing, they must leave the family.
 - Credits retain purchaser identity, original value, and expiration.
 - A departing member can withdraw only their own unused, unreserved credits or choose to leave them with the family. They cannot withdraw another purchaser's credits.
 - Remaining members retain the family pool, subject to the departing purchaser's choice.
-- If no family members remain, credits return to their purchasers. The handling of credits previously deliberately left behind needs a precise specification.
+- The family-group creator/current responsible member or admins/management may close the group. The creator loses closure permission on leaving and may select a remaining member as the new responsible person with closure authority. This changes group responsibility, not historical creator identity, credit ownership or dependent guardian authorization. A successor must accept before receiving responsibility and closure authority. Declining leaves the transfer incomplete; the creator may nominate someone else before leaving or leave without an accepted successor, losing closure permission. Until a successor accepts, admin/management may manage or close the group and the last remaining member may close it. Declining or awaiting acceptance does not change credits or bookings; actual departure follows the agreed credit rules. Closure, responsibility transfers and credit disposition are recorded in audit history.
+- When a family group closes, including when no members remain, remaining unused/unreserved credits return to their original purchasers, including credits previously left with the group. Their monetary value and expiration stay unchanged; consumed or expired credits are not restored and no refund is issued. Credits reserved for valid bookings remain attached to those bookings.
 - Existing bookings remain valid after departure. Reserved credits remain attached to those bookings and cannot be withdrawn immediately.
 - If such a booking is later cancelled on time, its released credit returns to the departed purchaser if they chose to take their credits; otherwise it stays in the family pool.
 - A released credit preserves its original monetary value and expiration date. Leaving a family or cancelling does not reset expiration.
 
 ## 6. Manual adjustments and audit history
+
+- Preserve booking, payment, payroll and audit history after account deactivation. The first release does not automatically delete these records. Requests to erase or anonymize personal information are handled separately while preserving required financial records. Define production retention periods before launch; this decision does not establish a legal retention period or authorize indefinite retention of all personal information.
+
+- Admins/management may view the full operational audit history. Customers and instructors may view only their own relevant transactions and payment history, not the full audit or other people's private records. Ordinary staff do not gain full audit access from their operational permissions; multi-role accounts retain the access authorized by their assigned roles.
 
 - All staff members may adjust customer credits, including restoring expired credits and granting exceptions.
 - Restoring a purchased credit preserves its original monetary value for instructor pay.
@@ -83,6 +100,7 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 - Owners, managers, or admins assign each instructor a percentage based on experience, certifications, and their agreement. Current percentages are 40%, 50%, or 60%.
 - Instructor pay is calculated separately for each consumed customer credit at its own monetary value, then summed. A session does not have one flat payout independent of attendees.
+- Free attendance under the staff/instructor benefit contributes zero to instructor earnings and consumes no paid credit. This is distinct from staff-granted complimentary customer credits, whose instructor-pay value is explicitly assigned under section 6.
 - The instructor's percentage does not change with attendance count; total earnings do.
 - Example: credits valued at 150 + 150 + 120 + 135 + 135 MXN total 690 MXN. At 50%, instructor earnings for that session are 345 MXN.
 - If the class takes place, consumed credits for attendees, late cancellations, and no-shows generate instructor earnings.
@@ -113,19 +131,42 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 ### 9.1. Account and profile management
 
+- When role removal ends staff/instructor free-attendance eligibility, cancel future complimentary attendance bookings without charging credits. Preserve paid customer bookings and customer access when the customer account remains active. Removing one role does not end free-attendance eligibility if another assigned role still grants it.
+
+- Deactivating a staff/instructor account immediately ends login access and free staff booking eligibility. Management must reassign or explicitly cancel upcoming teaching sessions; account deactivation does not silently cancel those sessions. Earned instructor pay remains owed and recorded, and management may record payment after deactivation. Removing a staff/instructor role while keeping the customer account active preserves customer access; this is distinct from deactivating the entire account.
+
+- Confirmation and initial password setup links expire after 24 hours; password recovery links after 1 hour; family, guardian and group-responsibility invitations after 7 days. All links are single-use. Resending invalidates the previous link, requires a 60-second wait and allows at most 5 sends per hour per recipient and purpose. Development uses a local email inbox; select the production email provider during implementation planning.
+
+- One login works across customer and management frontends; assigned roles control access. Sessions expire after 7 days, or 30 days when Remember me is selected. Password reset, account deactivation and role changes end existing sessions. Users can sign out of all devices.
+
+- All active accounts may recover their password through a secure, single-use email link. Password recovery does not reactivate a deactivated account. The link expiration and resend limits defined in this section apply.
+- Only admins/management may reactivate a deactivated account. Reactivation preserves its history but does not restore expired credits or cancelled bookings; credit restoration still requires a separately audited manual adjustment.
+- Reactivation does not automatically restore family membership or guardian authorization. A reactivated account must receive and accept a new invitation to rejoin a family or regain access as a dependent's guardian, following the existing invitation permissions. Historical membership and guardianship records remain preserved.
+- Only admins/management may reactivate a dependent profile. Before reactivation, at least one guardian authorized for that dependent immediately before deactivation must have an active account and accept renewed authorization. If all those guardian accounts are deactivated, dependent reactivation is blocked. A new person with no qualifying prior guardianship cannot satisfy this requirement. Reactivation does not restore expired credits or cancelled bookings.
+
+- Editable personal profile fields are name, phone, preferred language and profile photo, subject to the account-editing permissions below. Changing an email address requires confirmation of the new address; email changes are separate from ordinary profile edits and do not grant role or permission changes.
+
 - Only admins/management may create, update, or delete other instructors.
 - Only admins/management may create, edit, or deactivate other non-instructor staff accounts. Staff retain permission to update their own personal details, without changing their roles or permissions.
 - Staff may update their own personal profile only; this does not authorize changing their own role, permissions, or instructor pay percentage.
+- Only admins/management may assign or change account roles. Ordinary staff, instructors, and customers cannot change their own or another person's roles; customer registration and invitations cannot grant staff or management roles.
+- The app must reject deactivation or role removal that would leave no active account with administrative/management access. This includes an admin/manager attempting the change on their own account.
 - Admins/management and staff, including instructors, may create customers through the email-invitation flow. Instructors receive no additional permission to edit or deactivate those customers.
-- A customer created by admins/management or staff must provide an email address and receive an invitation to confirm it and set their own password. Creating customer records without email is not supported by this flow; personnel do not assign the customer's password.
+- All accounts sign in using an email address, including administrative and development test accounts.
+- One email account may hold both staff/instructor and customer roles. Adding a staff/instructor role preserves existing customer history, credits and family membership. Staff/instructors can purchase café products as customers; their free class attendance benefit does not make café purchases free.
+- Approved development accounts: admin@conecta.example.test with the administrator role and testuser@conecta.example.test with the customer role. These test accounts are development-only.
+- Customer creation requires an email address. The normal personnel-created flow sends an invitation for email confirmation and password setup; creating customer records without email is not supported.
+- An admin or manager may create an account without requiring email confirmation. This is an explicit exception to the invitation flow, not permission for ordinary staff or instructors to bypass verification.
+- The first admin is created manually in the database and does not require email verification. An email address is still required for sign-in.
+- Initial passwords matching the account name apply only to development test accounts: admin/admin and testuser/testuser. This rule does not apply to regular accounts, including accounts created by an admin or manager; they receive a secure, single-use email link to choose their own password, including when email confirmation is exempted. They must set their password before account access; this step does not add a separate email-confirmation requirement.
 - Only admins/management may delete another customer's account; staff may not delete customers.
 - Customers may register themselves with email confirmation, update their own personal details, and delete their own account.
 - Only admins/management may edit another customer's personal details. Ordinary staff may create customers but edit only their own personal profile; customer-creation permission does not authorize later edits to that customer's profile.
 - These account permissions do not broaden operational access to finances, credits, or other users' private records.
 - Deleting a customer or instructor means deactivating access while preserving booking, payment, and audit history; it does not mean physically erasing those records.
-- Handling of future bookings, remaining credits, and family membership during deactivation must be specified separately. No automatic cancellation, credit forfeiture, or transfer is implied.
+- Deactivating a customer's account cancels that customer's future bookings using the normal two-hour cancellation rule: at least two hours before the class releases the reserved credit; less than two hours consumes it. Booking, payment and audit history are preserved. Remaining unused credits stay recorded until their normal expiration, without an automatic refund or validity extension. Family-held credits follow the agreed departure rules in section 5, including the purchaser choice to withdraw eligible credits or leave them with the group. During self-deactivation, the customer must explicitly choose to keep eligible purchased credits recorded on the inactive account or leave them with the family; keeping them generates no refund and preserves normal expiration. If management deactivates the account without a customer choice, eligible purchased credits stay recorded on the inactive account, without a refund or expiration change; they are not donated to the family. Credits reserved for still-valid bookings remain reserved. On group closure, remaining credits follow the return-to-original-purchaser rule in section 5, including previously donated credits. No additional forfeiture or unapproved balance transfer is implied. If a guardian deactivates but another active authorized guardian remains, the dependent stays active and their bookings remain valid, including bookings created by the departing guardian. If the dependent is also deactivated, their future bookings are cancelled under the same two-hour rule, preserving history.
 
-The remaining permission matrix, role-assignment authority, multi-role users, and family invitation rights remain for specification. This table must not be interpreted as granting all staff unrestricted financial access.
+The remaining permission matrix, safeguards for privileged role changes, technical representation of multiple roles, and detailed family-management operations remain for specification. This table must not be interpreted as granting all staff unrestricted financial access.
 
 ## 10. Café
 
@@ -141,7 +182,7 @@ The remaining permission matrix, role-assignment authority, multi-role users, an
 These questions do not invalidate the confirmed intent and should not be answered silently during implementation:
 
 - Public home page content, visual identity, detailed screens, media management, and translation workflow.
-- Authentication and invitation delivery/expiration details, handling of obligations during account deactivation, remaining profile-management permissions, family creation/invitations, minors, and how to handle previously donated family credits when a group closes. Customer self-registration requires email confirmation; personnel-created customers require an email invitation to confirm their address and set a password; deletion deactivates access while preserving history, as agreed in section 9.1.
+- Production email provider selection during planning, handling of obligations during account deactivation, remaining profile-management permissions, detailed family-management operations, dependent guardian permissions. Customer self-registration and the normal personnel-created invitation flow require email confirmation; admin/management-created accounts and the manually created first admin have the explicit exceptions in section 9.1. Deletion deactivates access while preserving history.
 - Exact 30-day timestamp calculation, timezone/cutoff behavior, and which credits are extended by purchases within a family, including already-reserved credits.
 - Restored-credit expiry, late-cancellation exceptions, and a released credit whose original expiration has passed.
 - Provider selection, account connection, payment confirmation/failure handling, refunds, and financial reconciliation.

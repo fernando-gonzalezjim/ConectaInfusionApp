@@ -49,6 +49,8 @@ All modules are in first-release scope. This ordering is a dependency outline, n
 
 ## Approval and next step
 
-The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](SPEC-identity.md) is now a draft, including development fixtures and the newly confirmed account-management permissions; its open policy questions and approval remain outstanding. Other listed specs have not been written. Plans and implementation follow their own review gates.
+The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](SPEC-identity.md) was approved on October 3, 2026, including development fixtures and the confirmed account-management rules. Other listed specs have not been written. Plans and implementation follow their own review gates.
+
+The [Identity implementation plan](tasks/identity-plan.md) and [ordered checklist](tasks/identity-todo.md) were approved on October 3, 2026. Local implementation will use `feature/identity-implementation`; the approved specification remains unchanged.
 
 Deferred scope remains unchanged: ingredient inventory, waitlists, mixed studio/café packages, multiple independent businesses, automated instructor payouts, and the shared time-slot demand view.
