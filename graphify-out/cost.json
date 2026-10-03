@@ -1,0 +1,21 @@
+{
+  "runs": [
+    {
+      "date": "2026-10-03T14:47:15.131536+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 94,
+      "accounting": "Host agent usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T15:19:19.492019+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 6,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    }
+  ],
+  "total_input_tokens": null,
+  "total_output_tokens": null
+}
