@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { readdir } from 'node:fs/promises';
 import pg from 'pg';
 const compose=['compose','-f','compose.test.yaml','-p','conecta-foundation-tests'];
 const isolatedEnvironment={...process.env,COMPOSE_FILE:'compose.test.yaml',COMPOSE_PROJECT_NAME:'conecta-foundation-tests'};
@@ -14,7 +15,9 @@ function npmScript(name) {
 try {
   run('docker',['version']);
   started=true; npmScript('db:up');
-  run(process.execPath,['--test','--test-concurrency=1','apps/api/test/integration/foundation.test.mjs']);
+  const integrationFiles=(await readdir('apps/api/test/integration')).filter(name=>name.endsWith('.test.mjs')).sort();
+  if(integrationFiles.length===0) throw new Error('No integration tests found.');
+  run(process.execPath,['--test','--test-concurrency=1',...integrationFiles.map(name=>`apps/api/test/integration/${name}`)]);
   const admin=new pg.Pool({connectionString:'postgresql://foundation_test:foundation_test_only@127.0.0.1:55432/postgres'});
   try { await admin.query('CREATE DATABASE foundation_browser'); }
   finally { await admin.end(); }
