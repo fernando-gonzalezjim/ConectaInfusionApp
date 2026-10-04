@@ -6,6 +6,7 @@ import type { LoginResponse, SessionResponse } from '@conecta/contracts';
 import { ActionError } from './action-tokens.js';
 import { RegistrationError, type createRegistrationService } from './registration.js';
 import type { createRecoveryService } from './recovery.js';
+import type { createAccountInvitationService } from './account-invitations.js';
 
 export const sessionCookieName = 'conecta_session';
 export function readSessionCookie(header: unknown): string | undefined {
@@ -15,7 +16,7 @@ export function readSessionCookie(header: unknown): string | undefined {
   try { return decodeURIComponent(values[0]!.slice(sessionCookieName.length + 1)) || undefined; }
   catch { return undefined; }
 }
-function failure(res: Response, error: unknown): void {
+export function failure(res: Response, error: unknown): void {
   if (error instanceof RegistrationError || error instanceof ActionError) {
     if (error.code === 'THROTTLED') res.set('Retry-After', String(error.retryAfterSeconds ?? 60));
     res.status(error.code === 'THROTTLED' ? 429 : 400).json({ code: error.code }); return;
@@ -25,7 +26,7 @@ function failure(res: Response, error: unknown): void {
   }
   if (error instanceof AuthError) {
     const status = error.code === 'INVALID_REQUEST' ? 400 : error.code === 'FORBIDDEN' ? 403
-      : error.code === 'IDENTITY_DISABLED' ? 503 : 401;
+      : error.code === 'IDENTITY_DISABLED' ? 503 : error.code === 'NOT_FOUND' ? 404 : error.code === 'CONFLICT' ? 409 : 401;
     res.status(status).json({ code: error.code }); return;
   }
   // Native/database failures and overload never disclose credentials, SQL, connection strings or raw bodies.
@@ -42,6 +43,7 @@ export function createAuthRouter(service: SessionService, config: IdentityConfig
   onLogin?: (res: Response) => void;
   registration?: ReturnType<typeof createRegistrationService>;
   recovery?: ReturnType<typeof createRecoveryService>;
+  invitations?: ReturnType<typeof createAccountInvitationService>;
 } = {}): express.Router {
   if (!config.enabled) throw new AuthError('IDENTITY_DISABLED');
   if (typeof mutationGuard !== 'function') throw new Error('AUTH_MUTATION_GUARD_REQUIRED');
@@ -49,6 +51,13 @@ export function createAuthRouter(service: SessionService, config: IdentityConfig
   const cookieOptions = { httpOnly: true, secure: new URL(config.publicOrigin).protocol === 'https:', sameSite: 'lax' as const, path: '/' };
   router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   router.use(express.json({ limit: '2kb' }));
+  if (options.invitations) {
+    const invitations = options.invitations;
+    router.post('/setup', mutationGuard, async (req, res) => {
+      try { res.json(await invitations.setup(req.body, req.socket.remoteAddress ?? '')); }
+      catch (error) { failure(res, error); }
+    });
+  }
   if (options.recovery) {
     const recovery = options.recovery;
     for (const [path, operation] of [['/recovery', recovery.request], ['/recovery/reset', recovery.reset]] as const) {

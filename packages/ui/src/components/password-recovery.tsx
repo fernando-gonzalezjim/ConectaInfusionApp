@@ -41,8 +41,10 @@ export function RecoveryRequest({ api, t }: { api: RecoveryApi; t: RecoveryText 
   </Dialog>;
 }
 
-export function PasswordResetForm({ api, t, token, onCompleted, onInvalid, onRequest }: {
+export function PasswordResetForm({ api, t, token, onCompleted, onInvalid, onRequest, operation, submitLabels }: {
   api: RecoveryApi; t: RecoveryText; token: string; onCompleted(): void; onInvalid(): void; onRequest?(controller: AbortController): void;
+  operation?: (input: PasswordResetInput, signal?: AbortSignal) => Promise<unknown>;
+  submitLabels?: { ready: string; pending: string };
 }) {
   const id = useId(); const [password, setPassword] = useState(''); const [confirmation, setConfirmation] = useState('');
   const [pending, setPending] = useState(false); const [error, setError] = useState<string | null>(null);
@@ -52,7 +54,7 @@ export function PasswordResetForm({ api, t, token, onCompleted, onInvalid, onReq
   async function submit(event: FormEvent) {
     event.preventDefault(); if (request.current) return;
     const controller = new AbortController(); request.current = controller; onRequest?.(controller); setPending(true); setError(null);
-    try { await api.resetPassword({ token, password }, controller.signal); if (!controller.signal.aborted) onCompleted(); }
+    try { await (operation ?? api.resetPassword)({ token, password }, controller.signal); if (!controller.signal.aborted) onCompleted(); }
     catch (failure) { if (!controller.signal.aborted) {
       if (code(failure) === 'INVALID_ACTION') onInvalid();
       else setError(t(code(failure) === 'THROTTLED' ? 'authThrottled' : code(failure) === 'INVALID_REQUEST' ? 'registrationInvalid' : 'registrationUnavailable'));
@@ -65,6 +67,6 @@ export function PasswordResetForm({ api, t, token, onCompleted, onInvalid, onReq
       <p id={id+'-policy'} className="mt-2 text-sm text-muted-foreground">{t('passwordPolicy')}</p></div>
     <div><label htmlFor={id+'-confirm'} className="mb-2 block text-sm font-medium">{t('confirmPassword')}</label><Input ref={confirmInput} id={id+'-confirm'} required type="password" maxLength={256} autoComplete="new-password" value={confirmation} disabled={pending} onChange={e => setConfirmation(e.target.value)} /></div>
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-    <Button type="submit" disabled={pending} className="min-h-11 w-full">{t(pending ? 'resettingPassword' : 'resetPassword')}</Button>
+    <Button type="submit" disabled={pending} className="min-h-11 w-full">{submitLabels ? pending ? submitLabels.pending : submitLabels.ready : t(pending ? 'resettingPassword' : 'resetPassword')}</Button>
   </form>;
 }

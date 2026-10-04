@@ -1,17 +1,17 @@
 {
-  "node_count": 1246,
+  "node_count": 1296,
   "unverified_node_count": 0,
-  "raw_edge_count": 2162,
+  "raw_edge_count": 2319,
   "non_object_edges": 0,
   "missing_endpoint_edges": 0,
   "dangling_endpoint_edges": 0,
   "external_reference_edges": 0,
-  "self_loop_edges": 4,
-  "valid_candidate_edges": 2162,
+  "self_loop_edges": 5,
+  "valid_candidate_edges": 2319,
   "exact_duplicate_edges": 0,
-  "directed_unique_endpoint_pairs": 2162,
+  "directed_unique_endpoint_pairs": 2319,
   "directed_same_endpoint_collapsed_edges": 0,
-  "undirected_unique_endpoint_pairs": 2162,
+  "undirected_unique_endpoint_pairs": 2319,
   "undirected_same_endpoint_collapsed_edges": 0,
   "same_endpoint_group_count": 0,
   "relation_variant_groups": 0,
@@ -19,8 +19,8 @@
   "source_location_variant_groups": 0,
   "context_variant_groups": 0,
   "post_build_graph_type": "Graph",
-  "post_build_node_count": 1246,
-  "post_build_edge_count": 2162,
+  "post_build_node_count": 1296,
+  "post_build_edge_count": 2319,
   "post_build_error": "",
   "producer_suppression": {
     "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
@@ -103,28 +103,28 @@
   },
   "examples": [],
   "fresh_extraction": {
-    "node_count": 184,
+    "node_count": 197,
     "unverified_node_count": 0,
-    "raw_edge_count": 524,
+    "raw_edge_count": 541,
     "non_object_edges": 0,
     "missing_endpoint_edges": 0,
-    "dangling_endpoint_edges": 130,
+    "dangling_endpoint_edges": 139,
     "external_reference_edges": 34,
-    "self_loop_edges": 1,
-    "valid_candidate_edges": 360,
-    "exact_duplicate_edges": 12,
-    "directed_unique_endpoint_pairs": 337,
-    "directed_same_endpoint_collapsed_edges": 23,
-    "undirected_unique_endpoint_pairs": 332,
-    "undirected_same_endpoint_collapsed_edges": 28,
-    "same_endpoint_group_count": 14,
-    "relation_variant_groups": 11,
+    "self_loop_edges": 3,
+    "valid_candidate_edges": 368,
+    "exact_duplicate_edges": 1,
+    "directed_unique_endpoint_pairs": 348,
+    "directed_same_endpoint_collapsed_edges": 20,
+    "undirected_unique_endpoint_pairs": 348,
+    "undirected_same_endpoint_collapsed_edges": 20,
+    "same_endpoint_group_count": 19,
+    "relation_variant_groups": 18,
     "source_file_variant_groups": 0,
-    "source_location_variant_groups": 0,
-    "context_variant_groups": 0,
+    "source_location_variant_groups": 1,
+    "context_variant_groups": 1,
     "post_build_graph_type": "Graph",
-    "post_build_node_count": 269,
-    "post_build_edge_count": 496,
+    "post_build_node_count": 286,
+    "post_build_edge_count": 521,
     "post_build_error": "",
     "producer_suppression": {
       "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
@@ -207,96 +207,97 @@
     },
     "examples": [
       {
-        "source": "tasks_identity_todo_document",
-        "target": "tasks_identity_verification_document",
-        "edge_count": 11,
+        "source": "apps_api_src_modules_identity_sessions",
+        "target": "packages_contracts_index_d",
+        "edge_count": 3,
         "relations": [
-          "references"
+          "imports_from",
+          "re_exports"
         ],
         "source_files": [
-          "F:\\Code\\ConectaInfusionApp\\tasks\\identity-todo.md"
+          "apps/api/src/modules/identity/sessions.ts"
         ],
         "source_locations": [
-          ""
+          "L7",
+          "L9"
         ],
         "contexts": [
-          ""
+          "export",
+          "import",
+          "re-export"
         ]
       },
       {
-        "source": "apps_api_test_integration_identity_recovery_test",
-        "target": "apps_api_test_integration_identity_recovery_test_latesttoken",
+        "source": "apps_api_src_modules_identity_account_invitations",
+        "target": "packages_contracts_index_d_identityrole",
+        "edge_count": 2,
+        "relations": [
+          "imports"
+        ],
+        "source_files": [
+          "apps/api/src/modules/identity/account-invitations.ts"
+        ],
+        "source_locations": [
+          "L8"
+        ],
+        "contexts": [
+          "import"
+        ]
+      },
+      {
+        "source": "apps_api_src_modules_identity_sessions",
+        "target": "packages_contracts_index_d_identityrole",
+        "edge_count": 2,
+        "relations": [
+          "imports",
+          "re_exports"
+        ],
+        "source_files": [
+          "apps/api/src/modules/identity/sessions.ts"
+        ],
+        "source_locations": [
+          "L7",
+          "L9"
+        ],
+        "contexts": [
+          "import",
+          "re-export"
+        ]
+      },
+      {
+        "source": "apps_api_src_modules_identity_sessions",
+        "target": "packages_contracts_index_d_publicaccount",
+        "edge_count": 2,
+        "relations": [
+          "imports",
+          "re_exports"
+        ],
+        "source_files": [
+          "apps/api/src/modules/identity/sessions.ts"
+        ],
+        "source_locations": [
+          "L7",
+          "L9"
+        ],
+        "contexts": [
+          "import",
+          "re-export"
+        ]
+      },
+      {
+        "source": "apps_api_test_integration_identity_invitations_test",
+        "target": "apps_api_test_integration_identity_invitations_test_token",
         "edge_count": 2,
         "relations": [
           "calls",
           "contains"
         ],
         "source_files": [
-          "apps/api/test/integration/identity-recovery.test.mjs"
+          "apps/api/test/integration/identity-invitations.test.mjs"
         ],
         "source_locations": [
-          "L10",
-          "L34"
-        ],
-        "contexts": [
-          "",
-          "call"
-        ]
-      },
-      {
-        "source": "apps_customer_web_src_registrationaccess_registrationaccess",
-        "target": "apps_customer_web_src_registrationaccess_registrationaccess_submit",
-        "edge_count": 2,
-        "relations": [
-          "calls",
-          "contains"
-        ],
-        "source_files": [
-          "apps/customer-web/src/RegistrationAccess.tsx"
-        ],
-        "source_locations": [
-          "L22",
-          "L42"
-        ],
-        "contexts": [
-          "",
-          "call"
-        ]
-      },
-      {
-        "source": "packages_api_client_src_index_createapiclient",
-        "target": "packages_api_client_src_index_createapiclient_csrftoken",
-        "edge_count": 2,
-        "relations": [
-          "calls",
-          "contains"
-        ],
-        "source_files": [
-          "packages/api-client/src/index.ts"
-        ],
-        "source_locations": [
-          "L10",
-          "L54"
-        ],
-        "contexts": [
-          "",
-          "call"
-        ]
-      },
-      {
-        "source": "packages_api_client_src_index_createapiclient",
-        "target": "packages_api_client_src_index_createapiclient_send",
-        "edge_count": 2,
-        "relations": [
-          "calls",
-          "contains"
-        ],
-        "source_files": [
-          "packages/api-client/src/index.ts"
-        ],
-        "source_locations": [
-          "L14",
-          "L48"
+          "L42",
+          "L9"
         ],
         "contexts": [
           "",

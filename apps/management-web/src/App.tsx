@@ -4,6 +4,7 @@ import { createApiClient } from '@conecta/api-client';
 import { useLocale, useAccountLabels } from '@conecta/i18n';
 import { AccountAccess } from '@conecta/ui/components/account-access';
 import { RecoveryRequest } from '@conecta/ui/components/password-recovery';
+import { CustomerInvitations } from '@conecta/ui/components/customer-invitations';
 import { Button } from '@conecta/ui/components/button';
 import { Alert, AlertDescription } from '@conecta/ui/components/alert';
 const api = createApiClient();
@@ -41,6 +42,7 @@ export function App() {
     <header className="border-b bg-white"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6"><a href="/" className="text-xl font-semibold">{settings?.displayName ?? 'Conecta Infusion'}</a><label className="flex items-center gap-2 text-sm">{t('language')}<select aria-label={t('language')} value={locale} onChange={e => setLocale(e.target.value as Locale)} className="rounded-md border border-input bg-white p-2"><option value="es-MX">Español</option><option value="en">English</option></select></label><div className="flex flex-wrap gap-3"><AccountAccess api={api} labels={accountLabels} onAccountChange={setAccount} />{!account && <RecoveryRequest api={api} t={t} />}</div></div></header>
     <main id="content" className="mx-auto max-w-6xl px-6 py-12"><p className="text-xs font-semibold tracking-[.16em] text-primary">{t('managementEyebrow')}</p><h1 className="my-4 text-4xl font-semibold tracking-tight">{t('managementTitle')}</h1><p className="max-w-xl text-muted-foreground">{t('managementIntro')}</p>
       <div className="my-8">
+        {account && <div className="mb-6"><CustomerInvitations key={account.id+account.roles.join(',')} api={api} account={account} locale={locale} t={t} /></div>}
         {accessState === 'signed-out' && <p className="text-sm text-muted-foreground">{t('managementSignedOut')}</p>}
         {accessState === 'loading' && <p role="status">{t('managementAccessLoading')}</p>}
         {accessState === 'denied' && <Alert><AlertDescription>{t('managementDenied')}</AlertDescription></Alert>}

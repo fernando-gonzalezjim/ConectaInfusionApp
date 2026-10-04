@@ -29,4 +29,4 @@ Both frontends serve the shared `/auth/action` landing page. It removes query an
 
 After success, the page explains that all sessions ended and offers a fixed `/` sign-in link. It creates no session and accepts no caller-provided redirect. The delivery worker currently emits the configured customer origin; both frontends support the same protected action contract. Production hosts must serve their SPA for `/auth/action` and exclude third-party analytics/content from this secret-bearing page.
 
-Initial invitation password setup is deliberately unavailable until I15 supplies its backend and I16 implements its invitation landing flow. I14 implements recovery/password reset; unsupported setup and relationship purposes remain blocked. This clarifies the earlier I14 checklist's broad ?password setup? wording without introducing an unbacked account-activation flow.
+I15/I16 supply the [invitation password-setup backend and bilingual browser flow](identity-invitations.md). Recovery/reset and invitation setup share password-entry behavior while retaining separate purposes and endpoints. Relationship action purposes remain unsupported by the current screen.

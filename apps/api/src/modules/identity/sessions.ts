@@ -19,7 +19,7 @@ export interface SessionService {
   logoutAll(token: unknown): Promise<void>;
 }
 export class AuthError extends Error {
-  constructor(readonly code: 'INVALID_REQUEST' | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'IDENTITY_DISABLED') { super(code); }
+  constructor(readonly code: 'INVALID_REQUEST' | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'IDENTITY_DISABLED' | 'NOT_FOUND' | 'CONFLICT') { super(code); }
 }
 interface AccountRow {
   id: string; person_id: string; email: string; password_hash: string | null;

@@ -1,4 +1,4 @@
-import type { ApiErrorCode, CsrfResponse, LoginInput, LoginResponse, SessionResponse, PublicSettings, StudioOverview, ManagementAccessResponse, RegistrationInput, ActionAcceptedResponse, EmailConfirmedResponse, PasswordResetInput, PasswordResetResponse } from '@conecta/contracts';
+import type { ApiErrorCode, CsrfResponse, LoginInput, LoginResponse, SessionResponse, PublicSettings, StudioOverview, ManagementAccessResponse, RegistrationInput, ActionAcceptedResponse, EmailConfirmedResponse, PasswordResetInput, PasswordResetResponse, CustomerInvitationInput, PasswordSetupResponse } from '@conecta/contracts';
 
 export class ApiError extends Error {
   readonly code: ApiErrorCode;
@@ -23,8 +23,8 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       try { body = await response.json() as typeof body; } catch { /* Never expose raw error text. */ }
       const code: ApiErrorCode = response.status === 401 ? (body?.code === 'INVALID_CREDENTIALS' ? 'INVALID_CREDENTIALS' : 'UNAUTHENTICATED')
         : response.status === 403 ? 'FORBIDDEN' : response.status === 429 ? 'THROTTLED'
-        : response.status === 404 ? 'NOT_FOUND' : response.status >= 500 ? 'UNAVAILABLE'
-        : response.status === 400 && ['/auth/confirmation', '/auth/recovery/reset'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
+        : response.status === 404 ? 'NOT_FOUND' : response.status === 409 ? 'CONFLICT' : response.status >= 500 ? 'UNAVAILABLE'
+        : response.status === 400 && ['/auth/confirmation', '/auth/recovery/reset', '/auth/setup'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
       const retry = response.headers.get('Retry-After');
       const seconds = retry && /^[1-9][0-9]{0,6}$/.test(retry) ? Number(retry) : undefined;
       throw new ApiError(code, code === 'THROTTLED' ? seconds : undefined);
@@ -33,13 +33,22 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
     try { return await response.json() as T; }
     catch { throw new ApiError('INTERNAL_ERROR'); }
   }
-  async function anonymousAction<T extends 'ACCEPTED' | 'CONFIRMED' | 'PASSWORD_RESET'>(path: string, body: unknown, code: T, signal?: AbortSignal): Promise<{ code: T }> {
+  async function anonymousAction<T extends 'ACCEPTED' | 'CONFIRMED' | 'PASSWORD_RESET' | 'PASSWORD_SET'>(path: string, body: unknown, code: T, signal?: AbortSignal): Promise<{ code: T }> {
     const csrf = await send<CsrfResponse>('/auth/csrf', signal);
     const response = await send<{ code: T }>(path, signal, { body, csrfToken: csrfToken(csrf) });
     if (!response || response.code !== code) throw new ApiError('INTERNAL_ERROR');
     return { code };
   }
+  async function invitation(path: string, input: unknown, signal?: AbortSignal): Promise<ActionAcceptedResponse> {
+    const session = await send<SessionResponse>('/auth/session', signal);
+    const response = await send<ActionAcceptedResponse>(path, signal, { body: input, csrfToken: csrfToken(session) });
+    if (!response || response.code !== 'ACCEPTED') throw new ApiError('INTERNAL_ERROR');
+    return { code: 'ACCEPTED' };
+  }
   return {
+    inviteCustomer: (input: CustomerInvitationInput, signal?: AbortSignal) => invitation('/accounts/invitations', input, signal),
+    resendInvitation: (input: { email: string }, signal?: AbortSignal) => invitation('/accounts/invitations/resend', input, signal),
+    setupPassword: (input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordSetupResponse> => anonymousAction('/auth/setup', input, 'PASSWORD_SET', signal),
     requestRecovery: (input: { email: string }, signal?: AbortSignal): Promise<ActionAcceptedResponse> => anonymousAction('/auth/recovery', input, 'ACCEPTED', signal),
     resetPassword: (input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordResetResponse> => anonymousAction('/auth/recovery/reset', input, 'PASSWORD_RESET', signal),
     register: (input: RegistrationInput, signal?: AbortSignal): Promise<ActionAcceptedResponse> => anonymousAction('/auth/register', input, 'ACCEPTED', signal),

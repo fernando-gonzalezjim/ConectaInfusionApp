@@ -1,4 +1,11 @@
 export const es = {
+  inviteCustomer: 'Invitar cliente', invitationIntro: 'Envía una invitación para que el cliente configure su propia contraseña.',
+  invitationAccepted: 'Solicitud recibida. Si corresponde, el cliente recibirá un enlace. No se muestran datos de cuentas existentes.',
+  sendInvitation: 'Enviar invitación', resendInvitation: 'Reenviar invitación',
+  waiveConfirmation: 'Eximir la confirmación del correo', waiverHint: 'La exención queda registrada. El cliente debe configurar su contraseña; el correo no se marcará como verificado.',
+  waiverReason: 'Motivo de la exención', setupPassword: 'Configurar contraseña', settingPassword: 'Guardando contraseña…',
+  setupIntro: 'Configura tu contraseña para activar tu cuenta. Este enlace es válido durante 24 horas.',
+  setupComplete: 'Tu cuenta está lista. Ya puedes iniciar sesión.', setupInvalid: 'Este enlace venció, ya se usó o no es válido. Pide al equipo una nueva invitación.',
   forgotPassword: 'Olvidé mi contraseña', recoveryIntro: 'Escribe tu correo para solicitar un enlace de recuperación.',
   recoveryAccepted: 'Si el correo corresponde a una cuenta que puede recuperar su acceso, recibirás un enlace válido por una hora. Revisa el correo no deseado. Solicitarlo no cambia tu contraseña.',
   sendRecovery: 'Enviar enlace de recuperación', newPassword: 'Nueva contraseña', confirmPassword: 'Confirmar contraseña',
@@ -53,6 +60,13 @@ export const es = {
 };
 export type MessageKey = keyof typeof es;
 export const en: Record<MessageKey, string> = {
+  inviteCustomer: 'Invite customer', invitationIntro: 'Send an invitation so the customer can set their own password.',
+  invitationAccepted: 'Request received. If eligible, the customer will receive a link. Existing account details are not displayed.',
+  sendInvitation: 'Send invitation', resendInvitation: 'Resend invitation',
+  waiveConfirmation: 'Waive email confirmation', waiverHint: 'The exemption is recorded. The customer must set a password; the email will not be marked as verified.',
+  waiverReason: 'Exemption reason', setupPassword: 'Set up password', settingPassword: 'Saving password…',
+  setupIntro: 'Set your password to activate your account. This link is valid for 24 hours.',
+  setupComplete: 'Your account is ready. You can now sign in.', setupInvalid: 'This link has expired, was used already, or is invalid. Ask the team for a new invitation.',
   forgotPassword: 'Forgot password', recoveryIntro: 'Enter your email to request a recovery link.',
   recoveryAccepted: 'If this email belongs to an eligible account, you will receive a link valid for one hour. Check your spam folder. Requesting it does not change your password.',
   sendRecovery: 'Send recovery link', newPassword: 'New password', confirmPassword: 'Confirm password',

@@ -62,6 +62,8 @@ Project MCP connections are in .codex/config.toml; see [MCP setup](docs/mcp-setu
 
 ## Identity development
 
-Identity is opt-in. Follow [local configuration](docs/identity-local-email.md), [manual bootstrap](docs/identity-bootstrap.md) and the [Identity checklist](tasks/identity-todo.md). Both frontends share account/session controls; administrative access is checked on the server. I11/I12 supply [customer registration, confirmation and resend endpoints and bilingual screens](docs/identity-registration.md); personnel invitations remain later tasks. I13/I14 provide [password recovery endpoints and shared bilingual screens](docs/identity-recovery.md).
+Identity is opt-in. Follow [local configuration](docs/identity-local-email.md), [manual bootstrap](docs/identity-bootstrap.md) and the [Identity checklist](tasks/identity-todo.md). Both frontends share account/session controls; administrative access is checked on the server. I11/I12 supply [customer registration, confirmation and resend endpoints and bilingual screens](docs/identity-registration.md). I13/I14 provide [password recovery endpoints and shared bilingual screens](docs/identity-recovery.md). I15/I16 add [customer invitation endpoints, management controls and bilingual password setup](docs/identity-invitations.md).
+
+I17 adds [paginated management account listing and authorized personal profile edits](docs/identity-accounts.md). I18 adds [role administration and last-active-administration protection](docs/identity-roles.md). Account-editing and role screens follow in I19.
 
 I10 provides single-use action tokens and encrypted email delivery. With local Mailpit settings already loaded, `npm run identity:deliver` runs one bounded delivery tick. See [the delivery guide](docs/identity-action-delivery.md) for private env-file usage, retries, cleanup and the production boundary. No background delivery scheduler or production sending is enabled.

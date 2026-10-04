@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I14 are complete; the I03 and I06 human-review checkpoints were approved. The user approved continuation after I09 by requesting I10. The user approved the I12 human-review checkpoint and authorized I13. I14 recovery/password reset UI is complete; initial invitation setup belongs to I15/I16. I15 is next. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I18 are complete. The user approved the I03, I06, I12 and I15 human-review checkpoints and authorized continuation through I18. The human-review checkpoint after I18 remains pending; I19 administration UI is next. The user authorized an incremental Graphify refresh and commit/push after I18. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -182,8 +182,8 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I15: Customer invitations backend
 
-- [ ] **Acceptance:** Allow all specified staff/instructors to send customer-only invitations; only privileged accounts may waive confirmation, with secure password setup and provenance.
-- [ ] **Verification:** Actor matrix, missing email, forged exemption/role and consumed setup tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Allow all specified staff/instructors to send customer-only invitations; only privileged accounts may waive confirmation, with secure password setup and provenance.
+- [x] **Verification:** Actor matrix, missing email, forged exemption/role and consumed setup tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I14. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -191,14 +191,14 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### Checkpoint after I15
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes. I15 approved October 4, 2026; graph refresh remains pending.
 
 ### I16: Invitation UI
 
-- [ ] **Acceptance:** Offer permitted creation controls and confirmation/setup landing flow; ordinary inviters cannot inspect/edit private customer records.
-- [ ] **Verification:** Staff/instructor invite flow and management exemption flow in both languages. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Offer permitted creation controls and confirmation/setup landing flow; ordinary inviters cannot inspect/edit private customer records.
+- [x] **Verification:** Staff/instructor invite flow and management exemption flow in both languages. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I15. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -206,8 +206,8 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I17: Account administration backend
 
-- [ ] **Acceptance:** Implement privileged personnel/customer listing and edits with field allowlists; own-profile writes never promote privileges.
-- [ ] **Verification:** Full actor/target matrix and direct IDOR/mass-assignment tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Implement privileged personnel/customer listing and edits with field allowlists; own-profile writes never promote privileges.
+- [x] **Verification:** Full actor/target matrix and direct IDOR/mass-assignment tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I16. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -215,8 +215,8 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I18: Role administration
 
-- [ ] **Acceptance:** Apply privileged role assignments, revoke sessions and serialize last-active-admin checks; expose future free-booking eligibility hooks.
-- [ ] **Verification:** Two concurrent admin removals leave one; self-demotion and customer-role preservation tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Apply privileged role assignments, revoke sessions and serialize last-active-admin checks; expose future free-booking eligibility hooks.
+- [x] **Verification:** Two concurrent admin removals leave one; self-demotion and customer-role preservation tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I17. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -224,8 +224,8 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### Checkpoint after I18
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
 - [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
 
 ### I19: Administration UI

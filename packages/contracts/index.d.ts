@@ -45,6 +45,17 @@ export interface ActionAcceptedResponse { code: 'ACCEPTED' }
 export interface EmailConfirmedResponse { code: 'CONFIRMED' }
 export interface PasswordResetInput { token: string; password: string }
 export interface PasswordResetResponse { code: 'PASSWORD_RESET' }
+export interface CustomerInvitationInput { fullName: string; email: string; phone?: string | null; preferredLocale?: Locale; waiveConfirmation?: boolean; reason?: string }
+export interface PasswordSetupResponse { code: 'PASSWORD_SET' }
+export interface AccountProfileInput { fullName?: string; phone?: string | null; preferredLocale?: Locale }
+export interface AccountProfile extends PublicAccount {
+  phone: string | null; photoId: string | null;
+  status: 'pending' | 'active' | 'inactive'; profileStatus: 'active' | 'inactive';
+  confirmationStatus: 'pending' | 'verified' | 'exempt';
+}
+export interface AccountListResponse { accounts: AccountProfile[]; nextCursor: string | null }
+export interface RoleChangeInput { roles: IdentityRole[] }
+export interface RoleChangeResponse { accountId: string; roles: IdentityRole[]; staffAttendanceEligible: boolean }
 export interface CsrfResponse { csrfToken: string }
 export interface LoginResponse extends CsrfResponse { account: PublicAccount; expiresAt: string }
 export interface SessionResponse extends LoginResponse { authenticatedAt: string }
@@ -53,4 +64,4 @@ export interface ManagementAccessResponse {
   capabilities: { administerIdentity: true };
 }
 export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'INTERNAL_ERROR'
-  | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION';
+  | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION' | 'CONFLICT';

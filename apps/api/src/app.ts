@@ -12,6 +12,10 @@ import { createCsrfProtection } from './modules/identity/csrf.js';
 import { createManagementRouter } from './modules/identity/authorization.js';
 import { createRegistrationService } from './modules/identity/registration.js';
 import { createRecoveryService } from './modules/identity/recovery.js';
+import { createAccountInvitationService } from './modules/identity/account-invitations.js';
+import { createAccountRouter } from './modules/identity/account-routes.js';
+import { createAccountService } from './modules/identity/accounts.js';
+import { createRoleService } from './modules/identity/roles.js';
 
 export async function createApplication(options: {
   database?: Pool; identityConfig?: IdentityConfig; environment?: NodeJS.ProcessEnv;
@@ -23,6 +27,7 @@ export async function createApplication(options: {
   if (identityConfig.enabled) {
     const service = await createSessionService(database, identityConfig, { environment: options.environment });
     const protection = createCsrfProtection(service, identityConfig);
+    const invitations = createAccountInvitationService(database, identityConfig, service);
     const auth = express.Router();
     // Origin denials run before CORS, parsing or any database/password work.
     auth.use(protection.originGuard);
@@ -31,14 +36,19 @@ export async function createApplication(options: {
     auth.use(identityCors);
     auth.get('/csrf', protection.bootstrap);
     auth.use(createAuthRouter(service, identityConfig, (req, res, next) => {
-      const guard = ['/login', '/register', '/confirmation', '/confirmation/resend', '/recovery', '/recovery/reset'].includes(req.path)
+      const guard = ['/login', '/register', '/confirmation', '/confirmation/resend', '/recovery', '/recovery/reset', '/setup'].includes(req.path)
         ? protection.anonymousMutation : protection.sessionMutation;
       return guard(req, res, next);
     }, { onLogin: protection.clearAnonymousCookie, registration: createRegistrationService(database, identityConfig),
-      recovery: createRecoveryService(database, identityConfig, { environment: options.environment }) }));
+      recovery: createRecoveryService(database, identityConfig, { environment: options.environment }), invitations }));
     // Never fall through to the broader public Foundation parser/CORS/error logger.
     auth.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
     app.use('/api/v1/auth', auth);
+    const accounts = express.Router();
+    accounts.use(protection.originGuard, identityCors);
+    accounts.use(createAccountRouter(invitations, protection.sessionMutation, createAccountService(database, service), createRoleService(database, service, {environment:options.environment})));
+    accounts.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
+    app.use('/api/v1/accounts', accounts);
     const management = express.Router();
     management.use(protection.originGuard, identityCors);
     management.use(createManagementRouter(service));
