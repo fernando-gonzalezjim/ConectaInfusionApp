@@ -59,3 +59,9 @@ Public GET endpoints: /api/v1/health, /api/v1/ready, /api/v1/settings/public and
 See [architecture](docs/architecture.md), [toolchain](tasks/toolchain.md), [Foundation specification](SPEC-foundation.md), [tasks](tasks/todo.md), [visual direction](docs/design/visual-direction.md), [intent](docs/intent/conecta-infusion.md), and business rules in [English](docs/requirements/agreed-business-rules.md) / [Spanish](docs/requirements/agreed-business-rules.es.md). The Spanish PDF is regenerated only on request.
 
 Project MCP connections are in .codex/config.toml; see [MCP setup](docs/mcp-setup.md).
+
+## Identity development
+
+Identity is opt-in. Follow [local configuration](docs/identity-local-email.md), [manual bootstrap](docs/identity-bootstrap.md) and the [Identity checklist](tasks/identity-todo.md). Both frontends share account/session controls; administrative access is checked on the server. I11/I12 supply [customer registration, confirmation and resend endpoints and bilingual screens](docs/identity-registration.md); personnel invitations remain later tasks. I13/I14 provide [password recovery endpoints and shared bilingual screens](docs/identity-recovery.md).
+
+I10 provides single-use action tokens and encrypted email delivery. With local Mailpit settings already loaded, `npm run identity:deliver` runs one bounded delivery tick. See [the delivery guide](docs/identity-action-delivery.md) for private env-file usage, retries, cleanup and the production boundary. No background delivery scheduler or production sending is enabled.

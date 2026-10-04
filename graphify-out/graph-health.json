@@ -1,17 +1,17 @@
 {
-  "node_count": 844,
+  "node_count": 1246,
   "unverified_node_count": 0,
-  "raw_edge_count": 1120,
+  "raw_edge_count": 2162,
   "non_object_edges": 0,
   "missing_endpoint_edges": 0,
   "dangling_endpoint_edges": 0,
   "external_reference_edges": 0,
-  "self_loop_edges": 0,
-  "valid_candidate_edges": 1120,
+  "self_loop_edges": 4,
+  "valid_candidate_edges": 2162,
   "exact_duplicate_edges": 0,
-  "directed_unique_endpoint_pairs": 1120,
+  "directed_unique_endpoint_pairs": 2162,
   "directed_same_endpoint_collapsed_edges": 0,
-  "undirected_unique_endpoint_pairs": 1120,
+  "undirected_unique_endpoint_pairs": 2162,
   "undirected_same_endpoint_collapsed_edges": 0,
   "same_endpoint_group_count": 0,
   "relation_variant_groups": 0,
@@ -19,8 +19,8 @@
   "source_location_variant_groups": 0,
   "context_variant_groups": 0,
   "post_build_graph_type": "Graph",
-  "post_build_node_count": 844,
-  "post_build_edge_count": 1120,
+  "post_build_node_count": 1246,
+  "post_build_edge_count": 2162,
   "post_build_error": "",
   "producer_suppression": {
     "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
@@ -102,5 +102,208 @@
     "error": ""
   },
   "examples": [],
+  "fresh_extraction": {
+    "node_count": 184,
+    "unverified_node_count": 0,
+    "raw_edge_count": 524,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 130,
+    "external_reference_edges": 34,
+    "self_loop_edges": 1,
+    "valid_candidate_edges": 360,
+    "exact_duplicate_edges": 12,
+    "directed_unique_endpoint_pairs": 337,
+    "directed_same_endpoint_collapsed_edges": 23,
+    "undirected_unique_endpoint_pairs": 332,
+    "undirected_same_endpoint_collapsed_edges": 28,
+    "same_endpoint_group_count": 14,
+    "relation_variant_groups": 11,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 0,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 269,
+    "post_build_edge_count": 496,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [
+      {
+        "source": "tasks_identity_todo_document",
+        "target": "tasks_identity_verification_document",
+        "edge_count": 11,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\tasks\\identity-todo.md"
+        ],
+        "source_locations": [
+          ""
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "apps_api_test_integration_identity_recovery_test",
+        "target": "apps_api_test_integration_identity_recovery_test_latesttoken",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/test/integration/identity-recovery.test.mjs"
+        ],
+        "source_locations": [
+          "L10",
+          "L34"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_customer_web_src_registrationaccess_registrationaccess",
+        "target": "apps_customer_web_src_registrationaccess_registrationaccess_submit",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/customer-web/src/RegistrationAccess.tsx"
+        ],
+        "source_locations": [
+          "L22",
+          "L42"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "packages_api_client_src_index_createapiclient",
+        "target": "packages_api_client_src_index_createapiclient_csrftoken",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "packages/api-client/src/index.ts"
+        ],
+        "source_locations": [
+          "L10",
+          "L54"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "packages_api_client_src_index_createapiclient",
+        "target": "packages_api_client_src_index_createapiclient_send",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "packages/api-client/src/index.ts"
+        ],
+        "source_locations": [
+          "L14",
+          "L48"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      }
+    ]
+  },
   "prior_extraction_warning": "Original full extraction reported 16 dangling endpoints and 11 undirected edge collapses; this incremental diagnostic cannot recover information lost in that build."
 }

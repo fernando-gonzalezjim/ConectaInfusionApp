@@ -14,6 +14,26 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  mailpit:
+    image: axllent/mailpit:v1.31.4
+    profiles: ["identity"]
+    ports:
+      - "127.0.0.1:${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "127.0.0.1:${MAILPIT_UI_PORT:-8025}:8025"
+    environment:
+      MP_DISABLE_VERSION_CHECK: "true"
+      MP_SMTP_DISABLE_RDNS: "true"
+      MP_SMTP_ALLOWED_RECIPIENTS: '@[^@]+\.test$$'
+      MP_ALLOWED_HOSTS: "localhost,127.0.0.1"
+      MP_BLOCK_REMOTE_CSS_AND_FONTS: "true"
+      MP_MAX_MESSAGES: "100"
+      MP_MAX_AGE: "24h"
+    networks: ["mailpit_local"]
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
   flyway:
     image: redgate/flyway:13.9.0
     profiles: ["tools"]
@@ -30,5 +50,8 @@ services:
       FLYWAY_VALIDATE_MIGRATION_NAMING: "true"
     volumes:
       - ./database/migrations:/flyway/sql:ro
+networks:
+  mailpit_local:
+    driver: bridge
 volumes:
   postgres_data:

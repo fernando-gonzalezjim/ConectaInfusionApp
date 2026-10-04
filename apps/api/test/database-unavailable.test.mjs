@@ -29,6 +29,9 @@ test('database outage preserves liveness and returns unavailable responses', asy
     assert.deepEqual(await settings.json(), { code: 'UNAVAILABLE' });
     assert.equal((await fetch(`${base}/api/v1/settings/public`, { method: 'POST' })).status, 404);
     assert.equal((await fetch(`${base}/api/v1/audit`)).status, 404);
+    // Identity remains opt-in: Foundation-only applications expose no auth routes.
+    assert.equal((await fetch(`${base}/api/v1/auth/session`)).status, 404);
+    assert.equal((await fetch(`${base}/api/v1/auth/login`, { method: 'POST' })).status, 404);
   } finally {
     await new Promise(resolve => server.close(resolve));
     await pool.end();

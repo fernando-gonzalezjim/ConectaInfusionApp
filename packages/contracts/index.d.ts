@@ -30,4 +30,27 @@ export interface PublicSettings {
   supportedLocales: Locale[];
   units: { code: BusinessUnitCode; labels: Record<Locale, string> }[];
 }
-export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'INTERNAL_ERROR';
+export type IdentityRole = 'administrator' | 'manager' | 'reception' | 'cafe_staff' | 'instructor' | 'customer';
+export interface PublicAccount {
+  id: string;
+  personId: string;
+  email: string;
+  fullName: string;
+  preferredLocale: Locale;
+  roles: IdentityRole[];
+}
+export interface LoginInput { email: string; password: string; rememberMe?: boolean }
+export interface RegistrationInput { fullName: string; email: string; password: string; phone?: string | null; preferredLocale?: Locale }
+export interface ActionAcceptedResponse { code: 'ACCEPTED' }
+export interface EmailConfirmedResponse { code: 'CONFIRMED' }
+export interface PasswordResetInput { token: string; password: string }
+export interface PasswordResetResponse { code: 'PASSWORD_RESET' }
+export interface CsrfResponse { csrfToken: string }
+export interface LoginResponse extends CsrfResponse { account: PublicAccount; expiresAt: string }
+export interface SessionResponse extends LoginResponse { authenticatedAt: string }
+export interface ManagementAccessResponse {
+  account: PublicAccount;
+  capabilities: { administerIdentity: true };
+}
+export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'INTERNAL_ERROR'
+  | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION';

@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I03 are complete; the first human-review checkpoint is pending. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I14 are complete; the I03 and I06 human-review checkpoints were approved. The user approved continuation after I09 by requesting I10. The user approved the I12 human-review checkpoint and authorized I13. I14 recovery/password reset UI is complete; initial invitation setup belongs to I15/I16. I15 is next. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -37,12 +37,14 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated through isolated persistence/audit scenarios.
 - [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Human reviewed I01–I03 and approved continuation to I04. User authorized an incremental Graphify refresh for the implementation changes.
 
 ### I04: Password and bootstrap
 
-- [ ] **Acceptance:** Implement approved hashing and manual first-admin procedure; opt-in local-only testuser fixture never overwrites accounts or runs at startup.
-- [ ] **Verification:** Correct/wrong password tests; reject fixtures outside development and conflicting reruns. Run focused checks and typecheck/build for affected work.
+Execute as three small sub-slices: I04a password module/unit tests (2 files); I04b operator/bootstrap logic and PostgreSQL integration tests (2 files); I04c CLI, CLI tests, operator guide and ignored local SQL output (at most 4 files). Scope and permissions are unchanged.
+
+- [x] **Acceptance:** Implement approved hashing and manual first-admin procedure; opt-in local-only testuser fixture never overwrites accounts or runs at startup. See [operator guide](../docs/identity-bootstrap.md).
+- [x] **Verification:** Correct/wrong password tests; reject fixtures outside development and conflicting reruns. Typecheck, build, unit, PostgreSQL and Foundation browser regression checks passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I03. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -50,8 +52,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I05: Session and delivery persistence
 
-- [ ] **Acceptance:** Migrate hashed sessions/action tokens/throttles/encrypted outbox; configure loopback Mailpit and validated env secrets.
-- [ ] **Verification:** Migration constraints, invalid config and local inbox smoke checks. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I05a V5 schema/PostgreSQL tests (2 files); I05b validated configuration/unit tests (2 files); I05c encryption/unit tests (2 files); I05d startup validation/API environment example (2 files); I05e Mailpit Compose files, inbox test and setup guide (4 files). Tracking updates are documentation only. No login route, token redemption or delivery worker is added in this persistence task.
+
+- [x] **Acceptance:** Migrate hashed sessions/action tokens/throttles/encrypted outbox; configure loopback Mailpit and validated env secrets. See [local setup](../docs/identity-local-email.md).
+- [x] **Verification:** Migration constraints, invalid config, encryption/tampering and real local inbox smoke checks passed, together with workspace typecheck/build/unit and isolated integration/browser regressions. See [evidence](identity-verification.md).
 
 **Dependencies:** I04. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -59,8 +63,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I06: Login backend
 
-- [ ] **Acceptance:** Implement opaque sessions, fixed expiry, session-version checks, logout/all-device logout and generic failures; role/status checked server-side.
-- [ ] **Verification:** Expiry boundaries, revoked sessions and multi-role denial tests. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I06a login throttle/PostgreSQL tests (2 files); I06b session service/PostgreSQL tests (2 files); I06c unmounted auth router/HTTP integration tests (2 files); I06d setup/decision/evidence documentation. The auth router is not mounted in the application until I07 supplies the shared transport and CSRF/Origin checks. No new frontend or production deployment is included.
+
+- [x] **Acceptance:** Implement opaque sessions, fixed expiry, session-version checks, logout/all-device logout and generic failures; role/status checked server-side.
+- [x] **Verification:** Expiry boundaries, revoked sessions, multi-role denial, concurrency and rollback checks passed. See [evidence](identity-verification.md) and [backend guide](../docs/identity-login-backend.md).
 
 **Dependencies:** I05. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -68,14 +74,16 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### Checkpoint after I06
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] User approved the completed I04–I06 slice and continuation. The authorized incremental Graphify refresh includes I05 and I06.
 
 ### I07: Authenticated transport
 
-- [ ] **Acceptance:** Define DTOs and client mutations; integrate exact origins, credentials and CSRF/Origin validation including anonymous auth mutations.
-- [ ] **Verification:** Direct missing/foreign CSRF tests; cookie flags and safe error contract tests. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I07a shared DTOs/client and focused client tests (3 files); I07b validated origin config, CSRF middleware and denial tests (4 files); I07c app/server integration, router/shared model changes and real PostgreSQL transport tests (5 files); I07d isolated Chromium config/transport check and disabled-mode test wording (3 files); I07e documentation/evidence. Keep Identity opt-in. Login UI remains I08/I09. No graph refresh or commit is implied by this checkpoint approval.
+
+- [x] **Acceptance:** Shared DTOs/client mutations, exact origins, credentials and anonymous/session-bound CSRF protection integrated in the opt-in application. See [transport guide](../docs/identity-auth-transport.md).
+- [x] **Verification:** Direct missing/foreign CSRF denials, cookie/error contracts, workspace checks, PostgreSQL scenarios and real Chromium transport verified. See [evidence](identity-verification.md).
 
 **Dependencies:** I06. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -83,8 +91,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I08: Customer login slice
 
-- [ ] **Acceptance:** Provide Spanish/English sign-in, Remember me and current-account/logout flow with shared accessible components.
-- [ ] **Verification:** Real local admin/customer login, keyboard and validation flows. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I08a shared sign-in form, bilingual labels, customer session container and header integration (4 files); I08b controlled Chromium UI, isolated Foundation auth fixtures and real PostgreSQL browser login tests (3 files); I08c documentation/evidence and authorized changed-file Graphify refresh. Management login remains I09.
+
+- [x] **Acceptance:** Spanish/English sign-in, Remember me and own-account/current-device/all-device logout implemented with shared accessible components. See [customer login guide](../docs/identity-customer-login.md).
+- [x] **Verification:** Real local administrator/customer form login, fixed lifetimes, reload restoration, keyboard/validation, failure states and responsive accessibility verified. See [evidence](identity-verification.md).
 
 **Dependencies:** I07. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -92,8 +102,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I09: Management login slice
 
-- [ ] **Acceptance:** Reuse shared session controls and enforce management API/UI capabilities; keep public Foundation behavior working.
-- [ ] **Verification:** Both-port shared login/logout and direct non-manager API denial in real Chromium. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I09a shared access contract/client/test (3 files); I09b authorization module/application and PostgreSQL denial tests (3 files); I09c shared account/session controls, customer wrapper and i18n copy adapter (3 files); I09d management UI/copy/controlled browser checks (4 files); I09e real cross-frontend browser tests and documentation/evidence. No account-administration mutation, role assignment, graph refresh or production deployment is included.
+
+- [x] **Acceptance:** Reuse shared session controls and enforce management API/UI capabilities; keep public Foundation behavior working.
+- [x] **Verification:** Both-port shared login/logout and direct non-manager API denial in real Chromium. Workspace, PostgreSQL and both-port Chromium checks passed; see [evidence](identity-verification.md) and [management guide](../docs/identity-management-login.md).
 
 **Dependencies:** I08. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -101,16 +113,18 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### Checkpoint after I09
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] User approved continuation after I09 by requesting I10. Graphify remains stale for I09 and later changes.
 
 ## Phase 2: Registration and account administration
 
 ### I10: Single-use action delivery
 
-- [ ] **Acceptance:** Implement purpose/recipient/version-bound links, encrypted transactional outbox, bounded retry and scrubbing; GET never consumes.
-- [ ] **Verification:** Concurrent consumption/resend, SMTP outage recovery and secret-free logs. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I10a internal token contract/issuance/redemption and real PostgreSQL tests (2 files); I10b bounded outbox worker/SMTP adapter, delivery tests and existing Mailpit scenario (3 files); I10c operator command/scripts/tests (3 files); I10d operator guides/README; I10e tracking/evidence. No registration/invitation route, real-user email, graph refresh or developer database migration is included.
+
+- [x] **Acceptance:** Implement purpose/recipient/version-bound links, encrypted transactional outbox, bounded retry and scrubbing; GET never consumes. See [delivery guide](../docs/identity-action-delivery.md).
+- [x] **Verification:** Concurrent consumption/resend, SMTP outage recovery, stale-worker denial, socket deadline and secret-free operator output passed. Workspace checks, PostgreSQL/Mailpit scenarios and Chromium regressions passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I09. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -118,8 +132,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I11: Customer registration backend
 
-- [ ] **Acceptance:** Register customer-only accounts; confirm email on deliberate POST; apply 24-hour expiry, enumeration-safe replies and resend limits.
-- [ ] **Verification:** Role injection denial; exact expiry and 60-second/5-per-hour limits. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I11a registration/confirmation/resend service and real PostgreSQL tests (2 files); I11b auth-router/application composition (2 files), extending the same tests for actual HTTP denial checks; I11c guide/README and evidence/checklist. No registration UI, migration, production mail or real-user account creation is included. After verification, perform the user-authorized changed-file Graphify refresh, including the stale I09/I10 sources.
+
+- [x] **Acceptance:** Register customer-only pending accounts; confirm email on deliberate POST; apply 24-hour expiry, enumeration-safe replies and resend limits. See [registration contract](../docs/identity-registration.md).
+- [x] **Verification:** Role injection denial, exact expiry, 60-second/five-per-hour limits, concurrency, rollback and direct HTTP guards passed. Workspace and integration/browser regressions passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I10. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -127,8 +143,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I12: Registration UI
 
-- [ ] **Acceptance:** Expose bilingual registration/confirmation/resend with pending-state explanations and retry.
-- [ ] **Verification:** Real inbox confirmation flow; expired/used link and keyboard checks. Run focused checks and typecheck/build for affected work.
+Delivered as small sub-slices: typed client/contracts and unit test; customer screens and translations; controlled browser regressions; shared disposable email test configuration and real inbox flows; documentation and evidence. No backend behavior, migration or business rule was changed.
+
+- [x] **Acceptance:** Expose bilingual registration/confirmation/resend with pending-state explanations and retry.
+- [x] **Verification:** Real inbox confirmation flow; expired/used link and keyboard checks. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I11. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -136,14 +154,16 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### Checkpoint after I12
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
 
 ### I13: Recovery backend
 
-- [ ] **Acceptance:** Implement one-hour password reset, generic public responses and all-session revocation; inactive accounts remain inactive.
-- [ ] **Verification:** Concurrent reuse denied; expiry boundary and disabled-account recovery tests. Run focused checks and typecheck/build for affected work.
+Execute as small sub-slices: I13a service and real PostgreSQL tests with shared public-action limit extraction; I13b HTTP routes/application composition and denial tests; I13c recovery guide and tracking/evidence. Preserve existing registration behavior. No recovery UI, migration, business-rule change, production sending or graph refresh is included.
+
+- [x] **Acceptance:** Implement one-hour password reset, generic public responses and all-session revocation; inactive accounts remain inactive.
+- [x] **Verification:** Concurrent reuse denied; expiry boundary and disabled-account recovery tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I12. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -151,8 +171,10 @@ Task paths are likely areas, not permission to change entire directories. Each t
 
 ### I14: Recovery UI
 
-- [ ] **Acceptance:** Provide recovery/password setup pages without login-token leakage or arbitrary redirects.
-- [ ] **Verification:** Real inbox reset; both-frontends prior sessions stop working. Run focused checks and typecheck/build for affected work.
+Delivered as typed client/contract/test, shared recovery and action-page components, frontend integration/translation, controlled browser tests, real inbox/session tests, and documentation slices. Initial invitation setup remains I15/I16, since its backend does not exist in I13; unsupported setup purposes stay blocked. The user also authorized a changed-file Graphify refresh including stale I13 sources.
+
+- [x] **Acceptance:** Provide recovery/password reset pages without login-token leakage or arbitrary redirects.
+- [x] **Verification:** Real inbox reset; both-frontends prior sessions stop working. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I13. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 

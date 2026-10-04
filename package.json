@@ -17,6 +17,7 @@
     "db:up": "docker compose up -d --wait db",
     "test": "npm run test --workspaces --if-present",
     "test:integration": "npm run build -w @conecta/api && node scripts/test-integration.mjs",
+    "identity:deliver": "npm run build -w @conecta/api && node scripts/identity-delivery.mjs",
     "test:e2e": "playwright test",
     "db:flyway:migrate": "npm run db:migrate",
     "db:validate": "docker compose run --rm flyway validate",

@@ -6,6 +6,7 @@ import { Button } from '@conecta/ui/components/button';
 import { Input } from '@conecta/ui/components/input';
 import { Alert, AlertDescription } from '@conecta/ui/components/alert';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader } from '@conecta/ui/components/dialog';
+import { CustomerAccess } from './CustomerAccess';
 
 const api = createApiClient();
 export function FoundationApp() {
@@ -30,6 +31,7 @@ export function FoundationApp() {
     <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 border-b px-6 py-6">
       <a href="/" className="text-xl font-semibold tracking-tight">{settings?.displayName ?? 'Conecta Infusion'}</a>
       <label className="flex items-center gap-2 text-sm">{t('language')}<select aria-label={t('language')} value={locale} onChange={e => setLocale(e.target.value as Locale)} className="rounded-md border border-input bg-white p-2"><option value="es-MX">Español</option><option value="en">English</option></select></label>
+      <CustomerAccess />
     </header>
     <main id="content" className="mx-auto max-w-6xl px-6 py-10 md:py-16">
       <section className="relative overflow-hidden rounded-3xl bg-secondary px-7 py-12 md:px-12">
