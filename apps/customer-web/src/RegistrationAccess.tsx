@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { createApiClient, ApiError } from '@conecta/api-client';
 import { useLocale, useAccountLabels } from '@conecta/i18n';
+import {GuardianInvitation} from '@conecta/ui/components/guardian-invitation';
 import {FamilyInvitation} from '@conecta/ui/components/family-invitation';
 import { Button } from '@conecta/ui/components/button';
 import { Input } from '@conecta/ui/components/input';
@@ -60,6 +61,7 @@ export function CustomerActionPage() {
   const { t, locale, setLocale } = useLocale();
   const labels=useAccountLabels();
   return <IdentityActionPage api={api} t={t} locale={locale} setLocale={setLocale} renderConfirmationResend={() => <RegistrationAccess resendOnly />}
+    renderGuardianInvitation={(token,onCompleted,onInvalid)=><GuardianInvitation api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid}/>}
     renderFamilySuccessor={(token,onCompleted,onInvalid)=><FamilyInvitation purpose="responsibility" api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />}
     renderFamilyInvitation={(token,onCompleted,onInvalid)=><FamilyInvitation api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />} />;
 }

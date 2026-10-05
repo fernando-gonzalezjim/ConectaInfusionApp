@@ -1,3 +1,4 @@
+import {endFamilyMembershipInTransaction,closeFamilyInTransaction} from './identity-family-lifecycle-helpers.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
@@ -6,7 +7,7 @@ import {isolatedDatabase,migrate} from './identity-helpers.mjs';
 import {createAuthAccount,authConfig,password} from './identity-auth-helpers.mjs';
 import {createSessionService} from '../../dist/modules/identity/sessions.js';
 import {createRoleService} from '../../dist/modules/identity/roles.js';
-import {createFamilyInTransaction,joinFamilyInTransaction,endFamilyMembershipInTransaction,closeFamilyInTransaction} from '../../dist/modules/identity/families.js';
+import {createFamilyInTransaction,joinFamilyInTransaction} from '../../dist/modules/identity/families.js';
 const context=actor=>({actor:{id:actor.accountId,type:'customer'},session:actor.session,reason:'Controlled family fixture',correlationId:randomUUID()});
 async function familyAccount(pool,email,roles=['customer']){const account=await createAuthAccount(pool,email,roles),sessions=await createSessionService(pool,authConfig());
   const login=await sessions.login({email:account.email,password},'127.0.0.1'),resolved=await sessions.resolve(login.sessionToken);

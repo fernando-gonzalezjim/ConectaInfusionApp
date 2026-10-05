@@ -4,6 +4,7 @@ import type {useLocale} from '@conecta/i18n';
 import {Button} from '@conecta/ui/components/button';
 type Text=ReturnType<typeof useLocale>['t'];type Key=Parameters<Text>[0];
 const actions:Record<OperationalAuditAction,Key>={
+  'dependent.guardian_removed':'auditGuardianRemoved','dependent.guardian_invited':'auditGuardianInvited','dependent.guardian_accepted':'auditGuardianAccepted','dependent.created':'auditDependentCreated','dependent.profile_updated':'auditDependentUpdated','child_details.created':'auditChildDetailsCreated','child_details.updated':'auditChildDetailsUpdated','child_details.converted':'auditChildDetailsConverted',
   'family.responsibility_offered':'auditSuccessorOffered','family.responsibility_accepted':'auditSuccessorAccepted','family.responsibility_declined':'auditSuccessorDeclined',
   'account.created':'auditAccountCreated','account.profile_updated':'auditProfileUpdated','account.roles_changed':'auditRolesChanged',
   'account.deactivated':'auditAccountDeactivated','account.reactivated':'auditAccountReactivated','account.email_changed':'auditEmailChanged',

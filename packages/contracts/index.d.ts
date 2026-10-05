@@ -71,11 +71,12 @@ export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'IN
 export interface PhotoUploadInput { data: string; }
 export type OperationalAuditAction = 'account.created'|'account.profile_updated'|'account.roles_changed'|'account.deactivated'|'account.reactivated'
   |'account.email_changed'|'account.email_change_requested'|'account.confirmation_exempted'|'account.password_set'|'settings.updated'|'development.demo_seeded'
-  |'family.created'|'family.invitation_sent'|'family.member_joined'|'family.member_left'|'family.member_removed'|'family.closed'|'family.responsibility_offered'|'family.responsibility_accepted'|'family.responsibility_declined'|'other';
+  |'family.created'|'family.invitation_sent'|'family.member_joined'|'family.member_left'|'family.member_removed'|'family.closed'|'family.responsibility_offered'|'family.responsibility_accepted'|'family.responsibility_declined'
+  |'dependent.created'|'dependent.profile_updated'|'child_details.created'|'child_details.updated'|'child_details.converted'|'dependent.guardian_invited'|'dependent.guardian_accepted'|'dependent.guardian_removed'|'other';
 export type AuditValue = string|number|boolean|null|string[];
 export interface OperationalAuditEvent {
   id:string; occurredAt:string; actorType:'staff'|'customer'|'system'; actorId:string|null; actorName:string|null;
-  action:OperationalAuditAction; targetType:'account'|'family'|'business_settings'|'dataset'|'other'; targetId:string|null; targetName:string|null;
+  action:OperationalAuditAction; targetType:'account'|'family'|'dependent'|'child_details'|'business_settings'|'dataset'|'other'; targetId:string|null; targetName:string|null;
   businessUnit:BusinessUnitCode|null; correctionOf:string|null;
   changes:{before:Record<string,AuditValue>|null;after:Record<string,AuditValue>|null};
 }
@@ -90,3 +91,25 @@ export interface FamilyInvitationInput {email:string}
 export interface FamilyInvitationActionInput {token:string}
 export interface FamilyInvitationPreview {family:Pick<FamilyView,'id'|'name'>;expiresAt:string}
 export interface FamilyResponsibilityState {canNominate:boolean}
+// Internal domain composition contracts; no public lifecycle routes yet.
+export type FamilyLifecycleRequest={familyId:string;expectedVersion:number}&(
+  {operation:'close'}|
+  {operation:'leave';membershipId:string;creditChoice:'keep'|'donate'}|
+  {operation:'remove';membershipId:string;creditChoice?:'keep'|'donate';donationConsentReference?:string}
+);
+export type FamilyCreditPolicy='return-own-eligible'|'leave-own-eligible'|'return-all-to-original-purchasers';
+export interface FamilyLifecyclePreview {
+  familyId:string;version:number;operation:'leave'|'remove'|'close';membershipId?:string;personId?:string;
+  closesFamily:boolean;policy:FamilyCreditPolicy;revision:string;
+}
+export type FamilyLifecycleExecutionRequest=FamilyLifecycleRequest&{expectedFinancialRevision:string};
+export interface DependentProfileView {id:string;fullName:string;ageText:string;preferredLocale:Locale;version:number;guardians:{accountId:string;fullName:string}[]}
+export interface GuardianInviteTarget {id:string;fullName:string}
+export interface GuardianInvitationPreview {dependent:GuardianInviteTarget;expiresAt:string}
+export interface GuardianInvitationAccepted {dependentId:string}
+export interface GuardianRemovalTarget {id:string;accountId:string;fullName:string;canRemove:boolean}
+export interface GuardianRemovedResponse {dependentId:string;guardianRelationshipId:string}
+export interface SavedChildView {id:string;childName:string;ageText:string;dependentPersonId:string|null;version:number}
+export interface DependentProfileInput {fullName:string;ageText:string;preferredLocale?:Locale}
+export interface SavedChildInput {childName:string;ageText:string}
+export interface IdentityPage<T> {items:T[];nextCursor:string|null}

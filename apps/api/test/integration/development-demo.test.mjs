@@ -22,6 +22,22 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     const result = await seedDevelopmentDemo(db.pool,environment);
     assert.equal(result.createdAccounts,26);
     assert.equal(result.families,2);assert.equal(result.familyMemberships,3);
+    assert.equal(result.dependentProfiles,1);assert.equal(result.guardianRelationships,2);assert.equal(result.savedChildDetails,2);
+    const child=(await db.pool.query('SELECT person_id,created_by_account_id FROM dependent_profiles')).rows[0];
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM accounts WHERE person_id=$1',[child.person_id])).rows[0].n,0);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM members WHERE person_id=$1',[child.person_id])).rows[0].n,0);
+    const additionalGuardian=(await db.pool.query("SELECT id FROM dependent_guardians WHERE dependent_person_id=$1 AND source='accepted_invitation'",[child.person_id])).rows[0].id;
+    await db.pool.query("UPDATE people SET full_name='Edited fictional child' WHERE id=$1",[child.person_id]);
+    await db.pool.query("UPDATE dependent_profiles SET age_text='9 years',version=version+1 WHERE person_id=$1",[child.person_id]);
+    await db.pool.query("UPDATE dependent_guardians SET ended_at=clock_timestamp(),end_reason='self_removed' WHERE id=$1",[additionalGuardian]);
+    const savedOnly=(await db.pool.query('SELECT id FROM saved_child_details WHERE dependent_person_id IS NULL')).rows[0].id;
+    await db.pool.query("UPDATE saved_child_details SET child_name='Edited saved child',age_text='7 years',version=version+1 WHERE id=$1",[savedOnly]);
+    await seedDevelopmentDemo(db.pool,environment);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM dependent_profiles')).rows[0].n,1);
+    assert.equal((await db.pool.query('SELECT age_text FROM dependent_profiles WHERE person_id=$1',[child.person_id])).rows[0].age_text,'9 years');
+    assert.equal((await db.pool.query('SELECT full_name FROM people WHERE id=$1',[child.person_id])).rows[0].full_name,'Edited fictional child');
+    assert.ok((await db.pool.query('SELECT ended_at FROM dependent_guardians WHERE id=$1',[additionalGuardian])).rows[0].ended_at);
+    assert.equal((await db.pool.query('SELECT child_name FROM saved_child_details WHERE id=$1',[savedOnly])).rows[0].child_name,'Edited saved child');
     assert.equal((await db.pool.query('SELECT person_id FROM family_memberships WHERE ended_at IS NULL GROUP BY person_id HAVING count(*)>1')).rowCount,0);
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM family_memberships WHERE ended_at IS NULL')).rows[0].n,3);
     const unassigned=(await db.pool.query("SELECT p.id FROM people p JOIN accounts a ON a.person_id=p.id WHERE a.email='customer02@demo.conecta.example.test'")).rows[0];
@@ -47,6 +63,15 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     const inactive=(await db.pool.query("SELECT status,deactivated_at FROM accounts WHERE email='customer.inactive@demo.conecta.example.test'")).rows[0];
     assert.equal(inactive.status,'inactive');assert.ok(inactive.deactivated_at);
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM bookings')).rows[0].n,23);
+    const childClient=await db.pool.connect();await childClient.query('BEGIN');
+    try{
+      await childClient.query("UPDATE people SET status='inactive' WHERE id=$1",[child.person_id]);
+      await childClient.query("UPDATE dependent_guardians SET ended_at=clock_timestamp(),end_reason='dependent_deactivated' WHERE dependent_person_id=$1 AND ended_at IS NULL",[child.person_id]);
+      await childClient.query('COMMIT');
+    }catch(error){await childClient.query('ROLLBACK');throw error;}finally{childClient.release();}
+    await seedDevelopmentDemo(db.pool,environment);
+    assert.equal((await db.pool.query('SELECT status FROM people WHERE id=$1',[child.person_id])).rows[0].status,'inactive');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM dependent_prior_guardians WHERE dependent_person_id=$1',[child.person_id])).rows[0].n,1);
     const full = (await db.pool.query("SELECT s.capacity,count(b.id)::int n FROM class_sessions s JOIN bookings b ON b.class_session_id=s.id WHERE s.title='Demo: Yoga — full class' GROUP BY s.id")).rows[0];
     assert.equal(full.n,16); assert.equal(full.capacity,16);
     const account=(await db.pool.query("SELECT * FROM accounts WHERE email='instructor.yoga@demo.conecta.example.test'")).rows[0];

@@ -7,6 +7,7 @@ import { hashPassword } from '../apps/api/dist/modules/identity/passwords.js';
 import { appendIdentityAudit } from '../apps/api/dist/modules/identity/audit.js';
 import {createDemoPhotoFixture} from './development-photo-fixture.mjs';
 import {seedDevelopmentFamilies} from './development-families.mjs';
+import {seedDevelopmentDependents} from './development-dependents.mjs';
 
 // Fictional local-only credentials. Never use this dataset in a deployed database.
 export const demoPassword = 'ConectaDemo!2026';
@@ -86,10 +87,11 @@ export async function seedDevelopmentDemo(pool, environment = process.env) {
       if(row.member_id!==memberId || row.class_session_id!==sessionId) throw new Error('DEVELOPMENT_DEMO_CONFLICT');
     }
     const familyFixtures=await seedDevelopmentFamilies(client,id);
+    const dependentFixtures=await seedDevelopmentDependents(client,id);
     if(createdAccounts) await client.query(`INSERT INTO audit_events(actor_id,actor_type,action,target_type,target_id,changes,reason,correlation_id)
       VALUES ('development-demo-script','system','development.demo_seeded','dataset','conecta-development-demo-v1',$1,'Fictional local data only',$2)`,[JSON.stringify({createdAccounts,sessions:3,bookings:23}),randomUUID()]);
     await client.query('COMMIT');
-    return {createdAccounts,accounts:26,instructors:2,customers:21,sessions:3,bookings:23,...familyFixtures};
+    return {createdAccounts,accounts:26,instructors:2,customers:21,sessions:3,bookings:23,...familyFixtures,...dependentFixtures};
   } catch(error) {await client.query('ROLLBACK');throw error;}
   finally {client.release();}
 }
@@ -107,6 +109,7 @@ if(process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])
     console.log('Management audit testing: use the demo manager and View history; seeded account events already cover pagination.');
     console.log('Family screen testing: customer.profile/customer01 share a family; open My family and invite unassigned customer02; management can Assist family. See docs/identity-families.md.');
     console.log('Successor testing: the current responsible member can offer responsibility to another current member; customer.profile/customer01 provide the initial scenario. Accept or decline through the local inbox; seeding never creates offers or consent.');
+    console.log('Dependent persistence: one no-login child has customer.profile/customer01 as fictional guardians; customer18 has reusable child details without a profile. No child booking or invitation is created. See docs/identity-dependents.md.');
   } catch(error) {
     const known=/^(DEVELOPMENT_FLAG_REQUIRED|DEVELOPMENT_FIXTURES_DISABLED|UNSAFE_DEVELOPMENT_DATABASE|DEVELOPMENT_DATABASE_MISMATCH|DEVELOPMENT_ADMIN_REQUIRED|DEVELOPMENT_DEMO_CONFLICT)$/;
     console.error(known.test(error.message)?error.message:'DEVELOPMENT_DEMO_FAILED');

@@ -1,3 +1,4 @@
+import {endFamilyMembershipInTransaction,closeFamilyInTransaction} from './identity-family-lifecycle-helpers.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID,createHash} from 'node:crypto';
@@ -5,7 +6,7 @@ import {isolatedDatabase,migrate} from './identity-helpers.mjs';
 import {authConfig,createAuthAccount,password} from './identity-auth-helpers.mjs';
 import {createSessionService} from '../../dist/modules/identity/sessions.js';
 import {createFamilyResponsibilityService} from '../../dist/modules/identity/family-responsibility.js';
-import {createFamilyInTransaction,joinFamilyInTransaction,endFamilyMembershipInTransaction,closeFamilyInTransaction} from '../../dist/modules/identity/families.js';
+import {createFamilyInTransaction,joinFamilyInTransaction} from '../../dist/modules/identity/families.js';
 import {decryptOutboxPayload} from '../../dist/modules/identity/outbox-crypto.js';
 import {createEmailOutboxWorker} from '../../dist/modules/identity/email-outbox.js';
 

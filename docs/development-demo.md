@@ -2,6 +2,8 @@
 
 Run this manually after migrations and [manual administrator bootstrap](identity-bootstrap.md). It never runs on startup or in migrations. Existing active administration is required; the script does not create the first administrator. No email is sent. Most fictional accounts use explicit management confirmation exemptions with provenance and audited creation. The dedicated I20 profile customer has an explicitly audited synthetic verified state for local testing; this is not evidence of real mailbox ownership.
 
+I28 adds a fictional no-login dependent with `customer.profile`/`customer01` as guardians, one linked reusable child detail and an unlinked saved child for `customer18`. It does not change the 26-account/23-booking fixture counts or create child logins, invitations or bookings. Reseeding preserves manual details, ended guardian relationships and deactivated profiles. I30 exposes these fixtures in the customer Children and dependents dialog. See [dependent persistence](identity-dependents.md).
+
 The private root `dev.env` contains all local API, database, inbox and fixture settings, with independent random encryption/throttle keys. It is Git-ignored. Commands load it automatically; do not replace its keys while encrypted email is pending. This setup uses the separate `conecta_dev` database, Docker project `conecta-demo`, PostgreSQL port 5433 and inbox ports 1026/8026.
 
 ```powershell
@@ -64,3 +66,13 @@ I23 adds two fictional families and three memberships: `customer.profile` create
 The existing fixtures already cover the confirmed one-active-family rule; no new accounts/groups are needed. V7 enforces one current group per person, while the repeat-safe seed continues preserving historical memberships and manual edits.
 
 I26 reuses `customer.profile` and `customer01` in the shared family for responsibility offers, acceptance and decline. The manager fixture can assist through the customer account list. Seeding never issues successor links or chooses consent: these are manual UI actions with local inbox delivery. Reseeding preserves responsibility transfers and offer history. Follow the [family and successor manual checks](identity-families.md).
+
+## Dependent backend testing
+
+I29 reuses the I28 no-login dependent and saved-child fixtures; no additional accounts, acceptance records or bookings are required. `customer.profile` and `customer01` can access their current dependent profile, while `customer18` owns the saved child available for conversion. Consult the [dependent endpoint guide](identity-dependents.md) for routes, version handling and privacy boundaries. Reseeding preserves conversions, edited names/ages and ended guardian authorization. I30 provides customer screens in both languages.
+
+I30 manual UI checks reuse these same fixtures. Sign in to the customer app as `customer.profile@demo.conecta.example.test` or `customer01@demo.conecta.example.test` to see the current authorized guardian list, or as `customer18@demo.conecta.example.test` to edit/convert the saved child. Reseeding preserves those changes; the guarded full reset remains the only operation that clears the development database. Follow the [bilingual dependent screen checks](identity-dependents.md). No new demo rows are required for this step.
+
+I31 reuses existing child/guardian/customer/manager fixtures for [guardian invitation checks](identity-dependents.md). Invite an unassigned customer such as customer02 and accept through the local inbox; seeding creates no real invitations or consent. V11 marks legacy/synthetic consent exceptions and preserves manual edits. Migrate before seeding; the guarded full reset remains compatible.
+
+I32 reuses the same two current fictional guardians for [removal checks](identity-dependents.md). Removal preserves history; repeat seeding does not restore ended authorizations. To restore access, issue and accept a new invitation through the local inbox. The last active guardian cannot be removed. No additional seed accounts or consent are created.

@@ -328,8 +328,8 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 
 ### I27: Membership lifecycle contracts
 
-- [ ] **Acceptance:** Define leave/remove/close preview and transaction contracts; authorized closure and original-purchaser/keep-donate semantics are obligations for domain coordinators.
-- [ ] **Verification:** Denied actors and unavailable/unknown obligations cause no partial membership mutation. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Define leave/remove/close preview and transaction contracts; authorized closure and original-purchaser/keep-donate semantics are obligations for domain coordinators.
+- [x] **Verification:** Denied actors and unavailable/unknown obligations cause no partial membership mutation. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I26. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -337,47 +337,55 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 
 ### Checkpoint after I27
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+
+Delivered in sequential sub-slices: I27a typed preview/execution/financial obligations and disposable tests; I27b private mutation boundary and migration of existing family/successor regression fixtures to guarded execution; I27c domain documentation and verification. Execution binds family and financial revisions, preserves verified purchaser consent for application/audit and fails closed without actual coordination. Existing demo families suffice; no balances or consent are seeded. I27 counts once toward Graphify cadence; the next refresh remains after I29. The user's request to proceed with I28 authorizes this checkpoint.
 
 ### I28: Dependent persistence
 
-- [ ] **Acceptance:** Migrate no-login dependent people, guardian history, reusable child details and prior-guardian provenance; preserve attendee versus actor.
-- [ ] **Verification:** Multiple guardians, historical rows and no invented-email tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Migrate no-login dependent people, guardian history, reusable child details and prior-guardian provenance; preserve attendee versus actor.
+- [x] **Verification:** Multiple guardians, historical rows and no invented-email tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I27. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `database/migrations/`, `apps/api/src/modules/identity/dependents.ts`, `apps/api/test/integration/identity-dependents.test.mjs`.
 
+Delivered as I28a additive V10 persistence/constraints and role-guard compatibility, I28b repeat-safe fictional dependent/guardian/child fixtures and reset regressions, and I28c documentation/evidence. No public dependent routes or screens are added; those remain I29/I30. All 111 backend and 28 live-browser integration tests, 60 unit/client/translation tests, typechecks and builds passed. The verified local conecta_dev database is at V10 with one no-login child, two guardian histories and two saved-child records. I28 counts once toward Graphify cadence; two steps are complete since I26 and the changed-source refresh is scheduled after I29.
+
 ### I29: Dependent profile backend
 
-- [ ] **Acceptance:** Allow authorized guardian profile management; saved child name/age without profile is reusable and can convert without losing history.
-- [ ] **Verification:** Unrelated family member denied; attendee/actor snapshots remain distinct. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Allow authorized guardian profile management; saved child name/age without profile is reusable and can convert without losing history.
+- [x] **Verification:** Unrelated family member denied; attendee/actor snapshots remain distinct. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I28. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/dependent-routes.ts`, `apps/api/src/modules/identity/child-details.ts`, `apps/api/test/integration/identity-child-details.test.mjs`.
 
+Delivered in sequential sub-slices: I29a guardian/owner service and DTOs, I29b private guarded routers and application mounts, I29c safe audit projection/client/translated labels, and I29d documentation and regression evidence. I28 demo fixtures already cover both profile and saved-detail manual checks; no new seed identities or consent are required. No child booking, independent-login or lifecycle endpoint is enabled. All 114 backend integration, 28 live-browser, 61 unit/client/translation and four focused audit-browser tests passed, along with workspace typechecks/builds and local documentation links. The scheduled I27-I29 changed-source Graphify refresh completes this group.
+
 ### I30: Dependent UI
 
-- [ ] **Acceptance:** Offer child name/age reuse and optional profiles, clearly showing authorized guardians.
-- [ ] **Verification:** Guardian flows in both languages; booking integration remains unavailable until its module exists. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Offer child name/age reuse and optional profiles, clearly showing authorized guardians.
+- [x] **Verification:** Guardian flows in both languages; booking integration remains unavailable until its module exists. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I29. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/customer-web/src/`, `packages/ui/src/`, `packages/i18n/src/`, `tests/e2e/identity-dependents.spec.ts`.
 
+Delivered as I30a typed child client and contract tests, I30b shared bilingual customer dialog and guarded editing/conversion, I30c live database-backed browser verification, and I30d documentation/evidence. Existing I28 fixtures cover manual testing; no additional seed rows are needed. All 64 unit/client/translation, 114 controlled Chromium, 114 backend integration and 30 live Chromium tests passed; workspace typechecks/builds and 133 local links passed. I30 counts once toward the approved Graphify cadence; the snapshot remains through I29 and the next incremental refresh is after I32.
+
 ### Checkpoint after I30
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I31: Guardian consent
 
-- [ ] **Acceptance:** Implement seven-day existing-guardian invitations and management assistance; only accepted relationships authorize access.
-- [ ] **Verification:** Pending grants no access; duplicate acceptance and wrong-target tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Implement seven-day existing-guardian invitations and management assistance; only accepted relationships authorize access.
+- [x] **Verification:** Pending grants no access; duplicate acceptance and wrong-target tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I30. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -385,12 +393,14 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 
 ### I32: Guardian removal
 
-- [ ] **Acceptance:** Allow self-removal and privileged removal of another guardian; serialize checks so active dependents retain an active guardian.
-- [ ] **Verification:** Sequential/concurrent last-guardian removal rollback and pending-does-not-count tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Allow self-removal and privileged removal of another guardian; serialize checks so active dependents retain an active guardian.
+- [x] **Verification:** Sequential/concurrent last-guardian removal rollback and pending-does-not-count tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I31. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/guardians.ts`, `apps/api/src/modules/identity/dependent-routes.ts`, `apps/customer-web/src/`, `apps/api/test/integration/identity-guardians.test.mjs`.
+
+Delivered in sequential sub-slices: I32a private removal service/routes/contracts and PostgreSQL permission/history tests; I32b typed client and safe audit projection; I32c shared bilingual customer/management confirmations and controlled Chromium checks; I32d live consent/removal and stale-authority barrier verification; I32e documentation, regression evidence and the scheduled changed-source Graphify refresh. Existing I28/I31 demo fixtures cover removal without new identities or synthetic consent. Workspace typechecks/builds, 66 unit/client/translation, 129 controlled Chromium, 126 backend integration and 32 live Chromium checks passed, with all 143 local links valid. The scheduled changed-source Graphify refresh covers I30-I32; next boundary is I35.
 
 ### I33: Independent account transition
 
@@ -477,7 +487,7 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 
 ### I40: Documentation and handoff
 
-- [ ] **Acceptance:** Document bootstrap/local inbox/security configuration and unresolved production/domain integration; review approved-spec coverage and remind user graph is stale.
+- [ ] **Acceptance:** Document bootstrap/local inbox/security configuration and unresolved production/domain integration; review approved-spec coverage and record Graphify snapshot status.
 - [ ] **Verification:** Local links/checklist review; human review before module sign-off; PDFs unchanged and bilingual rules synchronized only if changed. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I39. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -488,4 +498,4 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 
 - [ ] Human reviews specification coverage and recorded verification evidence.
 - [ ] Outstanding booking, credit, scheduling and payroll integrations are explicit; no incomplete lifecycle workflow is marked production-ready.
-- [ ] Remind the user to refresh Graphify. Rebuild only when authorized.
+- [ ] Record Graphify snapshot status and apply the approved changed-source refresh cadence; no reminders, full rebuilds or hooks.

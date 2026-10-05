@@ -60,12 +60,14 @@ export async function cancelActionDelivery(client: PoolClient, ids: string[], no
 // commands prelock accounts/people in UUID order before relationship rows;
 // helpers recheck those locks, then take the recipient send lock, token and outbox.
 export async function issueAction(client: PoolClient, config: EnabledIdentityConfig, input: ActionBinding,
-  locale: 'es-MX' | 'en', now = new Date()): Promise<{ id: string; expiresAt: string }> {
+  locale: 'es-MX' | 'en', now = new Date(), clock?:()=>Date): Promise<{ id: string; expiresAt: string }> {
   if (!config.enabled || !['es-MX', 'en'].includes(locale)) invalid();
   const binding = validate(input, now);
   await lockContext(client, binding, config.smtp.transport === 'mailpit');
   const sendHash = actionSubjectHash(config.secrets, 'send', JSON.stringify([binding.purpose, binding.recipientEmail]));
   await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))', ['identity-action-send:' + sendHash.toString('hex')]);
+  // Callers with a live clock measure validity and throttling after blocking locks.
+  if(clock){now=clock();validate(binding,now);}
   const previous = (await client.query<{ attempts: number; expires_at: Date; last_attempt_at: Date }>(
     "SELECT attempts,expires_at,last_attempt_at FROM identity_throttles WHERE scope='resend_identity' AND subject_hash=$1", [sendHash])).rows[0];
   const sameWindow = previous && previous.expires_at > now;

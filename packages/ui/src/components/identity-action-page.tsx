@@ -3,7 +3,7 @@ import type { Locale, EmailConfirmedResponse, EmailChangedResponse, PasswordRese
 import { Button } from './button';
 import { RecoveryRequest, PasswordResetForm, type RecoveryApi, type RecoveryKey } from './password-recovery';
 
-type ActionKey = RecoveryKey | 'language' | 'confirmEmail' | 'confirmIntro' | 'confirmingEmail' | 'emailConfirmed' | 'confirmationInvalid' | 'unsupportedAction' | 'returnHome' | 'signIn' | 'resetIntro' | 'resetComplete' | 'resetInvalid' | 'setupPassword' | 'settingPassword' | 'setupIntro' | 'setupComplete' | 'setupInvalid' | 'confirmNewEmail' | 'emailChanged' | 'emailChangeConfirmIntro' | 'familyInvitationTitle' | 'familyJoined' | 'familyInvalid' | 'successorTitle' | 'successorAccepted' | 'successorDeclined';
+type ActionKey = RecoveryKey | 'language' | 'confirmEmail' | 'confirmIntro' | 'confirmingEmail' | 'emailConfirmed' | 'confirmationInvalid' | 'unsupportedAction' | 'returnHome' | 'signIn' | 'resetIntro' | 'resetComplete' | 'resetInvalid' | 'setupPassword' | 'settingPassword' | 'setupIntro' | 'setupComplete' | 'setupInvalid' | 'confirmNewEmail' | 'emailChanged' | 'emailChangeConfirmIntro' | 'familyInvitationTitle' | 'familyJoined' | 'familyInvalid' | 'successorTitle' | 'successorAccepted' | 'successorDeclined' | 'guardianTitle' | 'guardianAccepted' | 'guardianInvalid';
 interface ActionApi extends RecoveryApi {
   confirmEmail(input: { token: string }, signal?: AbortSignal): Promise<EmailConfirmedResponse>;
   setupPassword(input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordSetupResponse>;
@@ -16,13 +16,14 @@ function readAction() {
   const params = new URLSearchParams(window.location.hash.slice(1));
   window.history.replaceState(null, '', window.location.pathname);
   const purpose = params.getAll('purpose').length === 1 ? params.get('purpose') : null;
-  const supported = purpose === 'email_confirmation' || purpose === 'password_reset' || purpose === 'password_setup' || purpose === 'email_change' || purpose === 'family_invitation' || purpose === 'family_successor';
+  const supported = purpose === 'email_confirmation' || purpose === 'password_reset' || purpose === 'password_setup' || purpose === 'email_change' || purpose === 'family_invitation' || purpose === 'family_successor' || purpose === 'guardian_invitation';
   const token = params.getAll('token').length === 1 ? params.get('token') : null;
   return { supported, purpose, token: supported && token && /^[A-Za-z0-9_-]{43}$/.test(token) ? token : null };
 }
 const incomingAction = readAction();
-export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmationResend, renderFamilyInvitation, renderFamilySuccessor }: {
+export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmationResend, renderFamilyInvitation, renderFamilySuccessor, renderGuardianInvitation }: {
   api: ActionApi; t: (key: ActionKey) => string; locale: Locale; setLocale(locale: Locale): void; renderConfirmationResend?: () => ReactNode;
+  renderGuardianInvitation?:(token:string,onCompleted:()=>void,onInvalid:()=>void)=>ReactNode;
   renderFamilyInvitation?:(token:string,onCompleted:()=>void,onInvalid:()=>void)=>ReactNode;
   renderFamilySuccessor?:(token:string,onCompleted:(decision?:'declined')=>void,onInvalid:()=>void)=>ReactNode;
 }) {
@@ -34,7 +35,8 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
   const resetting = purpose === 'password_reset';
   const settingUp = purpose === 'password_setup';
   const changingEmail = purpose === 'email_change';
-  const familyInvitation = purpose === 'family_invitation' || purpose === 'family_successor';
+  const guardianInvitation=purpose==='guardian_invitation';
+  const familyInvitation = purpose === 'family_invitation' || purpose === 'family_successor' || guardianInvitation;
   const successor=purpose==='family_successor';
   const [declined,setDeclined]=useState(false);
   const [linkVersion, setLinkVersion] = useState(0);
@@ -67,9 +69,9 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
     <header className="mx-auto flex max-w-xl flex-wrap items-center justify-between gap-4"><a href="/" className="text-xl font-semibold">Conecta Infusion</a>
       <label className="text-sm">{t('language')}<select aria-label={t('language')} className="ml-2 rounded-md border bg-background p-2" value={locale} onChange={e => setLocale(e.target.value as 'en' | 'es-MX')}><option value="es-MX">Español</option><option value="en">English</option></select></label></header>
     <main className="mx-auto mt-12 max-w-xl space-y-6 rounded-2xl border bg-card p-6 md:p-10" aria-busy={pending}>
-      <h1 className="text-3xl font-semibold">{t(successor ? 'successorTitle' : familyInvitation ? 'familyInvitationTitle' : settingUp ? 'setupPassword' : resetting ? 'resetPassword' : changingEmail ? 'confirmNewEmail' : 'confirmEmail')}</h1>
-      {confirmed ? <p role="status">{t(successor ? declined?'successorDeclined':'successorAccepted' : familyInvitation ? 'familyJoined' : settingUp ? 'setupComplete' : resetting ? 'resetComplete' : changingEmail ? 'emailChanged' : 'emailConfirmed')}</p> : invalid ? <p role="alert">{t(supported ? familyInvitation ? 'familyInvalid' : settingUp ? 'setupInvalid' : resetting ? 'resetInvalid' : 'confirmationInvalid' : 'unsupportedAction')}</p>
-        : familyInvitation && token.current ? <div key={linkVersion}>{(successor?renderFamilySuccessor:renderFamilyInvitation)?.(token.current,
+      <h1 className="text-3xl font-semibold">{t(guardianInvitation?'guardianTitle':successor ? 'successorTitle' : familyInvitation ? 'familyInvitationTitle' : settingUp ? 'setupPassword' : resetting ? 'resetPassword' : changingEmail ? 'confirmNewEmail' : 'confirmEmail')}</h1>
+      {confirmed ? <p role="status">{t(guardianInvitation?'guardianAccepted':successor ? declined?'successorDeclined':'successorAccepted' : familyInvitation ? 'familyJoined' : settingUp ? 'setupComplete' : resetting ? 'resetComplete' : changingEmail ? 'emailChanged' : 'emailConfirmed')}</p> : invalid ? <p role="alert">{t(supported ? guardianInvitation?'guardianInvalid':familyInvitation ? 'familyInvalid' : settingUp ? 'setupInvalid' : resetting ? 'resetInvalid' : 'confirmationInvalid' : 'unsupportedAction')}</p>
+        : familyInvitation && token.current ? <div key={linkVersion}>{(guardianInvitation?renderGuardianInvitation:successor?renderFamilySuccessor:renderFamilyInvitation)?.(token.current,
           (decision?:'declined')=>{if(generation.current===currentGeneration){token.current=null;setDeclined(decision==='declined');setConfirmed(true);}},
           ()=>{if(generation.current===currentGeneration){token.current=null;setInvalid(true);}})??<p role="alert">{t('unsupportedAction')}</p>}</div>
         : (resetting || settingUp) && token.current ? <><p>{t(settingUp ? 'setupIntro' : 'resetIntro')}</p><PasswordResetForm key={linkVersion} api={api} t={t} token={token.current}

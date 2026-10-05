@@ -25,6 +25,10 @@ import {createAuditRouter} from './modules/identity/audit-routes.js';
 import {createFamilyInvitationService} from './modules/identity/family-invitations.js';
 import {createFamilyRouter} from './modules/identity/family-routes.js';
 import {createFamilyResponsibilityService} from './modules/identity/family-responsibility.js';
+import {createChildDetailsService} from './modules/identity/child-details.js';
+import {createDependentRouter} from './modules/identity/dependent-routes.js';
+import {createGuardianInvitationService} from './modules/identity/guardian-invitations.js';
+import {createGuardianService} from './modules/identity/guardians.js';
 
 export async function createApplication(options: {
   database?: Pool; identityConfig?: IdentityConfig; environment?: NodeJS.ProcessEnv;
@@ -74,6 +78,10 @@ export async function createApplication(options: {
     const families=express.Router();families.use(protection.originGuard,identityCors);
     families.use(createFamilyRouter(createFamilyInvitationService(database,identityConfig,service),protection.sessionMutation,createFamilyResponsibilityService(database,identityConfig,service)));
     app.use('/api/v1/families',families);
+    const children=createChildDetailsService(database,service);
+    const guardians=createGuardianInvitationService(database,identityConfig,service);
+    const guardianRemoval=createGuardianService(database,service);
+    for(const kind of ['dependents','child-details'] as const){const router=express.Router();router.use(protection.originGuard,identityCors,createDependentRouter(children,protection.sessionMutation,kind,guardians,guardianRemoval));app.use('/api/v1/'+kind,router);}
     const management = express.Router();
     management.use(protection.originGuard, identityCors);
     management.use(createManagementRouter(service));

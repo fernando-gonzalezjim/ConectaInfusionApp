@@ -1,5 +1,6 @@
 import type { ApiErrorCode, CsrfResponse, LoginInput, LoginResponse, SessionResponse, PublicSettings, StudioOverview, ManagementAccessResponse, RegistrationInput, ActionAcceptedResponse, EmailConfirmedResponse, PasswordResetInput, PasswordResetResponse, CustomerInvitationInput, PasswordSetupResponse } from '@conecta/contracts';
 import type {AccountListQuery,AccountListResponse,AccountProfile,AccountProfileInput,IdentityRole,RoleChangeInput,RoleChangeResponse} from '@conecta/contracts';
+import {createDependentClient} from './dependents.ts';
 
 const identityRoles: readonly IdentityRole[]=['administrator','manager','reception','cafe_staff','instructor','customer'];
 const validId=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
@@ -46,7 +47,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       const code: ApiErrorCode = response.status === 401 ? (body?.code === 'INVALID_CREDENTIALS' ? 'INVALID_CREDENTIALS' : 'UNAUTHENTICATED')
         : response.status === 403 ? (body?.code === 'RECENT_AUTH_REQUIRED' ? 'RECENT_AUTH_REQUIRED' : 'FORBIDDEN') : response.status === 429 ? 'THROTTLED'
         : response.status === 404 ? 'NOT_FOUND' : response.status === 409 ? 'CONFLICT' : response.status >= 500 ? 'UNAVAILABLE'
-        : response.status === 400 && ['/auth/confirmation', '/auth/recovery/reset', '/auth/setup', '/auth/email-change/confirmation','/families/invitations/preview','/families/invitations/accept','/families/successor-offers/preview','/families/successor-offers/accept','/families/successor-offers/decline'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
+        : response.status === 400 && ['/auth/confirmation', '/auth/recovery/reset', '/auth/setup', '/auth/email-change/confirmation','/dependents/guardian-invitations/preview','/dependents/guardian-invitations/accept','/families/invitations/preview','/families/invitations/accept','/families/successor-offers/preview','/families/successor-offers/accept','/families/successor-offers/decline'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
       const retry = response.headers.get('Retry-After');
       const seconds = retry && /^[1-9][0-9]{0,6}$/.test(retry) ? Number(retry) : undefined;
       throw new ApiError(code, code === 'THROTTLED' ? seconds : undefined);
@@ -95,6 +96,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
     return {family:{id:result.family.id,name:result.family.name},expiresAt:result.expiresAt};
   }
   return {
+    ...createDependentClient(send,familyMutation,code=>new ApiError(code)),
     getFamilyResponsibility:async(id:string,signal?:AbortSignal):Promise<import('@conecta/contracts').FamilyResponsibilityState>=>{
       if(!validId(id))throw new ApiError('INVALID_REQUEST');const result=await send<import('@conecta/contracts').FamilyResponsibilityState>(`/families/${id}/responsibility`,signal);
       if(!result||typeof result.canNominate!=='boolean')throw new ApiError('INTERNAL_ERROR');return {canNominate:result.canNominate};
@@ -113,12 +115,12 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       const params=new URLSearchParams({limit:String(query.limit??25)});if(query.cursor)params.set('cursor',query.cursor);
       const page=await send<import('@conecta/contracts').OperationalAuditPage>(`/audit?${params}`,signal);
       if(!page||!Array.isArray(page.events)||page.events.length>50||!(page.nextCursor===null||typeof page.nextCursor==='string'&&page.nextCursor.length<=200&&/^[A-Za-z0-9_-]+$/.test(page.nextCursor)))throw new ApiError('INTERNAL_ERROR');
-      const actions=['account.created','account.profile_updated','account.roles_changed','account.deactivated','account.reactivated','account.email_changed','account.email_change_requested','account.confirmation_exempted','account.password_set','settings.updated','development.demo_seeded','family.created','family.invitation_sent','family.member_joined','family.member_left','family.member_removed','family.closed','family.responsibility_offered','family.responsibility_accepted','family.responsibility_declined','other'];
-      const fields=['fullName','phone','preferredLocale','email','photoId','personId','status','confirmationStatus','exemptionSource','roles','displayName','country','currency','timezone','defaultLocale','supportedLocales','defaultCapacity','createdAccounts','sessions','bookings','name','version','membershipId','responsibleMembershipId','memberCount','acceptedInvitationId','invitationId','invitationVersion'];
-      const snapshot=(value:Record<string,import('@conecta/contracts').AuditValue>|null)=>{
+      const actions=['account.created','account.profile_updated','account.roles_changed','account.deactivated','account.reactivated','account.email_changed','account.email_change_requested','account.confirmation_exempted','account.password_set','settings.updated','development.demo_seeded','family.created','family.invitation_sent','family.member_joined','family.member_left','family.member_removed','family.closed','family.responsibility_offered','family.responsibility_accepted','family.responsibility_declined','dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted','dependent.guardian_invited','dependent.guardian_accepted','dependent.guardian_removed','other'];
+      const fields=['fullName','phone','preferredLocale','email','photoId','personId','status','confirmationStatus','exemptionSource','roles','displayName','country','currency','timezone','defaultLocale','supportedLocales','defaultCapacity','createdAccounts','sessions','bookings','name','version','membershipId','responsibleMembershipId','memberCount','acceptedInvitationId','invitationId','invitationVersion','guardianAccountId','guardianRelationshipId'];
+      const snapshot=(value:Record<string,import('@conecta/contracts').AuditValue>|null,referencesOnly=false)=>{
         if(value===null)return null;if(!value||typeof value!=='object'||Array.isArray(value))throw new ApiError('INTERNAL_ERROR');
         const result:Record<string,import('@conecta/contracts').AuditValue>={};for(const [key,entry] of Object.entries(value)){
-          if(!fields.includes(key))continue;
+          if(!fields.includes(key)||referencesOnly&&!['personId','version','invitationId','invitationVersion','guardianAccountId','guardianRelationshipId'].includes(key))continue;
           if(!(entry===null||typeof entry==='boolean'||typeof entry==='number'&&Number.isFinite(entry)||typeof entry==='string'&&entry.length<=500
             ||Array.isArray(entry)&&entry.length<=6&&entry.every(item=>typeof item==='string'&&item.length<=120)))throw new ApiError('INTERNAL_ERROR');result[key]=Array.isArray(entry)?[...entry]:entry;
         }return result;
@@ -126,12 +128,12 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       return {nextCursor:page.nextCursor,events:page.events.map(event=>{
         if(!event||!validId(event.id)||typeof event.occurredAt!=='string'||event.occurredAt.length>32||Number.isNaN(Date.parse(event.occurredAt))
           ||!['staff','customer','system'].includes(event.actorType)||!(event.actorId===null||validId(event.actorId)||event.actorId==='development-demo-script')
-          ||!actions.includes(event.action)||!['account','family','business_settings','dataset','other'].includes(event.targetType)
+          ||!actions.includes(event.action)||!['account','family','dependent','child_details','business_settings','dataset','other'].includes(event.targetType)
           ||!(event.targetId===null||validId(event.targetId)||event.targetId==='1'||event.targetId==='conecta-development-demo-v1')
           ||![event.actorName,event.targetName].every(name=>name===null||typeof name==='string'&&name.length<=120)
           ||!(event.businessUnit===null||['studio','cafe'].includes(event.businessUnit))||!(event.correctionOf===null||validId(event.correctionOf))||!event.changes)throw new ApiError('INTERNAL_ERROR');
         return {id:event.id,occurredAt:event.occurredAt,actorType:event.actorType,actorId:event.actorId,actorName:event.actorName,action:event.action,targetType:event.targetType,targetId:event.targetId,targetName:event.targetName,
-          businessUnit:event.businessUnit,correctionOf:event.correctionOf,changes:{before:snapshot(event.changes.before),after:snapshot(event.changes.after)}};
+          businessUnit:event.businessUnit,correctionOf:event.correctionOf,changes:{before:snapshot(event.changes.before,event.targetType==='dependent'||event.targetType==='child_details'),after:snapshot(event.changes.after,event.targetType==='dependent'||event.targetType==='child_details')}};
       })};
     },
     getOwnPhoto:(signal?:AbortSignal)=>photo('/me/photo',signal),

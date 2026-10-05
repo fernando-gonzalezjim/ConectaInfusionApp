@@ -1,4 +1,4 @@
-# Family persistence, invitations and responsibility (I23-I26)
+# Family persistence, invitations, responsibility and lifecycle (I23-I27)
 
 V6 adds `families` and `family_memberships`; migration does not create real groups or claim existing customers. Creator identity is historical and immutable. Current responsibility points to a current membership in the same family. Leaving clears responsibility when appropriate; no successor is assigned automatically. An active group must have a current member, and a closed group must have none. Closed records and ended memberships cannot be resurrected or deleted.
 
@@ -8,7 +8,7 @@ Invitation acceptance metadata records provenance but is not a substitute for to
 
 The user confirmed one active family per customer on October 4, 2026. V7 adds a global partial unique index on current memberships by person, preserving V6's checksum and all ended memberships. Create/join commands check this after locking the person/account; concurrent attempts cannot join two groups. Customers must leave the current group under the existing credit rules before creating or accepting another. Existing conflicting memberships cause migration failure without deleting history, choosing a group or moving credits; an operator must reconcile them explicitly.
 
-Departure and closure require a supplied domain coordinator using the same PostgreSQL client and locks. Missing coordination fails closed; Identity never treats missing credit tables as evidence of no obligations. The coordinator must enforce purchaser ownership, reserved credits, expiration and explicit donation choices. I23 does not implement credit disposition or offer a live departure workflow. After a coordinator returns, session expiry is checked again before membership mutation; failure rolls back the complete transaction.
+Departure and closure require a supplied domain coordinator using the same PostgreSQL client and locks. Missing coordination fails closed; Identity never treats missing credit tables as evidence of no obligations. The coordinator must enforce purchaser ownership, reserved credits, expiration and explicit donation choices. I27 defines the integration contract without implementing credit disposition or offering a live departure workflow. After a coordinator returns, session expiry is checked again before membership mutation; failure rolls back the complete transaction.
 
 The demo seed creates two fictional groups and three memberships: a shared group for `customer.profile` and `customer01`, and a solo group for `customer18`. Acceptance provenance is synthetic development data, with no email or financial mutation. Reseeding preserves group renames, closure and departures. Existing unassigned `customer02` and the manager/customer account provide the I24 invitation and management-assistance scenarios; no extra fictional accounts or preaccepted consent are needed. See [the demo guide](development-demo.md).
 
@@ -49,7 +49,26 @@ Offers use the existing seven-day single-use email policy, 60-second cooldown an
 
 Offers bind the exact target membership, recipient account/email/version, issuer account/version and family version. Any membership change, closure or intervening responsibility change invalidates the offer. A departed or ineligible issuer cannot transfer authority. The delivery worker checks the same live domain policy before decrypting an email; obsolete deliveries are cancelled and scrubbed. Redemption samples expiry after blocking locks. Final offers are immutable history; their tokens cannot be reused for the opposite decision.
 
-The existing lifecycle commands already remove the departed creator's authority and preserve last-member closure when no successor accepted. Pending/declined offers do not add a departure requirement. Public leave/remove/close workflows still await I27's domain-coordination contracts; Identity does not bypass credit disposition through this transfer screen.
+The lifecycle commands remove the departed creator's authority and preserve last-member closure when no successor accepted. Pending/declined offers do not add a departure requirement. Public leave/remove/close workflows await credits-bookings integration; Identity does not bypass credit disposition through this transfer screen.
+
+## Membership lifecycle contract (I27)
+
+`family-lifecycle.ts` exposes only `previewFamilyLifecycleInTransaction` and `executeFamilyLifecycleInTransaction` for application composition. Lower-level membership-ending and closure mutations are private to that module. Callers supply an existing PostgreSQL transaction, authenticated context and trusted credits-bookings coordinator. They must roll back on every error. No HTTP route, UI button or production financial adapter is enabled by this step.
+
+Preview verifies the same current session, permissions, expected family version and membership locks as execution, without membership or audit mutation. The coordinator's `inspect` must also be read-only: lock and positively establish all affected financial obligations, return a bounded opaque revision, and explicitly support ownership, reservations, original value/expiry, no refunds/restoration and transactional disposition audit. Unknown/unavailable state or incomplete support fails with `CONFLICT`. Missing financial tables never justify an empty-obligation claim. No financial balances or consent references are exposed by the preview DTO.
+
+Execution requires `expectedFinancialRevision` from preview. It repeats authorization and inspection under locks and rejects changed family or financial revisions. `apply` receives the same client and immutable plan; its matching revision receipt is required before membership changes. Domain writes, membership history and sanitized Identity audit must commit or roll back together. Session expiry is checked again after application. An adapter must not commit independently, call remote payment services inside this transaction, swallow errors or mutate Identity membership/responsibility itself. Composition must prelock all participating accounts/people in UUID order before entering Identity, then family/membership rows, then financial rows, consistently across domain operations. Identity alone does not establish financial correctness; verify the real adapter again when credits-bookings is implemented.
+
+| Operation | Authority | Financial policy |
+| --- | --- | --- |
+| Leave | Departing independent member | Explicit `keep` returns only their eligible unused/unreserved purchased credits; `donate` leaves those credits in the group |
+| Remove | Current responsible member or admin/manager, never self-removal | Defaults to return the removed purchaser's eligible credits; donation requires a consent reference independently verified as accepted by that removed purchaser |
+| Close | Current responsible member, admin/manager, or sole remaining member when responsibility is vacant | Return all unused/unreserved credits, including prior donations, to original purchasers |
+| Last member leaves/is removed | Same authority as departure | Closure policy overrides donation because the group is closing |
+
+For removal donation, inspection verifies consent and application receives its reference and purchaser identity to consume/revalidate and audit that exact consent atomically. A removing actor cannot assert acceptance for the purchaser; system jobs cannot request donation. All policies preserve credits attached to valid bookings, original monetary value and expiry, consumed/expired history, and guardian authorization. Closure does not refund or restore credits. Financial revision must bind relevant locked obligations and verified consent so stale previews cannot authorize changed disposition.
+
+The existing shared/solo family demo fixtures are sufficient for membership inspection. No new fictional balances or consent are seeded: financial behavior is demonstrated only through disposable integration fixtures with explicit trusted adapters. Those test-only adapters are not application configuration or production implementations.
 
 ## Local manual check (I25)
 
