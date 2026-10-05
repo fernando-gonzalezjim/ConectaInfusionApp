@@ -1,17 +1,17 @@
 {
-  "node_count": 1296,
+  "node_count": 1731,
   "unverified_node_count": 0,
-  "raw_edge_count": 2319,
+  "raw_edge_count": 3447,
   "non_object_edges": 0,
   "missing_endpoint_edges": 0,
   "dangling_endpoint_edges": 0,
   "external_reference_edges": 0,
   "self_loop_edges": 5,
-  "valid_candidate_edges": 2319,
+  "valid_candidate_edges": 3447,
   "exact_duplicate_edges": 0,
-  "directed_unique_endpoint_pairs": 2319,
+  "directed_unique_endpoint_pairs": 3447,
   "directed_same_endpoint_collapsed_edges": 0,
-  "undirected_unique_endpoint_pairs": 2319,
+  "undirected_unique_endpoint_pairs": 3447,
   "undirected_same_endpoint_collapsed_edges": 0,
   "same_endpoint_group_count": 0,
   "relation_variant_groups": 0,
@@ -19,8 +19,8 @@
   "source_location_variant_groups": 0,
   "context_variant_groups": 0,
   "post_build_graph_type": "Graph",
-  "post_build_node_count": 1296,
-  "post_build_edge_count": 2319,
+  "post_build_node_count": 1731,
+  "post_build_edge_count": 3447,
   "post_build_error": "",
   "producer_suppression": {
     "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
@@ -103,28 +103,28 @@
   },
   "examples": [],
   "fresh_extraction": {
-    "node_count": 197,
+    "node_count": 465,
     "unverified_node_count": 0,
-    "raw_edge_count": 541,
+    "raw_edge_count": 1202,
     "non_object_edges": 0,
     "missing_endpoint_edges": 0,
-    "dangling_endpoint_edges": 139,
-    "external_reference_edges": 34,
-    "self_loop_edges": 3,
-    "valid_candidate_edges": 368,
+    "dangling_endpoint_edges": 215,
+    "external_reference_edges": 58,
+    "self_loop_edges": 1,
+    "valid_candidate_edges": 929,
     "exact_duplicate_edges": 1,
-    "directed_unique_endpoint_pairs": 348,
-    "directed_same_endpoint_collapsed_edges": 20,
-    "undirected_unique_endpoint_pairs": 348,
-    "undirected_same_endpoint_collapsed_edges": 20,
-    "same_endpoint_group_count": 19,
-    "relation_variant_groups": 18,
+    "directed_unique_endpoint_pairs": 886,
+    "directed_same_endpoint_collapsed_edges": 43,
+    "undirected_unique_endpoint_pairs": 883,
+    "undirected_same_endpoint_collapsed_edges": 46,
+    "same_endpoint_group_count": 42,
+    "relation_variant_groups": 30,
     "source_file_variant_groups": 0,
-    "source_location_variant_groups": 1,
-    "context_variant_groups": 1,
+    "source_location_variant_groups": 11,
+    "context_variant_groups": 0,
     "post_build_graph_type": "Graph",
-    "post_build_node_count": 286,
-    "post_build_edge_count": 521,
+    "post_build_node_count": 603,
+    "post_build_edge_count": 1156,
     "post_build_error": "",
     "producer_suppression": {
       "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
@@ -207,101 +207,102 @@
     },
     "examples": [
       {
-        "source": "apps_api_src_modules_identity_sessions",
-        "target": "packages_contracts_index_d",
+        "source": "database_migrations_v9_family_responsibility_identity_family_successor_valid",
+        "target": "database_migrations_v9_family_responsibility_sql_account_roles",
         "edge_count": 3,
         "relations": [
-          "imports_from",
-          "re_exports"
+          "reads_from"
         ],
         "source_files": [
-          "apps/api/src/modules/identity/sessions.ts"
+          "database/migrations/V9__family_responsibility.sql"
         ],
         "source_locations": [
-          "L7",
-          "L9"
+          "L33",
+          "L36",
+          "L39"
         ],
         "contexts": [
-          "export",
-          "import",
-          "re-export"
+          ""
         ]
       },
       {
-        "source": "apps_api_src_modules_identity_account_invitations",
-        "target": "packages_contracts_index_d_identityrole",
+        "source": "apps_api_src_modules_identity_email_outbox_createemailoutboxworker",
+        "target": "apps_api_src_modules_identity_email_outbox_createemailoutboxworker_runbatch",
         "edge_count": 2,
         "relations": [
-          "imports"
+          "contains",
+          "indirect_call"
         ],
         "source_files": [
-          "apps/api/src/modules/identity/account-invitations.ts"
+          "apps/api/src/modules/identity/email-outbox.ts"
         ],
         "source_locations": [
-          "L8"
+          "L126",
+          "L188"
         ],
         "contexts": [
-          "import"
+          "",
+          "collection"
         ]
       },
       {
-        "source": "apps_api_src_modules_identity_sessions",
-        "target": "packages_contracts_index_d_identityrole",
-        "edge_count": 2,
-        "relations": [
-          "imports",
-          "re_exports"
-        ],
-        "source_files": [
-          "apps/api/src/modules/identity/sessions.ts"
-        ],
-        "source_locations": [
-          "L7",
-          "L9"
-        ],
-        "contexts": [
-          "import",
-          "re-export"
-        ]
-      },
-      {
-        "source": "apps_api_src_modules_identity_sessions",
-        "target": "packages_contracts_index_d_publicaccount",
-        "edge_count": 2,
-        "relations": [
-          "imports",
-          "re_exports"
-        ],
-        "source_files": [
-          "apps/api/src/modules/identity/sessions.ts"
-        ],
-        "source_locations": [
-          "L7",
-          "L9"
-        ],
-        "contexts": [
-          "import",
-          "re-export"
-        ]
-      },
-      {
-        "source": "apps_api_test_integration_identity_invitations_test",
-        "target": "apps_api_test_integration_identity_invitations_test_token",
+        "source": "apps_api_src_modules_identity_family_responsibility_createfamilyresponsibilityservice",
+        "target": "apps_api_src_modules_identity_family_responsibility_createfamilyresponsibilityservice_respond",
         "edge_count": 2,
         "relations": [
           "calls",
           "contains"
         ],
         "source_files": [
-          "apps/api/test/integration/identity-invitations.test.mjs"
+          "apps/api/src/modules/identity/family-responsibility.ts"
         ],
         "source_locations": [
-          "L42",
-          "L9"
+          "L109",
+          "L61"
         ],
         "contexts": [
           "",
           "call"
+        ]
+      },
+      {
+        "source": "apps_api_test_integration_identity_family_invitations_test",
+        "target": "apps_api_test_integration_identity_family_invitations_test_fixture",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/test/integration/identity-family-invitations.test.mjs"
+        ],
+        "source_locations": [
+          "L32",
+          "L47"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_api_test_integration_identity_family_invitations_test_fixture",
+        "target": "apps_api_test_integration_identity_family_invitations_test_fixture_account",
+        "edge_count": 2,
+        "relations": [
+          "contains",
+          "indirect_call"
+        ],
+        "source_files": [
+          "apps/api/test/integration/identity-family-invitations.test.mjs"
+        ],
+        "source_locations": [
+          "L36",
+          "L43"
+        ],
+        "contexts": [
+          "",
+          "collection"
         ]
       }
     ]

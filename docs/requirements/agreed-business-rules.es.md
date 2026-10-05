@@ -61,6 +61,8 @@ Estos son requisitos para una implementación futura. Los ejemplos ilustran las 
 
 ## 5. Créditos compartidos y salida del grupo familiar
 
+- Cada cliente puede pertenecer a un solo grupo familiar activo a la vez. Para crear otro grupo o aceptar pertenecer a otro, primero debe salir del grupo actual conforme a las reglas existentes de salida y créditos. Se conservan las pertenencias históricas.
+
 - Cuando se retira a un integrante del grupo familiar, sus propios créditos comprados sin usar y sin reservar que correspondan regresan a su cuenta, salvo que elija explícitamente dejarlos con la familia. Quien lo retira no puede ceder sus créditos en su nombre. Los créditos apartados para reservas válidas permanecen vinculados, y el valor y vencimiento de los créditos no cambian.
 
 - Cualquier integrante activo con cuenta independiente del grupo familiar puede invitar a otro integrante; se requiere aceptación antes de incorporarse. Los integrantes pueden salir voluntariamente. Solo el responsable actual del grupo o los administradores o la gerencia pueden retirar a otro integrante. La salida obligada sigue las reglas existentes sobre créditos al salir y se registra en el historial de auditoría; no otorga autoridad sobre los responsables de perfiles dependientes.

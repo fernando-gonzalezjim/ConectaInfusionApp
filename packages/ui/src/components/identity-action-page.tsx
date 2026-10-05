@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import type { Locale, EmailConfirmedResponse, PasswordResetInput, PasswordSetupResponse } from '@conecta/contracts';
+import type { Locale, EmailConfirmedResponse, EmailChangedResponse, PasswordResetInput, PasswordSetupResponse } from '@conecta/contracts';
 import { Button } from './button';
 import { RecoveryRequest, PasswordResetForm, type RecoveryApi, type RecoveryKey } from './password-recovery';
 
-type ActionKey = RecoveryKey | 'language' | 'confirmEmail' | 'confirmIntro' | 'confirmingEmail' | 'emailConfirmed' | 'confirmationInvalid' | 'unsupportedAction' | 'returnHome' | 'signIn' | 'resetIntro' | 'resetComplete' | 'resetInvalid' | 'setupPassword' | 'settingPassword' | 'setupIntro' | 'setupComplete' | 'setupInvalid';
+type ActionKey = RecoveryKey | 'language' | 'confirmEmail' | 'confirmIntro' | 'confirmingEmail' | 'emailConfirmed' | 'confirmationInvalid' | 'unsupportedAction' | 'returnHome' | 'signIn' | 'resetIntro' | 'resetComplete' | 'resetInvalid' | 'setupPassword' | 'settingPassword' | 'setupIntro' | 'setupComplete' | 'setupInvalid' | 'confirmNewEmail' | 'emailChanged' | 'emailChangeConfirmIntro' | 'familyInvitationTitle' | 'familyJoined' | 'familyInvalid' | 'successorTitle' | 'successorAccepted' | 'successorDeclined';
 interface ActionApi extends RecoveryApi {
   confirmEmail(input: { token: string }, signal?: AbortSignal): Promise<EmailConfirmedResponse>;
   setupPassword(input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordSetupResponse>;
+  confirmEmailChange(input: { token: string }, signal?: AbortSignal): Promise<EmailChangedResponse>;
 }
 // Capture once before React mounts (including StrictMode); never persist a token or leave it in history.
 export const isActionPage = window.location.pathname === '/auth/action';
@@ -15,13 +16,15 @@ function readAction() {
   const params = new URLSearchParams(window.location.hash.slice(1));
   window.history.replaceState(null, '', window.location.pathname);
   const purpose = params.getAll('purpose').length === 1 ? params.get('purpose') : null;
-  const supported = purpose === 'email_confirmation' || purpose === 'password_reset' || purpose === 'password_setup';
+  const supported = purpose === 'email_confirmation' || purpose === 'password_reset' || purpose === 'password_setup' || purpose === 'email_change' || purpose === 'family_invitation' || purpose === 'family_successor';
   const token = params.getAll('token').length === 1 ? params.get('token') : null;
   return { supported, purpose, token: supported && token && /^[A-Za-z0-9_-]{43}$/.test(token) ? token : null };
 }
 const incomingAction = readAction();
-export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmationResend }: {
+export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmationResend, renderFamilyInvitation, renderFamilySuccessor }: {
   api: ActionApi; t: (key: ActionKey) => string; locale: Locale; setLocale(locale: Locale): void; renderConfirmationResend?: () => ReactNode;
+  renderFamilyInvitation?:(token:string,onCompleted:()=>void,onInvalid:()=>void)=>ReactNode;
+  renderFamilySuccessor?:(token:string,onCompleted:(decision?:'declined')=>void,onInvalid:()=>void)=>ReactNode;
 }) {
   const token = useRef(incomingAction.token); const request = useRef<AbortController | null>(null); const busy = useRef(false);
   const [pending, setPending] = useState(false); const [confirmed, setConfirmed] = useState(false);
@@ -30,6 +33,10 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
   const [purpose, setPurpose] = useState(incomingAction.purpose);
   const resetting = purpose === 'password_reset';
   const settingUp = purpose === 'password_setup';
+  const changingEmail = purpose === 'email_change';
+  const familyInvitation = purpose === 'family_invitation' || purpose === 'family_successor';
+  const successor=purpose==='family_successor';
+  const [declined,setDeclined]=useState(false);
   const [linkVersion, setLinkVersion] = useState(0);
   const generation = useRef(0); const currentGeneration = generation.current;
   useEffect(() => {
@@ -37,7 +44,7 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
     function changed() {
       const next = readAction(); ++generation.current; request.current?.abort(); request.current = null; busy.current = false;
       token.current = next.token; setPurpose(next.purpose); setSupported(next.supported); setInvalid(!next.token);
-      setConfirmed(false); setPending(false); setError(false);
+      setConfirmed(false); setPending(false); setError(false);setDeclined(false);
       setLinkVersion(value => value+1);
     }
     window.addEventListener('hashchange', changed);
@@ -47,7 +54,7 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
     if (busy.current || !token.current) return; busy.current = true;
     const controller = new AbortController(); request.current = controller; setPending(true); setError(false);
     try {
-      await api.confirmEmail({ token: token.current }, controller.signal);
+      await (changingEmail ? api.confirmEmailChange : api.confirmEmail)({ token: token.current }, controller.signal);
       if (!controller.signal.aborted) { token.current = null; setConfirmed(true); }
     } catch (failure) {
       if (!controller.signal.aborted) {
@@ -60,17 +67,20 @@ export function IdentityActionPage({ api, t, locale, setLocale, renderConfirmati
     <header className="mx-auto flex max-w-xl flex-wrap items-center justify-between gap-4"><a href="/" className="text-xl font-semibold">Conecta Infusion</a>
       <label className="text-sm">{t('language')}<select aria-label={t('language')} className="ml-2 rounded-md border bg-background p-2" value={locale} onChange={e => setLocale(e.target.value as 'en' | 'es-MX')}><option value="es-MX">Español</option><option value="en">English</option></select></label></header>
     <main className="mx-auto mt-12 max-w-xl space-y-6 rounded-2xl border bg-card p-6 md:p-10" aria-busy={pending}>
-      <h1 className="text-3xl font-semibold">{t(settingUp ? 'setupPassword' : resetting ? 'resetPassword' : 'confirmEmail')}</h1>
-      {confirmed ? <p role="status">{t(settingUp ? 'setupComplete' : resetting ? 'resetComplete' : 'emailConfirmed')}</p> : invalid ? <p role="alert">{t(supported ? settingUp ? 'setupInvalid' : resetting ? 'resetInvalid' : 'confirmationInvalid' : 'unsupportedAction')}</p>
+      <h1 className="text-3xl font-semibold">{t(successor ? 'successorTitle' : familyInvitation ? 'familyInvitationTitle' : settingUp ? 'setupPassword' : resetting ? 'resetPassword' : changingEmail ? 'confirmNewEmail' : 'confirmEmail')}</h1>
+      {confirmed ? <p role="status">{t(successor ? declined?'successorDeclined':'successorAccepted' : familyInvitation ? 'familyJoined' : settingUp ? 'setupComplete' : resetting ? 'resetComplete' : changingEmail ? 'emailChanged' : 'emailConfirmed')}</p> : invalid ? <p role="alert">{t(supported ? familyInvitation ? 'familyInvalid' : settingUp ? 'setupInvalid' : resetting ? 'resetInvalid' : 'confirmationInvalid' : 'unsupportedAction')}</p>
+        : familyInvitation && token.current ? <div key={linkVersion}>{(successor?renderFamilySuccessor:renderFamilyInvitation)?.(token.current,
+          (decision?:'declined')=>{if(generation.current===currentGeneration){token.current=null;setDeclined(decision==='declined');setConfirmed(true);}},
+          ()=>{if(generation.current===currentGeneration){token.current=null;setInvalid(true);}})??<p role="alert">{t('unsupportedAction')}</p>}</div>
         : (resetting || settingUp) && token.current ? <><p>{t(settingUp ? 'setupIntro' : 'resetIntro')}</p><PasswordResetForm key={linkVersion} api={api} t={t} token={token.current}
           operation={settingUp ? api.setupPassword : undefined} submitLabels={settingUp ? { ready: t('setupPassword'), pending: t('settingPassword') } : undefined}
           onRequest={controller => { if (generation.current === currentGeneration) request.current=controller; else controller.abort(); }}
           onCompleted={() => { if (generation.current === currentGeneration) { token.current=null; setConfirmed(true); } }}
           onInvalid={() => { if (generation.current === currentGeneration) { token.current=null; setInvalid(true); } }} /></>
-        : <><p>{t('confirmIntro')}</p><Button className="min-h-11" disabled={pending} onClick={() => void confirm()}>{t(pending ? 'confirmingEmail' : 'confirmEmail')}</Button></>}
+        : <><p>{t(changingEmail ? 'emailChangeConfirmIntro' : 'confirmIntro')}</p><Button className="min-h-11" disabled={pending} onClick={() => void confirm()}>{t(pending ? 'confirmingEmail' : changingEmail ? 'confirmNewEmail' : 'confirmEmail')}</Button></>}
       {error && <p role="alert" className="text-destructive">{t('registrationUnavailable')}</p>}
-      {!confirmed && !settingUp && <div key={linkVersion} className="flex flex-wrap gap-3">{!resetting && renderConfirmationResend?.()}<RecoveryRequest api={api} t={t} /></div>}
-      <a href="/" className="block text-sm underline underline-offset-4">{t(confirmed ? 'signIn' : 'returnHome')}</a>
+      {!confirmed && !settingUp && !familyInvitation && <div key={linkVersion} className="flex flex-wrap gap-3">{!resetting && !changingEmail && renderConfirmationResend?.()}<RecoveryRequest api={api} t={t} /></div>}
+      <a href="/" className="block text-sm underline underline-offset-4">{t(confirmed && !familyInvitation ? 'signIn' : 'returnHome')}</a>
     </main>
   </div>;
 }

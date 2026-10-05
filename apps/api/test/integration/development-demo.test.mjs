@@ -1,0 +1,83 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { isolatedDatabase, migrate } from './identity-helpers.mjs';
+import { createAuthAccount } from './identity-auth-helpers.mjs';
+import { seedDevelopmentDemo, demoPassword } from '../../../../scripts/development-demo.mjs';
+import { verifyPassword } from '../../dist/modules/identity/passwords.js';
+import { cleanDevelopmentDatabase } from '../../../../scripts/development-clean.mjs';
+
+test('demo seed refuses production/remote configuration before connecting', async () => {
+  const pool = { connect() { throw new Error('MUST_NOT_CONNECT'); } };
+  await assert.rejects(seedDevelopmentDemo(pool, {NODE_ENV:'production'}), {message:'DEVELOPMENT_FIXTURES_DISABLED'});
+  await assert.rejects(seedDevelopmentDemo(pool, {NODE_ENV:'development',IDENTITY_DEV_FIXTURES:'true',DATABASE_URL:'postgresql://host/conecta'}), {message:'UNSAFE_DEVELOPMENT_DATABASE'});
+  await assert.rejects(cleanDevelopmentDatabase(pool,{NODE_ENV:'development',IDENTITY_DEV_FIXTURES:'true',DATABASE_URL:'postgresql://localhost/conecta'}),{message:'DEVELOPMENT_RESET_TARGET_REQUIRED'});
+});
+
+test('demo seed is atomic, repeat-safe, preserves edits and links fictional bookings to identities', async () => {
+  const db = await isolatedDatabase(); migrate(db.name);
+  const environment = {NODE_ENV:'development',IDENTITY_DEV_FIXTURES:'true',DATABASE_URL:db.pool.options.connectionString};
+  try {
+    await assert.rejects(seedDevelopmentDemo(db.pool,environment), {message:'DEVELOPMENT_ADMIN_REQUIRED'});
+    await createAuthAccount(db.pool,'operator@example.test',['administrator']);
+    const result = await seedDevelopmentDemo(db.pool,environment);
+    assert.equal(result.createdAccounts,26);
+    assert.equal(result.families,2);assert.equal(result.familyMemberships,3);
+    assert.equal((await db.pool.query('SELECT person_id FROM family_memberships WHERE ended_at IS NULL GROUP BY person_id HAVING count(*)>1')).rowCount,0);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM family_memberships WHERE ended_at IS NULL')).rows[0].n,3);
+    const unassigned=(await db.pool.query("SELECT p.id FROM people p JOIN accounts a ON a.person_id=p.id WHERE a.email='customer02@demo.conecta.example.test'")).rows[0];
+    assert.equal((await db.pool.query('SELECT 1 FROM family_memberships WHERE person_id=$1 AND ended_at IS NULL',[unassigned.id])).rowCount,0,'I24 manual invitation recipient must start without a family');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM family_invitations')).rows[0].n,0,'Seeding must not send invitations or claim real consent');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM family_successor_offers')).rows[0].n,0,'Seeding must never choose successor consent');
+    const shared=(await db.pool.query("SELECT id,responsible_membership_id FROM families WHERE name='Demo shared family'")).rows[0];
+    await db.pool.query("UPDATE families SET name='Manually renamed family',version=version+1 WHERE id=$1",[shared.id]);
+    const departed=(await db.pool.query("SELECT id FROM family_memberships WHERE family_id=$1 AND source='accepted_invitation'",[shared.id])).rows[0];
+    await db.pool.query('UPDATE families SET responsible_membership_id=$2,version=version+1 WHERE id=$1',[shared.id,departed.id]);
+    await seedDevelopmentDemo(db.pool,environment);
+    assert.equal((await db.pool.query('SELECT responsible_membership_id FROM families WHERE id=$1',[shared.id])).rows[0].responsible_membership_id,departed.id,'Reseeding preserves manually transferred responsibility');
+    // Restore the initial fixture responsible member before testing historical departure.
+    await db.pool.query('UPDATE families SET responsible_membership_id=$2,version=version+1 WHERE id=$1',[shared.id,shared.responsible_membership_id]);
+    await db.pool.query("UPDATE family_memberships SET ended_at=clock_timestamp(),end_reason='left' WHERE id=$1",[departed.id]);
+    const auditCount=(await db.pool.query("SELECT count(*)::int n FROM audit_events WHERE actor_id='development-demo-script'")).rows[0].n;
+    assert.ok(auditCount>25,'Existing demo audit events must exercise pagination without fabricating changes');
+    const profileCustomer=(await db.pool.query("SELECT id,confirmation_status,email_verified_at,exemption_source FROM accounts WHERE email='customer.profile@demo.conecta.example.test'")).rows[0];
+    assert.equal(profileCustomer.confirmation_status,'verified');assert.ok(profileCustomer.email_verified_at);assert.equal(profileCustomer.exemption_source,null);
+    await db.pool.query("UPDATE accounts SET email='profile.changed@example.test' WHERE id=$1",[profileCustomer.id]);
+    const pending=(await db.pool.query("SELECT status,password_hash FROM accounts WHERE email='customer.pending@demo.conecta.example.test'")).rows[0];
+    assert.equal(pending.status,'pending');assert.equal(pending.password_hash,null);
+    const inactive=(await db.pool.query("SELECT status,deactivated_at FROM accounts WHERE email='customer.inactive@demo.conecta.example.test'")).rows[0];
+    assert.equal(inactive.status,'inactive');assert.ok(inactive.deactivated_at);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM bookings')).rows[0].n,23);
+    const full = (await db.pool.query("SELECT s.capacity,count(b.id)::int n FROM class_sessions s JOIN bookings b ON b.class_session_id=s.id WHERE s.title='Demo: Yoga — full class' GROUP BY s.id")).rows[0];
+    assert.equal(full.n,16); assert.equal(full.capacity,16);
+    const account=(await db.pool.query("SELECT * FROM accounts WHERE email='instructor.yoga@demo.conecta.example.test'")).rows[0];
+    assert.equal(await verifyPassword(demoPassword,account.password_hash),true);
+    assert.equal(account.confirmation_status,'exempt');
+    assert.equal((await db.pool.query('SELECT person_id FROM instructors WHERE person_id=$1',[account.person_id])).rowCount,1);
+    await db.pool.query("UPDATE people SET full_name='Edited manually' WHERE id=$1",[account.person_id]);
+    const again=await seedDevelopmentDemo(db.pool,environment); assert.equal(again.createdAccounts,0);
+    assert.equal((await db.pool.query('SELECT name FROM families WHERE id=$1',[shared.id])).rows[0].name,'Manually renamed family');
+    assert.equal((await db.pool.query('SELECT end_reason FROM family_memberships WHERE id=$1',[departed.id])).rows[0].end_reason,'left');
+    assert.equal((await db.pool.query("SELECT count(*)::int n FROM audit_events WHERE actor_id='development-demo-script'")).rows[0].n,auditCount);
+    assert.equal((await db.pool.query('SELECT email FROM accounts WHERE id=$1',[profileCustomer.id])).rows[0].email,'profile.changed@example.test');
+    assert.equal((await db.pool.query('SELECT full_name FROM people WHERE id=$1',[account.person_id])).rows[0].full_name,'Edited manually');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM bookings')).rows[0].n,23);
+    await cleanDevelopmentDatabase(db.pool,environment);
+    assert.equal((await db.pool.query("SELECT count(*)::int n FROM pg_tables WHERE schemaname='public'")).rows[0].n,0);
+    migrate(db.name);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM accounts')).rows[0].n,0);
+  } finally {await db.pool.end();}
+});
+
+test('a conflicting existing customer rolls back the entire seed without claiming their identity', async () => {
+  const db=await isolatedDatabase(); migrate(db.name);
+  const environment={NODE_ENV:'development',IDENTITY_DEV_FIXTURES:'true',DATABASE_URL:db.pool.options.connectionString};
+  try {
+    await createAuthAccount(db.pool,'operator@example.test',['administrator']);
+    const existing=await createAuthAccount(db.pool,'customer18@demo.conecta.example.test',['customer']);
+    await assert.rejects(seedDevelopmentDemo(db.pool,environment),{message:'DEVELOPMENT_DEMO_CONFLICT'});
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM accounts')).rows[0].n,2);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM instructors')).rows[0].n,0);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM audit_events')).rows[0].n,0);
+    assert.equal((await db.pool.query('SELECT person_id FROM accounts WHERE id=$1',[existing.accountId])).rows[0].person_id,existing.personId);
+  } finally {await db.pool.end();}
+});

@@ -43,6 +43,8 @@ export interface LoginInput { email: string; password: string; rememberMe?: bool
 export interface RegistrationInput { fullName: string; email: string; password: string; phone?: string | null; preferredLocale?: Locale }
 export interface ActionAcceptedResponse { code: 'ACCEPTED' }
 export interface EmailConfirmedResponse { code: 'CONFIRMED' }
+export interface EmailChangeInput { email: string }
+export interface EmailChangedResponse { code: 'EMAIL_CHANGED' }
 export interface PasswordResetInput { token: string; password: string }
 export interface PasswordResetResponse { code: 'PASSWORD_RESET' }
 export interface CustomerInvitationInput { fullName: string; email: string; phone?: string | null; preferredLocale?: Locale; waiveConfirmation?: boolean; reason?: string }
@@ -54,6 +56,7 @@ export interface AccountProfile extends PublicAccount {
   confirmationStatus: 'pending' | 'verified' | 'exempt';
 }
 export interface AccountListResponse { accounts: AccountProfile[]; nextCursor: string | null }
+export interface AccountListQuery { limit?: number; cursor?: string; role?: IdentityRole; status?: AccountProfile['status'] }
 export interface RoleChangeInput { roles: IdentityRole[] }
 export interface RoleChangeResponse { accountId: string; roles: IdentityRole[]; staffAttendanceEligible: boolean }
 export interface CsrfResponse { csrfToken: string }
@@ -64,4 +67,26 @@ export interface ManagementAccessResponse {
   capabilities: { administerIdentity: true };
 }
 export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'INTERNAL_ERROR'
-  | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION' | 'CONFLICT';
+  | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION' | 'CONFLICT' | 'RECENT_AUTH_REQUIRED';
+export interface PhotoUploadInput { data: string; }
+export type OperationalAuditAction = 'account.created'|'account.profile_updated'|'account.roles_changed'|'account.deactivated'|'account.reactivated'
+  |'account.email_changed'|'account.email_change_requested'|'account.confirmation_exempted'|'account.password_set'|'settings.updated'|'development.demo_seeded'
+  |'family.created'|'family.invitation_sent'|'family.member_joined'|'family.member_left'|'family.member_removed'|'family.closed'|'family.responsibility_offered'|'family.responsibility_accepted'|'family.responsibility_declined'|'other';
+export type AuditValue = string|number|boolean|null|string[];
+export interface OperationalAuditEvent {
+  id:string; occurredAt:string; actorType:'staff'|'customer'|'system'; actorId:string|null; actorName:string|null;
+  action:OperationalAuditAction; targetType:'account'|'family'|'business_settings'|'dataset'|'other'; targetId:string|null; targetName:string|null;
+  businessUnit:BusinessUnitCode|null; correctionOf:string|null;
+  changes:{before:Record<string,AuditValue>|null;after:Record<string,AuditValue>|null};
+}
+export interface OperationalAuditQuery { limit?:number; cursor?:string }
+export interface OperationalAuditPage { events:OperationalAuditEvent[]; nextCursor:string|null }
+export interface FamilyView {
+  id:string; name:string; createdByPersonId:string; responsibleMembershipId:string|null;
+  status:'active'|'closed'; version:number;
+}
+export interface FamilyCreateInput {name:string}
+export interface FamilyInvitationInput {email:string}
+export interface FamilyInvitationActionInput {token:string}
+export interface FamilyInvitationPreview {family:Pick<FamilyView,'id'|'name'>;expiresAt:string}
+export interface FamilyResponsibilityState {canNominate:boolean}

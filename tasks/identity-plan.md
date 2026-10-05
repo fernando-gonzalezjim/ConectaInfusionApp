@@ -10,6 +10,8 @@ The existing [Foundation plan](plan.md), [tasks](todo.md) and [verification evid
 
 Deliver email-based authentication, shared sessions across both frontends, server-side permissions, profile/account administration, invitations, family membership, dependent profiles, guardian authorization and account lifecycle. Keep Spanish primary and English available in the product; implementation and technical documentation use English.
 
+From I19 onward, assess fictional manual-test data in each implementation step. Extend the repeat-safe development demo seeder and its verification/docs when new scenarios need records. Keep it compatible with the guarded full development reset, without overwriting manual edits or introducing production fixtures. This user instruction is also recorded in `AGENTS.md`.
+
 Identity will provide active-account/role/guardian facts and transactional membership/lifecycle contracts. It will not implement purchases, credit valuation, attendance booking, café sales, instructor scheduling or payroll. The approved consequences for credits, bookings, teaching sessions and earnings must be enforced with those owning modules before the affected workflows are available for real use. A partially integrated account-deletion button is not a completed feature.
 
 ## Evidence informing this plan
@@ -99,7 +101,7 @@ The [task checklist](identity-todo.md) contains small units, dependencies, likel
 | 1. Safe persistence and admin login | I01–I09 | Verified migrations, hashing, sessions, manual fixture bootstrap and both-frontends login. |
 | 2. Registration and account administration | I10–I22 | Email flows, permission denials, role concurrency, profile/photo and audit UI. |
 | 3. Families and dependents | I23–I34 | Invitation consent, ownership boundaries, successor fallback, guardian invariants and independent transition. |
-| 4. Lifecycle and handoff | I35–I40 | Coordinator safety, deactivation/reactivation, isolated integration/browser evidence, updated setup and graph reminder. |
+| 4. Lifecycle and handoff | I35–I40 | Coordinator safety, deactivation/reactivation, isolated integration/browser evidence, updated setup and scheduled incremental graph refresh. |
 
 Run focused Node tests for changed behavior, real PostgreSQL integration for invariants and rollback, and real Chromium for cookie sharing and UI flows. Clock control must cover exact expiry/cutoff boundaries. Controlled-response browser tests supplement but never substitute for real authentication tests. Cover Spanish/English, keyboard flow and existing 360/768/1440 viewports. No guessed coverage threshold and no skipped assertions to get green.
 
@@ -116,13 +118,13 @@ Final local commands: `npm run typecheck`, `npm run build`, `npm test`, `npm run
 | Long sessions or mail links remain usable after access changes | Server version/status checks, single-use consumption, revocation and tests for races. |
 | Domain obligations are skipped while financial modules are absent | Integration-required failures and separately tracked owning-module acceptance checks. |
 | Outbox/photo storage exposes personal data or secrets | Encryption, retention of delivery metadata only, bounded uploads, metadata removal and access checks. |
-| Graph references requirements as implemented code | Validate sources and status; preserve graph limitations and stale reminder. |
+| Graph references requirements as implemented code | Validate sources and status; preserve graph limitations and snapshot status. |
 
 Before production: choose SMTP provider/sender/domain and verify delivery, configure HTTPS/same-host routes/proxy trust, choose photo storage, production bootstrap and secret rotation, define personal-data handling/retention and review independent accounts for minors under the launch process. This plan does not invent a legal minimum age or retention period. Financial module integration and history screens must be verified before their operations ship.
 
 ## Graphify and documentation workflow
 
-Use the current graph automatically for context where helpful. After changes to relationships, schema, contracts, module boundaries, specification or business rules, record “graph may be stale” and remind the user to update it. This new plan is meaningful graph content: update reminder is due now, but no rebuild is authorized merely by asking for the plan. No automatic hooks.
+Use the current graph automatically for context where helpful and verify current sources. The October 4, 2026 workflow approval supersedes the original reminder policy: automatically refresh changed sources after every three completed implementation steps, starting with I24 (first scheduled refresh after I26). Track progress and staleness in [the refresh ledger](graphify-refresh.md), without user reminders, full rebuilds or hooks.
 
 Keep English/Spanish business rules synchronized if a product rule changes during implementation. Both PDFs remain explicit-request snapshots. This plan adds technical decisions without changing approved product permissions. Record approved deviations before coding the affected slice.
 

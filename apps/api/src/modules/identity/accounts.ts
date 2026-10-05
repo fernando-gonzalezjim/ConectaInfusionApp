@@ -62,6 +62,34 @@ export function createAccountService(pool: Pool, sessions: SessionService, optio
     return row;
   }
   return {
+    async withManagementRead<T>(token:unknown,read:(client:PoolClient)=>Promise<T>):Promise<T>{
+      const context=await sessions.resolve(token,['administrator','manager']);
+      return transaction(async client=>{await authorize(client,context);return read(client);});
+    },
+    async readAuthorized(target: unknown, token: unknown): Promise<AccountProfile> {
+      const context = await sessions.resolve(token);
+      if (typeof target !== 'string' || !uuid.test(target)) throw new AuthError('INVALID_REQUEST');
+      return transaction(async client => { await authorize(client, context, target.toLowerCase()); return profile(client, target.toLowerCase()); });
+    },
+    async replacePhoto(target: unknown, photoId: string, token: unknown) {
+      const context = await sessions.resolve(token);
+      if (typeof target !== 'string' || !uuid.test(target) || !uuid.test(photoId)) throw new AuthError('INVALID_REQUEST');
+      const targetId = target.toLowerCase();
+      return transaction(async client => {
+        const actorRoles = await authorize(client, context, targetId);
+        const before = await profile(client, targetId);
+        await client.query('UPDATE people SET photo_id=$2,updated_at=$3 WHERE id=$1', [before.personId, photoId, clock()]);
+        await appendIdentityAudit(client, { actor: { id: context.account.id, type: actorRoles.some(role => role !== 'customer') ? 'staff' : 'customer' },
+          action: 'account.profile_updated', targetType: 'account', targetId, before: {photoId:before.photoId}, after: {photoId},
+          reason: targetId === context.account.id ? 'Own profile photo replaced' : 'Profile photo replaced by management', correlationId: randomUUID() });
+        return {profile:await profile(client,targetId),previousPhotoId:before.photoId};
+      });
+    },
+    async readOwn(token: unknown, id: string): Promise<AccountProfile> {
+      const context = await sessions.resolve(token);
+      if (id !== context.account.id) throw new AuthError('FORBIDDEN');
+      return transaction(async client => { await authorize(client, context, id); return profile(client, id); });
+    },
     async list(value: unknown, token: unknown): Promise<AccountListResponse> {
       const context = await sessions.resolve(token, ['administrator', 'manager']);
       const input = object(value, ['limit', 'cursor', 'role', 'status']);

@@ -34,6 +34,7 @@ test('closing a pending invitation discards fields and prevents stale completion
   await page.goto('http://localhost:5174');await page.getByLabel('Idioma',{exact:true}).selectOption('en');await page.getByRole('button',{name:'Invite customer',exact:true}).click();
   await page.getByLabel('Email',{exact:true}).fill('pending@example.test');await page.getByLabel('Name',{exact:true}).fill('Pending customer');
   await page.getByRole('button',{name:'Send invitation',exact:true}).click();await expect(page.getByRole('button',{name:'Sending…'})).toBeDisabled();
+  await expect.poll(()=>calls).toBe(1);
   await page.keyboard.press('Escape');await page.getByRole('button',{name:'Invite customer',exact:true}).click();release();
   await expect(page.getByLabel('Email',{exact:true})).toHaveValue('');await expect(page.getByLabel('Name',{exact:true})).toHaveValue('');
   await expect(page.getByRole('dialog').getByRole('status')).toHaveCount(0);expect(calls).toBe(1);
@@ -66,6 +67,7 @@ test('setup handles transient errors, invalid links and replacement while a requ
   await page.goto('http://localhost:5173/auth/action#purpose=password_setup&token='+'x'.repeat(43));await page.getByLabel('Idioma',{exact:true}).selectOption('en');
   async function fill(){await page.getByLabel('New password',{exact:true}).fill('A strong invitation password');await page.getByLabel('Confirm password',{exact:true}).fill('A strong invitation password');}
   await fill();await page.getByRole('button',{name:'Set up password',exact:true}).click();await expect(page.getByRole('button',{name:'Saving password…'})).toBeDisabled();
+  await expect.poll(()=>calls).toBe(1);
   await page.goto('http://localhost:5173/auth/action#purpose=password_setup&token='+'y'.repeat(43));release();await expect(page.getByRole('alert')).toHaveCount(0);
   await fill();await page.getByRole('button',{name:'Set up password',exact:true}).click();await expect(page.getByRole('alert')).toContainText('try again');await expect(page.getByLabel('New password',{exact:true})).toHaveValue('');
   await fill();await page.getByRole('button',{name:'Set up password',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Ask the team');

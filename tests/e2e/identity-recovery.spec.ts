@@ -31,7 +31,7 @@ test('reset removes secrets from URLs, requires matching strong passwords, handl
   await expect(page.getByRole('alert')).toContainText('try again');await expect(password).toHaveValue('');await expect(confirm).toHaveValue('');
   await password.fill('A strong replacement password');await confirm.fill('A strong replacement password');await page.getByRole('button',{name:'Reset password',exact:true}).click();
   await expect(page.getByRole('status')).toContainText('Sign in again');await expect(page.getByRole('link',{name:'Sign in',exact:true})).toHaveAttribute('href','/');
-  await page.goto('http://localhost:5173/auth/action#purpose=family_invitation&token='+ 'x'.repeat(43));await expect(page.getByRole('alert')).toContainText('supported');expect(calls).toBe(2);
+  await page.goto('http://localhost:5173/auth/action#purpose=unsupported_action&token='+ 'x'.repeat(43));await expect(page.getByRole('alert')).toContainText('supported');expect(calls).toBe(2);
 });
 test('replacement reset link cancels pending work and cannot inherit an old completion',async({page})=>{
   let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});const tokens:string[]=[];
@@ -39,6 +39,7 @@ test('replacement reset link cancels pending work and cannot inherit an old comp
   await page.goto('http://localhost:5173/auth/action#purpose=password_reset&token='+ 'x'.repeat(43));await page.getByLabel('Idioma',{exact:true}).selectOption('en');
   async function fill(){await page.getByLabel('New password',{exact:true}).fill('A strong replacement password');await page.getByLabel('Confirm password',{exact:true}).fill('A strong replacement password');}
   await fill();await page.getByRole('button',{name:'Reset password',exact:true}).click();await expect(page.getByRole('button',{name:'Resetting…',exact:true})).toBeDisabled();
+  await expect.poll(()=>tokens).toEqual(['x'.repeat(43)]);
   await page.goto('http://localhost:5173/auth/action#purpose=password_reset&token='+ 'y'.repeat(43));release();
   await expect(page).toHaveURL('http://localhost:5173/auth/action');await expect(page.getByLabel('New password',{exact:true})).toHaveValue('');
   await expect(page.getByRole('status')).toHaveCount(0);await fill();await page.getByRole('button',{name:'Reset password',exact:true}).click();await expect(page.getByRole('status')).toContainText('Sign in again');

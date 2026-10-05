@@ -7,6 +7,7 @@ import { ActionError } from './action-tokens.js';
 import { RegistrationError, type createRegistrationService } from './registration.js';
 import type { createRecoveryService } from './recovery.js';
 import type { createAccountInvitationService } from './account-invitations.js';
+import type { createProfileService } from './profiles.js';
 
 export const sessionCookieName = 'conecta_session';
 export function readSessionCookie(header: unknown): string | undefined {
@@ -25,7 +26,7 @@ export function failure(res: Response, error: unknown): void {
     res.set('Retry-After', String(error.retryAfterSeconds)).status(429).json({ code: error.code }); return;
   }
   if (error instanceof AuthError) {
-    const status = error.code === 'INVALID_REQUEST' ? 400 : error.code === 'FORBIDDEN' ? 403
+    const status = error.code === 'INVALID_REQUEST' ? 400 : error.code === 'FORBIDDEN' || error.code === 'RECENT_AUTH_REQUIRED' ? 403
       : error.code === 'IDENTITY_DISABLED' ? 503 : error.code === 'NOT_FOUND' ? 404 : error.code === 'CONFLICT' ? 409 : 401;
     res.status(status).json({ code: error.code }); return;
   }
@@ -44,6 +45,7 @@ export function createAuthRouter(service: SessionService, config: IdentityConfig
   registration?: ReturnType<typeof createRegistrationService>;
   recovery?: ReturnType<typeof createRecoveryService>;
   invitations?: ReturnType<typeof createAccountInvitationService>;
+  profiles?: ReturnType<typeof createProfileService>;
 } = {}): express.Router {
   if (!config.enabled) throw new AuthError('IDENTITY_DISABLED');
   if (typeof mutationGuard !== 'function') throw new Error('AUTH_MUTATION_GUARD_REQUIRED');
@@ -51,6 +53,17 @@ export function createAuthRouter(service: SessionService, config: IdentityConfig
   const cookieOptions = { httpOnly: true, secure: new URL(config.publicOrigin).protocol === 'https:', sameSite: 'lax' as const, path: '/' };
   router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   router.use(express.json({ limit: '2kb' }));
+  if (options.profiles) {
+    const profiles = options.profiles;
+    router.post('/email-change', mutationGuard, async (req, res) => {
+      try { res.status(202).json(await profiles.requestEmail(req.body, readSessionCookie(req.headers.cookie), req.socket.remoteAddress ?? '')); }
+      catch (error) { failure(res, error); }
+    });
+    router.post('/email-change/confirmation', mutationGuard, async (req, res) => {
+      try { res.json(await profiles.confirmEmail(req.body, req.socket.remoteAddress ?? '')); }
+      catch (error) { failure(res, error); }
+    });
+  }
   if (options.invitations) {
     const invitations = options.invitations;
     router.post('/setup', mutationGuard, async (req, res) => {

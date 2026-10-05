@@ -1,6 +1,6 @@
 # Account listing and personal profile edits
 
-I17 implements opt-in account administration endpoints. Both frontends can use the same API; management screens are an I19 task. [Role administration](identity-roles.md) is implemented in I18; self-profile/email screens and the email-change workflow are I20, photos are I21, and account lifecycle is a later task. Customer invitation creation remains the separate [I15/I16 workflow](identity-invitations.md).
+I17 implements opt-in account administration endpoints. Both frontends can use the same API; [management screens](identity-administration.md) are implemented in I19. [Role administration](identity-roles.md) is implemented in I18; self-profile/email screens and the email-change workflow are I20, photos are I21, and account lifecycle is a later task. Customer invitation creation remains the separate [I15/I16 workflow](identity-invitations.md).
 
 | Endpoint | Input | Success |
 | --- | --- | --- |
@@ -19,4 +19,4 @@ The server resolves the session and rechecks account/profile activity, session v
 
 Reads require an authenticated session and reject foreign Origin headers. Writes additionally require an exact configured Origin, JSON and session-bound `X-CSRF-Token`. Bodies are limited to 2 KB and all account responses use `Cache-Control: no-store`. Failures return stable codes: `INVALID_REQUEST` (400), `UNAUTHENTICATED` (401), `FORBIDDEN` (403), authorized missing target `NOT_FOUND` (404), or generic `UNAVAILABLE` (503). These endpoints do not hard-delete records, reactivate accounts or implement family/guardian access.
 
-For local API testing, follow [identity configuration](identity-local-email.md) and [bootstrap](identity-bootstrap.md), then sign in normally and use the session cookie and CSRF token. Management can read `/api/v1/accounts?role=customer&limit=25`. A profile mutation body such as `{ "fullName": "Updated name", "preferredLocale": "es-MX" }` applies only to the authorized target. UI testing for these operations will be added with I19/I20; I17 verification uses real PostgreSQL and HTTP requests against disposable fixtures.
+For local API testing, follow [identity configuration](identity-local-email.md) and [bootstrap](identity-bootstrap.md), then sign in normally and use the session cookie and CSRF token. Management can read `/api/v1/accounts?role=customer&limit=25`. A profile mutation body such as `{ "fullName": "Updated name", "preferredLocale": "es-MX" }` applies only to the authorized target. I19 provides management screens and browser verification; I20 provides [own-profile editing and verified email changes](identity-profiles.md) in both frontends. I17 verification uses real PostgreSQL and HTTP requests against disposable fixtures.

@@ -85,6 +85,8 @@ Keep the approved family rules: individual logins for independent members and pa
 
 ## Commands and structure
 
+Confirmed October 4, 2026: each customer may belong to only one active family group at a time. Creating or accepting membership in another group requires leaving the current group first under the existing departure/credit rules. Preserve historical memberships. Enforce this for sequential and concurrent attempts at both the application and database boundaries; never transfer membership or credits automatically.
+
 Existing verification commands from the root:
 
 ```powershell

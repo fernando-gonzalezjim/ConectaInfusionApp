@@ -69,7 +69,9 @@ export function createRoleService(pool:Pool,sessions:SessionService,options:{now
        OR EXISTS(SELECT 1 FROM members WHERE person_id=$1 OR lower(btrim(email))=$2)
        OR EXISTS(SELECT 1 FROM instructors WHERE person_id=$1 OR person_id IS NULL)
        OR EXISTS(SELECT 1 FROM pg_tables WHERE schemaname='public' AND NOT(tablename=ANY($3::text[]))) AS blocked`,[account.person_id,account.email,
-       ['members','instructors','class_sessions','bookings','products','sales','sale_items','business_units','business_settings','audit_events','people','accounts','account_roles','identity_sessions','identity_action_tokens','identity_throttles','identity_email_outbox','flyway_schema_history']])).rows[0];
+       // Family facts are Identity-owned and preserved because the customer role
+       // cannot be removed here. Unknown domain tables still require coordination.
+       ['members','instructors','class_sessions','bookings','products','sales','sale_items','business_units','business_settings','audit_events','people','accounts','account_roles','identity_sessions','identity_action_tokens','identity_throttles','identity_email_outbox','families','family_memberships','family_invitations','family_successor_offers','flyway_schema_history']])).rows[0];
       if(legacy?.blocked)throw new AuthError('CONFLICT');
      }
     }

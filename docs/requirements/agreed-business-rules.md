@@ -61,6 +61,8 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 ## 5. Family sharing and leaving a family
 
+- Each customer may belong to only one active family group at a time. Creating or accepting membership in another group requires leaving the current group first, following the existing departure and credit rules. Historical memberships are preserved.
+
 - When a member is removed from a family group, their own eligible unused/unreserved purchased credits return to their account unless they explicitly choose to leave them with the family. The person removing them cannot donate their credits on their behalf. Credits reserved for valid bookings remain attached, and credit value and expiration remain unchanged.
 
 - Any active independent family member may invite another member; acceptance is required before joining. Members may leave voluntarily. Only the current group responsible person or admins/management may remove another member. Removal follows the existing credit-departure rules and is recorded in audit history; it does not grant authority over dependent guardianship.

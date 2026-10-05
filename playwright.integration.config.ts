@@ -19,6 +19,7 @@ export default defineConfig({
   webServer: [
     { command: 'npm run dev', url: 'http://localhost:3001/api/v1/ready', reuseExistingServer: false,
       env: { DATABASE_URL: databaseUrl, PORT: '3001', NODE_ENV: 'test', IDENTITY_ENABLED: 'true',
+        IDENTITY_PHOTO_DIRECTORY:process.env.FOUNDATION_TEST_PHOTO_DIRECTORY??'',
         WEB_ORIGINS: 'http://localhost:5173,http://localhost:5174', IDENTITY_PUBLIC_ORIGIN: 'http://localhost:5173',
         IDENTITY_OUTBOX_ACTIVE_KEY_ID: 'integration',
         IDENTITY_OUTBOX_KEYS: outboxKeys,

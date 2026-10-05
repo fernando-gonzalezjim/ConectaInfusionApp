@@ -16,6 +16,15 @@ import { createAccountInvitationService } from './modules/identity/account-invit
 import { createAccountRouter } from './modules/identity/account-routes.js';
 import { createAccountService } from './modules/identity/accounts.js';
 import { createRoleService } from './modules/identity/roles.js';
+import { createProfileService } from './modules/identity/profiles.js';
+import { createProfileRouter } from './modules/identity/profile-routes.js';
+import { createPhotoService } from './modules/identity/photos.js';
+import { createPhotoRouter } from './modules/identity/photo-routes.js';
+import {createAuditViewService} from './modules/identity/audit-view.js';
+import {createAuditRouter} from './modules/identity/audit-routes.js';
+import {createFamilyInvitationService} from './modules/identity/family-invitations.js';
+import {createFamilyRouter} from './modules/identity/family-routes.js';
+import {createFamilyResponsibilityService} from './modules/identity/family-responsibility.js';
 
 export async function createApplication(options: {
   database?: Pool; identityConfig?: IdentityConfig; environment?: NodeJS.ProcessEnv;
@@ -28,6 +37,10 @@ export async function createApplication(options: {
     const service = await createSessionService(database, identityConfig, { environment: options.environment });
     const protection = createCsrfProtection(service, identityConfig);
     const invitations = createAccountInvitationService(database, identityConfig, service);
+    const administration = createAccountService(database, service);
+    const profiles = createProfileService(database, identityConfig, service, administration);
+    const photos = createPhotoService(database, service, administration, (options.environment ?? process.env).IDENTITY_PHOTO_DIRECTORY);
+    app.locals.identityPhotos=photos;
     const auth = express.Router();
     // Origin denials run before CORS, parsing or any database/password work.
     auth.use(protection.originGuard);
@@ -36,19 +49,31 @@ export async function createApplication(options: {
     auth.use(identityCors);
     auth.get('/csrf', protection.bootstrap);
     auth.use(createAuthRouter(service, identityConfig, (req, res, next) => {
-      const guard = ['/login', '/register', '/confirmation', '/confirmation/resend', '/recovery', '/recovery/reset', '/setup'].includes(req.path)
+      const guard = ['/login', '/register', '/confirmation', '/confirmation/resend', '/recovery', '/recovery/reset', '/setup', '/email-change/confirmation'].includes(req.path)
         ? protection.anonymousMutation : protection.sessionMutation;
       return guard(req, res, next);
     }, { onLogin: protection.clearAnonymousCookie, registration: createRegistrationService(database, identityConfig),
-      recovery: createRecoveryService(database, identityConfig, { environment: options.environment }), invitations }));
+      recovery: createRecoveryService(database, identityConfig, { environment: options.environment }), invitations, profiles }));
     // Never fall through to the broader public Foundation parser/CORS/error logger.
     auth.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
     app.use('/api/v1/auth', auth);
+    const me = express.Router();
+    me.use(protection.originGuard, identityCors);
+    me.use(createPhotoRouter(photos, protection.sessionMutation, true));
+    me.use(createProfileRouter(profiles, protection.sessionMutation));
+    me.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
+    app.use('/api/v1/me', me);
     const accounts = express.Router();
     accounts.use(protection.originGuard, identityCors);
-    accounts.use(createAccountRouter(invitations, protection.sessionMutation, createAccountService(database, service), createRoleService(database, service, {environment:options.environment})));
+    accounts.use(createPhotoRouter(photos, protection.sessionMutation, false));
+    accounts.use(createAccountRouter(invitations, protection.sessionMutation, administration, createRoleService(database, service, {environment:options.environment})));
     accounts.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
     app.use('/api/v1/accounts', accounts);
+    const audit=express.Router();audit.use(protection.originGuard,identityCors,createAuditRouter(createAuditViewService(administration)));
+    app.use('/api/v1/audit',audit);
+    const families=express.Router();families.use(protection.originGuard,identityCors);
+    families.use(createFamilyRouter(createFamilyInvitationService(database,identityConfig,service),protection.sessionMutation,createFamilyResponsibilityService(database,identityConfig,service)));
+    app.use('/api/v1/families',families);
     const management = express.Router();
     management.use(protection.originGuard, identityCors);
     management.use(createManagementRouter(service));

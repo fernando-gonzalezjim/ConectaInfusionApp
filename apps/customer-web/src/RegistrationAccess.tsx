@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { createApiClient, ApiError } from '@conecta/api-client';
-import { useLocale } from '@conecta/i18n';
+import { useLocale, useAccountLabels } from '@conecta/i18n';
+import {FamilyInvitation} from '@conecta/ui/components/family-invitation';
 import { Button } from '@conecta/ui/components/button';
 import { Input } from '@conecta/ui/components/input';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@conecta/ui/components/dialog';
@@ -57,5 +58,8 @@ export function RegistrationAccess({ resendOnly = false }: { resendOnly?: boolea
 
 export function CustomerActionPage() {
   const { t, locale, setLocale } = useLocale();
-  return <IdentityActionPage api={api} t={t} locale={locale} setLocale={setLocale} renderConfirmationResend={() => <RegistrationAccess resendOnly />} />;
+  const labels=useAccountLabels();
+  return <IdentityActionPage api={api} t={t} locale={locale} setLocale={setLocale} renderConfirmationResend={() => <RegistrationAccess resendOnly />}
+    renderFamilySuccessor={(token,onCompleted,onInvalid)=><FamilyInvitation purpose="responsibility" api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />}
+    renderFamilyInvitation={(token,onCompleted,onInvalid)=><FamilyInvitation api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />} />;
 }

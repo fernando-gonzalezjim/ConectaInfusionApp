@@ -2,7 +2,9 @@
 
 Respond to the user in English, even when the user writes in Spanish. Write code, identifiers and technical documentation in English unless translation is not practical. Product-facing Spanish and explicitly requested Spanish documents remain Spanish; preserve the synchronized bilingual business rules.
 
-Use the existing Graphify graph automatically when it helps investigate architecture, dependencies or change impact. Check relevant source files and the approved specification because the graph is a snapshot and may be incomplete. After meaningful changes to code relationships, API contracts, database schemas, architecture, specifications or business rules, remind the user to update Graphify and record that the graph may be stale. Do not rebuild it automatically or enable hooks unless authorized. Routine formatting, PDF exports and minor wording edits do not require a reminder.
+For each implementation step, assess whether manual verification needs new fictional data. If needed, extend `scripts/development-demo.mjs` and its tests/documentation in the same step. Preserve repeat-safe seeding and compatibility with the guarded full development reset; never seed production or overwrite existing manual edits.
+
+Use the existing Graphify graph automatically when it helps investigate architecture, dependencies or change impact. Check relevant source files and the approved specification because the graph is a snapshot and may be incomplete. Automatically refresh only changed sources after every three completed implementation steps, starting with I24 (first scheduled refresh after I26). Track the counter and snapshot status in `tasks/graphify-refresh.md`. Record when the graph may be stale, but do not remind the user to update it. No full rebuilds or automatic hooks are authorized by this cadence. Routine formatting, PDF exports and minor wording edits do not count as implementation steps.
 
 Always use the OpenAI developer documentation MCP server when working with OpenAI APIs, Codex, Agents SDK, or other OpenAI developer products.
 

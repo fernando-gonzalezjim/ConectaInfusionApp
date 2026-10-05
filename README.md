@@ -31,7 +31,7 @@ Customer: http://localhost:5173. Management: http://localhost:5174. API: http://
 | Location | Responsibility |
 | --- | --- |
 | apps/customer-web | Customer shell and future public/customer workflows |
-| apps/management-web | Separate staff shell; protected operations await Identity |
+| apps/management-web | Protected management account, role and operational audit screens |
 | apps/api | PostgreSQL access, public settings/overview, internal settings/audit service |
 | packages/ui | Tailwind tokens and shadcn/ui components |
 | packages/i18n | Spanish/English messages, locale, money and timezone formatting |
@@ -62,8 +62,12 @@ Project MCP connections are in .codex/config.toml; see [MCP setup](docs/mcp-setu
 
 ## Identity development
 
+For fictional personnel, customer and booking records, see the [development demo dataset](docs/development-demo.md) and run `npm run db:seed:demo` after local configuration, migrations and administrator bootstrap.
+
 Identity is opt-in. Follow [local configuration](docs/identity-local-email.md), [manual bootstrap](docs/identity-bootstrap.md) and the [Identity checklist](tasks/identity-todo.md). Both frontends share account/session controls; administrative access is checked on the server. I11/I12 supply [customer registration, confirmation and resend endpoints and bilingual screens](docs/identity-registration.md). I13/I14 provide [password recovery endpoints and shared bilingual screens](docs/identity-recovery.md). I15/I16 add [customer invitation endpoints, management controls and bilingual password setup](docs/identity-invitations.md).
 
-I17 adds [paginated management account listing and authorized personal profile edits](docs/identity-accounts.md). I18 adds [role administration and last-active-administration protection](docs/identity-roles.md). Account-editing and role screens follow in I19.
+I17 adds [paginated management account listing and authorized personal profile edits](docs/identity-accounts.md). I18 adds [role administration and last-active-administration protection](docs/identity-roles.md). I19 provides [bilingual management account and role screens](docs/identity-administration.md). I20 provides [own-profile editing and confirmed email changes](docs/identity-profiles.md) in both frontends. I21 adds [private profile photos, replacement cleanup and a demo upload fixture](docs/identity-photos.md).
+
+I22 adds [private management audit history](docs/identity-audit.md). I23/I24 add [historical family persistence, customer creation and consent-based invitation endpoints](docs/identity-families.md); I25 adds bilingual family creation, management assistance and explicit recipient acceptance screens. I26 adds successor responsibility offers with deliberate acceptance/decline and preserved creator identity. The demo seeder includes fictional family fixtures and preserves manual edits and responsibility transfers. Graphify refreshes changed sources automatically every three completed steps; progress is recorded in [the refresh ledger](tasks/graphify-refresh.md).
 
 I10 provides single-use action tokens and encrypted email delivery. With local Mailpit settings already loaded, `npm run identity:deliver` runs one bounded delivery tick. See [the delivery guide](docs/identity-action-delivery.md) for private env-file usage, retries, cleanup and the production boundary. No background delivery scheduler or production sending is enabled.

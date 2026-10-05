@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01–I18 are complete. The user approved the I03, I06, I12 and I15 human-review checkpoints and authorized continuation through I18. The human-review checkpoint after I18 remains pending; I19 administration UI is next. The user authorized an incremental Graphify refresh and commit/push after I18. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01-I26 are complete. The user authorized I26; I27 is next. The user confirmed one active family per customer and authorized an incremental Graphify refresh including demo tooling, I19–I23 and the V7 constraint. Starting with I24, changed-source refreshes run automatically every three completed steps (first after I26); see [the refresh ledger](graphify-refresh.md). Each subsequent task must assess and extend fictional demo data when needed. See [graph report](../graphify-out/GRAPH_REPORT.md) for the last snapshot and integrity limits. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -156,7 +156,7 @@ Delivered as small sub-slices: typed client/contracts and unit test; customer sc
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [x] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Human reviewed the completed slice before the next group.
 
 ### I13: Recovery backend
 
@@ -193,7 +193,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [x] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes. I15 approved October 4, 2026; graph refresh remains pending.
+- [x] Human reviewed the completed slice before the next group. I15 approved October 4, 2026; graph refresh remains pending.
 
 ### I16: Invitation UI
 
@@ -226,12 +226,12 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Human reviewed the completed slice before the next group. The user authorized I19 on October 4, 2026; later changes remain pending an authorized incremental graph refresh.
 
 ### I19: Administration UI
 
-- [ ] **Acceptance:** Provide authorized account details/roles with clear denial/conflict handling; do not present unintegrated lifecycle as available.
-- [ ] **Verification:** Role changes invalidate active browsers; customer/instructor cannot administer others. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Provide authorized account details/roles with clear denial/conflict handling; do not present unintegrated lifecycle as available.
+- [x] **Verification:** Role changes invalidate active browsers; customer/instructor cannot administer others. Run focused checks and typecheck/build for affected work. See [I19 evidence](identity-verification.md).
 
 **Dependencies:** I18. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -239,8 +239,8 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I20: Self profile and email change
 
-- [ ] **Acceptance:** Allow own approved fields; verify new email before login replacement, notify prior address and revoke sessions after completion.
-- [ ] **Verification:** Uniqueness races, ownership denial, old/new address behavior and recent-auth tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Allow own approved fields; verify new email before login replacement, notify prior address and revoke sessions after completion.
+- [x] **Verification:** Uniqueness races, ownership denial, old/new address behavior and recent-auth tests. Run focused checks and typecheck/build for affected work. See [I20 evidence](identity-verification.md).
 
 **Dependencies:** I19. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -248,8 +248,10 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I21: Profile photos
 
-- [ ] **Acceptance:** Add bounded verified/re-encoded uploads, private storage identifiers and authorized serving using I01 decisions.
-- [ ] **Verification:** Spoofed types, pixel limits, metadata stripping and cross-account access tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Add bounded verified/re-encoded uploads, private storage identifiers and authorized serving using I01 decisions.
+- [x] **Verification:** Spoofed types, pixel limits, metadata stripping and cross-account access tests. Run focused checks and typecheck/build for affected work.
+
+Completed October 4, 2026 in sequential backend/storage, typed client, bilingual UI and demo-fixture slices. [Photo setup](../docs/identity-photos.md) and [verification evidence](identity-verification.md) record private serving, replacement rollback/retries/reconciliation, actual browser checks and production storage limits.
 
 **Dependencies:** I20. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -257,14 +259,16 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### Checkpoint after I21
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Human reviewed I21 and approved continuation to I22 and I23 on October 4, 2026. Graphify refresh remains outstanding.
 
 ### I22: Operational audit views
 
-- [ ] **Acceptance:** Expose paginated privileged sanitized audit and bilingual management view; personal transaction/pay histories remain domain-owned.
-- [ ] **Verification:** Customer/staff denial, pagination and no secret exposure. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Expose paginated privileged sanitized audit and bilingual management view; personal transaction/pay histories remain domain-owned.
+- [x] **Verification:** Customer/staff denial, pagination and no secret exposure. Run focused checks and typecheck/build for affected work.
+
+Completed October 4, 2026. [Audit guide](../docs/identity-audit.md) and [evidence](identity-verification.md) cover private keyset pagination, fresh authorization, safe snapshots, bilingual accessible UI and actual PostgreSQL/browser scenarios. Existing fictional account audit events already exercise pagination; no extra accounts were needed.
 
 **Dependencies:** I21. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -274,8 +278,10 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I23: Family persistence
 
-- [ ] **Acceptance:** Migrate historical memberships and responsible-member state; define transactional membership commands distinct from credit disposition.
-- [ ] **Verification:** Constraint and concurrent duplicate-membership tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Migrate historical memberships and responsible-member state; define transactional membership commands distinct from credit disposition.
+- [x] **Verification:** Constraint and concurrent duplicate-membership tests. Run focused checks and typecheck/build for affected work.
+
+Completed October 4, 2026. [Family persistence](../docs/identity-families.md) and [evidence](identity-verification.md) record V6 preservation/rollback, historical constraints, current responsibility, concurrency, fresh permission checks and required domain coordination. Demo seeding now includes two fictional groups and three memberships, preserves edits/departures and remains reset-compatible. No public family or uncoordinated financial workflow is exposed.
 
 **Dependencies:** I22. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -283,36 +289,42 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 ### I24: Family invitation backend
 
-- [ ] **Acceptance:** Create customer families and seven-day invitations requiring acceptance; management assistance does not bypass consent.
-- [ ] **Verification:** Pending grants no rights; expired/duplicate/concurrent acceptance tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Create customer families and seven-day invitations requiring acceptance; management assistance does not bypass consent.
+- [x] **Verification:** Pending grants no rights; expired/duplicate/concurrent acceptance tests. Focused PostgreSQL/HTTP/recipient-locale/upgrade tests, complete backend/browser regressions, workspace typecheck/build and 56 unit/client tests passed.
 
 **Dependencies:** I23. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/family-invitations.ts`, `apps/api/src/modules/identity/family-routes.ts`, `apps/api/test/integration/identity-family-invitations.test.mjs`.
 
+Delivered in smaller sub-slices: I24a invitation schema, authoritative service and PostgreSQL acceptance tests; I24b shared DTOs, guarded HTTP composition, delivery integration and known-Identity-table role guard; I24c private audit writer, typed client validation/regression, bilingual labels and audit renderer; I24d demo scenario assessment and documentation/evidence. Reuse the existing single-use token, encrypted outbox and internal family transaction commands. Family screens/client journeys remain I25. Each sub-slice stays within the planned substantive-file limit; the complete I24 task counts once toward the Graphify cadence.
+
 ### Checkpoint after I24
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated through actual HTTP/transaction/delivery tests and a reproducible manual guide.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] User authorized I25 after reviewing I24; approved three-step Graphify cadence is recorded in `tasks/graphify-refresh.md`.
 
 ### I25: Family UI
 
-- [ ] **Acceptance:** Expose group creation, accepted membership and invite/accept views without granting guardianship.
-- [ ] **Verification:** Customer/management assistance flow; pending and unrelated member denial. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Expose group creation, accepted membership and invite/accept views without granting guardianship.
+- [x] **Verification:** Customer/management assistance flow; pending and unrelated member denial. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I24. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/customer-web/src/`, `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-families.spec.ts`.
 
+Completed in sequential slices: typed client and API lookup; shared family dialogs and consent landing; bilingual frontend integration; controlled browser tests; live PostgreSQL/SMTP browser tests and documentation. Existing fictional accounts/groups cover this step; no seed invitation or automatic membership was added. See [family guide](../docs/identity-families.md) and [verification evidence](identity-verification.md).
+
 ### I26: Successor responsibility
 
-- [ ] **Acceptance:** Support voluntary nomination and acceptance; decline does not block departure; departed creator loses authority and last-member fallback applies.
-- [ ] **Verification:** Pending/declined offers grant no closure; membership changes invalidate obsolete offers. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Support voluntary nomination and acceptance; decline does not block departure; departed creator loses authority and last-member fallback applies.
+- [x] **Verification:** Pending/declined offers grant no closure; membership changes invalidate obsolete offers. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I25. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/family-responsibility.ts`, `apps/api/src/modules/identity/family-routes.ts`, `apps/customer-web/src/`, `apps/api/test/integration/identity-successor.test.mjs`.
+
+Delivered in sequential sub-slices within the planned substantive-file limit: I26a V9 historical offers, authoritative service, DTO and consent/audit tests; I26b guarded HTTP composition, delivery eligibility and known-table role guard; I26c typed client and private audit action validation/rendering; I26d bilingual nomination UI and labels; I26e shared recipient decision UI and both frontend renderers; I26f controlled browser tests; I26g live inbox/browser consent, repeat-safe demo assessment and documentation. The entire I26 task counts once toward Graphify cadence. Existing fictional shared-family members cover transfers; no automatic nomination, acceptance or decline is seeded.
 
 ### I27: Membership lifecycle contracts
 
@@ -327,7 +339,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I28: Dependent persistence
 
@@ -360,7 +372,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I31: Guardian consent
 
@@ -393,7 +405,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I34: Family/dependent review
 
@@ -428,7 +440,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I37: Reactivation
 
@@ -461,7 +473,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 
 - [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
 - [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; remind user to update Graphify after meaningful changes.
+- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I40: Documentation and handoff
 

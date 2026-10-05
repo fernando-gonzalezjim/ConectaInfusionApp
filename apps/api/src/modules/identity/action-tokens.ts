@@ -56,7 +56,9 @@ export async function cancelActionDelivery(client: PoolClient, ids: string[], no
 }
 
 // Caller owns BEGIN/COMMIT/ROLLBACK on this client, including domain mutations and their audit.
-// Lock order: owning domain rows, account, person, recipient/purpose send lock, token, outbox.
+// The caller establishes a consistent domain lock order. Multi-account family
+// commands prelock accounts/people in UUID order before relationship rows;
+// helpers recheck those locks, then take the recipient send lock, token and outbox.
 export async function issueAction(client: PoolClient, config: EnabledIdentityConfig, input: ActionBinding,
   locale: 'es-MX' | 'en', now = new Date()): Promise<{ id: string; expiresAt: string }> {
   if (!config.enabled || !['es-MX', 'en'].includes(locale)) invalid();
