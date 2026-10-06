@@ -1,3 +1,4 @@
+import {FamilyLifecycleUnavailable,type LifecycleKey} from './account-lifecycle';
 import {useEffect,useId,useRef,useState,type FormEvent} from 'react';
 import type {FamilyView,FamilyCreateInput,FamilyInvitationInput,FamilyInvitationActionInput,FamilyInvitationPreview,ActionAcceptedResponse,PublicAccount} from '@conecta/contracts';
 import {Button} from './button';
@@ -18,7 +19,7 @@ export interface FamilyApi {
   acceptFamilySuccessor(input:FamilyInvitationActionInput,signal?:AbortSignal):Promise<FamilyView>;
   declineFamilySuccessor(input:FamilyInvitationActionInput,signal?:AbortSignal):Promise<FamilyView>;
 }
-export type FamilyKey='myFamily'|'assistFamily'|'familyIntro'|'familyAssistIntro'|'familyName'|'createFamily'|'familyCreating'|'familyLoading'|'familyMembership'
+export type FamilyKey=LifecycleKey|'myFamily'|'assistFamily'|'familyIntro'|'familyAssistIntro'|'familyName'|'createFamily'|'familyCreating'|'familyLoading'|'familyMembership'
   |'familyNoGroup'|'familyNoManagedGroup'|'familyMemberEmail'|'familySend'|'familySending'|'familySent'|'familyInviteHint'|'familyCreated'|'familyRefresh'
   |'familyUnavailable'|'familyConflict'|'familyUncertain'|'familyClosed'|'familyNoGuardianship'|'familyInvitationTitle'|'familyInvitationIntro'|'familySignInHint'
   |'familyReview'|'familyReviewing'|'familyAccept'|'familyAccepting'|'familyJoined'|'familyInvalid'|'familyExpires'|'familyCustomerRequired'|'authExpired'|'familyForbidden'|'authThrottled'|'close'|'retry'
@@ -75,6 +76,7 @@ function FamilyPanel({api,account,management,t,onPending,onAccessLost}:{api:Fami
           <label htmlFor={id+'-email'} className="block text-sm font-medium">{t('familyMemberEmail')}</label><Input id={id+'-email'} type="email" autoComplete="email" required maxLength={320} value={email} onChange={e=>setEmail(e.target.value)} />
           <Button type="submit" className="min-h-11 w-full">{t(pending==='invite'?'familySending':'familySend')}</Button>
         </fieldset><p className="text-sm text-muted-foreground">{t('familyInviteHint')}</p></form>}
+        {family.status==='active'&&<FamilyLifecycleUnavailable t={t}/>}
         {family.status==='active'&&<FamilyResponsibility key={family.id+':'+attempt} api={api} familyId={family.id} t={t} disabled={pending!==null||uncertain}
           onPending={value=>{setSuccessorPending(value);onPending(value);}} onAccessLost={onAccessLost} />}
       </>:management?<p>{t('familyNoManagedGroup')}</p>:<><p>{t('familyNoGroup')}</p><form onSubmit={e=>void submit(e,'create')} className="space-y-3"><fieldset disabled={pending!==null||uncertain} className="space-y-3">

@@ -20,6 +20,20 @@ export async function seedDevelopmentDependents(client,id){
     await client.query("INSERT INTO dependent_guardians(id,dependent_person_id,guardian_account_id,source,accepted_by_account_id,accepted_invitation_id) VALUES ($1,$2,$3,'accepted_invitation',$3,$4)",[id('guardian:profile-child:other'),personId,otherId,id('guardian-consent:profile-child:other')]);
     createdProfiles++;
   }
+  const inactiveId=id('dependent:reactivation-child'),inactiveCreator=id('account:customer18');
+  const inactive=(await client.query('SELECT created_by_account_id FROM dependent_profiles WHERE person_id=$1 FOR UPDATE',[inactiveId])).rows[0];
+  if(inactive){
+    if(inactive.created_by_account_id!==inactiveCreator)throw new Error('DEVELOPMENT_DEMO_CONFLICT');
+  }else{
+    if((await client.query('SELECT 1 FROM people WHERE id=$1',[inactiveId])).rowCount)throw new Error('DEVELOPMENT_DEMO_CONFLICT');
+    await client.query("INSERT INTO people(id,full_name) VALUES ($1,'Demo Inactive Dependent')",[inactiveId]);
+    await client.query("INSERT INTO dependent_profiles(person_id,age_text,created_by_account_id) VALUES ($1,'7 years',$2)",[inactiveId,inactiveCreator]);
+    await client.query("INSERT INTO dependent_guardians(id,dependent_person_id,guardian_account_id,source,accepted_by_account_id) VALUES ($1,$2,$3,'creation',$3)",[id('guardian:reactivation-child:creator'),inactiveId,inactiveCreator]);
+    // Capture real schema provenance, but never manufacture renewal acceptance.
+    await client.query("UPDATE people SET status='inactive',updated_at=clock_timestamp() WHERE id=$1",[inactiveId]);
+    await client.query("UPDATE dependent_guardians SET ended_at=clock_timestamp(),end_reason='dependent_deactivated' WHERE dependent_person_id=$1",[inactiveId]);
+    createdProfiles++;
+  }
   for(const [key,owner,name,age,dependentId] of [
     ['profile-child','customer.profile','Demo Dependent Child','8 years',personId],
     ['saved-only-child','customer18','Demo Saved Child','6 years',null],
@@ -32,5 +46,5 @@ export async function seedDevelopmentDependents(client,id){
   }
   if(createdProfiles||createdDetails)await client.query(`INSERT INTO audit_events(actor_id,actor_type,action,target_type,target_id,changes,reason,correlation_id)
     VALUES ('development-demo-script','system','development.dependents_seeded','dataset','conecta-development-demo-v1',$1,'Fictional local child/guardian data; no email, login, booking or financial mutation',$2)`,[JSON.stringify({createdProfiles,createdDetails}),randomUUID()]);
-  return {dependentProfiles:1,guardianRelationships:2,savedChildDetails:2};
+  return {dependentProfiles:2,guardianRelationships:3,savedChildDetails:2};
 }

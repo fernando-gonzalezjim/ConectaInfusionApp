@@ -13,7 +13,7 @@ function text(value:unknown,max:number){if(typeof value!=='string'||!value.trim(
 function version(value:unknown){if(typeof value!=='number'||!Number.isSafeInteger(value)||value<0||value>=2147483647)throw new AuthError('INVALID_REQUEST');return value;}
 function locale(value:unknown){if(value!==undefined&&value!=='es-MX'&&value!=='en')throw new AuthError('INVALID_REQUEST');return value as 'es-MX'|'en'|undefined;}
 function page(value:unknown){const body=input(value,['limit','cursor'],[]);if(body.limit!==undefined&&(typeof body.limit!=='string'||! /^[1-9][0-9]?$/.test(body.limit)||Number(body.limit)>50))throw new AuthError('INVALID_REQUEST');return {limit:body.limit===undefined?25:Number(body.limit),cursor:body.cursor===undefined?null:identifier(body.cursor)};}
-export const childAuditActions=['dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted','dependent.guardian_invited','dependent.guardian_accepted','dependent.guardian_removed'] as const;
+export const childAuditActions=['dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted','dependent.guardian_invited','dependent.guardian_accepted','dependent.guardian_removed','dependent.reactivation_invited','dependent.reactivation_accepted','dependent.reactivated','dependent.transition_requested','dependent.transitioned'] as const;
 type AuditAction=typeof childAuditActions[number];
 export function readChildAuditSnapshot(value:unknown):Record<string,import('@conecta/contracts').AuditValue>|null{
   if(value===null)return null;const result:Record<string,import('@conecta/contracts').AuditValue>={};if(!value||typeof value!=='object'||Array.isArray(value))return result;

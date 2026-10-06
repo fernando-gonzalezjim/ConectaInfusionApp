@@ -30,6 +30,10 @@ export function createDependentClient(read:Read,write:Write,error:(code:'INVALID
     return {items:result.items.map(project),nextCursor:result.nextCursor};
   }
   return {
+    requestDependentTransition:async(value:string,input:{email:string},signal?:AbortSignal)=>{
+      const result=await write<ActionAcceptedResponse>('/dependents/'+id(value)+'/transition',input,signal);
+      if(!result||result.code!=='ACCEPTED')throw error('INTERNAL_ERROR');return {code:'ACCEPTED'} as const;
+    },
     listGuardians:(value:string,query:Query={},signal?:AbortSignal)=>page<GuardianRemovalTarget>('/dependents/'+id(value)+'/guardians',query,entry=>{
       if(!entry||!identifier(entry.id)||!identifier(entry.accountId)||!text(entry.fullName,120)||typeof entry.canRemove!=='boolean')throw error('INTERNAL_ERROR');
       return {id:entry.id,accountId:entry.accountId,fullName:entry.fullName,canRemove:entry.canRemove};

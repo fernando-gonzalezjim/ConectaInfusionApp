@@ -69,14 +69,28 @@ export interface ManagementAccessResponse {
 export type ApiErrorCode = 'UNAVAILABLE' | 'INVALID_REQUEST' | 'NOT_FOUND' | 'INTERNAL_ERROR'
   | 'INVALID_CREDENTIALS' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'THROTTLED' | 'IDENTITY_DISABLED' | 'INVALID_ACTION' | 'CONFLICT' | 'RECENT_AUTH_REQUIRED';
 export interface PhotoUploadInput { data: string; }
-export type OperationalAuditAction = 'account.created'|'account.profile_updated'|'account.roles_changed'|'account.deactivated'|'account.reactivated'
+export interface AccountDeactivationRequest {confirmation:true;creditChoice?:'keep'|'leave-family';dependentPersonIds?:string[]}
+export interface AccountReactivationRequest {confirmation:true;expectedSessionVersion:number}
+export interface AccountLifecycleState {accountId:string;status:'pending'|'active'|'inactive';sessionVersion:number;dependents:{id:string;fullName:string;canDeactivateTogether:boolean}[]}
+export interface DependentReactivationState {dependent:{id:string;fullName:string};deactivationSequence:number;guardians:{accountId:string;fullName:string;eligible:boolean;acceptedInvitationId:string|null}[]}
+export interface AccountReactivationResponse {accountId:string;status:'active'|'pending';sessionVersion:number}
+export interface GuardianReactivationInvitationRequest {guardianAccountId:string;expectedDeactivationSequence:number}
+export interface DependentReactivationRequest {confirmation:true;invitationId:string;expectedDeactivationSequence:number}
+export interface GuardianReactivationAccepted {dependentId:string;invitationId:string;code:'CONSENT_RECORDED'}
+export interface AccountDeactivationExecutionRequest extends AccountDeactivationRequest {idempotencyKey:string;expectedRevision:string}
+export type AccountDeactivationPreview={status:'ready';revision:string}|{status:'blocked';reasons:('INTEGRATION_REQUIRED'|'UNKNOWN_SCHEMA'|'LEGACY_OBLIGATIONS')[]};
+export interface AccountDeactivationReceipt {operationId:string;code:'APPLIED'}
+export type OperationalAuditAction = 'identity.lifecycle_applied'|'dependent.deactivated'|'account.created'|'account.profile_updated'|'account.roles_changed'|'account.deactivated'|'account.reactivated'
   |'account.email_changed'|'account.email_change_requested'|'account.confirmation_exempted'|'account.password_set'|'settings.updated'|'development.demo_seeded'
   |'family.created'|'family.invitation_sent'|'family.member_joined'|'family.member_left'|'family.member_removed'|'family.closed'|'family.responsibility_offered'|'family.responsibility_accepted'|'family.responsibility_declined'
-  |'dependent.created'|'dependent.profile_updated'|'child_details.created'|'child_details.updated'|'child_details.converted'|'dependent.guardian_invited'|'dependent.guardian_accepted'|'dependent.guardian_removed'|'other';
+  |'dependent.created'|'dependent.profile_updated'|'child_details.created'|'child_details.updated'|'child_details.converted'|'dependent.guardian_invited'|'dependent.guardian_accepted'|'dependent.guardian_removed'|'dependent.reactivation_invited'|'dependent.reactivation_accepted'|'dependent.reactivated'|'dependent.transition_requested'|'dependent.transitioned'|'other';
+
+export interface DependentTransitionInput {token:string;email:string;password:string}
+export interface DependentTransitionResponse {code:'TRANSITIONED'}
 export type AuditValue = string|number|boolean|null|string[];
 export interface OperationalAuditEvent {
   id:string; occurredAt:string; actorType:'staff'|'customer'|'system'; actorId:string|null; actorName:string|null;
-  action:OperationalAuditAction; targetType:'account'|'family'|'dependent'|'child_details'|'business_settings'|'dataset'|'other'; targetId:string|null; targetName:string|null;
+  action:OperationalAuditAction; targetType:'lifecycle_operation'|'account'|'family'|'dependent'|'child_details'|'business_settings'|'dataset'|'other'; targetId:string|null; targetName:string|null;
   businessUnit:BusinessUnitCode|null; correctionOf:string|null;
   changes:{before:Record<string,AuditValue>|null;after:Record<string,AuditValue>|null};
 }

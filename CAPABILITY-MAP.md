@@ -10,7 +10,7 @@ Sources: [confirmed intent](docs/intent/conecta-infusion.md) and [agreed rules](
 - One business, with separate studio and café financial units; Spanish first, English supported.
 - The proposed module boundaries below organize requirements, not separate deployed services. They can live within the existing application.
 - Audit history, permission enforcement, and bilingual behavior apply throughout the modules that use them.
-- Payment provider, authentication approach, and unresolved business details remain open until their specifications address them.
+- Payment provider and unresolved domain details remain open until their specifications address them. Identity's authentication approach is defined in its approved plan and locally implemented; production configuration remains outstanding.
 
 ## Approved modules
 
@@ -52,5 +52,7 @@ All modules are in first-release scope. This ordering is a dependency outline, n
 The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](SPEC-identity.md) was approved on October 3, 2026, including development fixtures and the confirmed account-management rules. Other listed specs have not been written. Plans and implementation follow their own review gates.
 
 The [Identity implementation plan](tasks/identity-plan.md) and [ordered checklist](tasks/identity-todo.md) were approved on October 3, 2026. Local implementation will use `feature/identity-implementation`; the approved specification remains unchanged.
+
+Identity I01-I40 are technically complete, with [setup and specification coverage](docs/identity-setup.md) and [verification evidence](tasks/identity-verification.md). Final human module sign-off remains pending. Account access, role/profile administration, consent-based families/guardians and access restoration are locally verified. Financial lifecycle operations remain blocked under default composition until credits-bookings, studio-catalog and instructor-payroll provide trusted transactional coordinators; no complete first-release or production readiness is implied. Scoped customer/instructor financial history and free staff booking/displacement remain owning-module work. The next approved specification topics are studio-catalog and payments, following the order above.
 
 Deferred scope remains unchanged: ingredient inventory, waitlists, mixed studio/café packages, multiple independent businesses, automated instructor payouts, and the shared time-slot demand view.

@@ -8,10 +8,11 @@ import type {useLocale} from '@conecta/i18n';
 import {GuardianAccess,type GuardianApi} from '@conecta/ui/components/guardian-access';
 import {FamilyAccess,type FamilyApi} from '@conecta/ui/components/family-access';
 
+import {AccountLifecycle,type AccountLifecycleApi} from '@conecta/ui/components/account-lifecycle';
 const roles:IdentityRole[]=['administrator','manager','reception','cafe_staff','instructor','customer'];
 type Text=ReturnType<typeof useLocale>['t'];
 type Key=Parameters<Text>[0];
-interface AdministrationApi extends FamilyApi,GuardianApi {
+interface AdministrationApi extends FamilyApi,GuardianApi,AccountLifecycleApi {
   getAccountPhoto(id:string,signal?:AbortSignal):Promise<Blob>;
   uploadAccountPhoto(id:string,input:import('@conecta/contracts').PhotoUploadInput,signal?:AbortSignal):Promise<AccountProfile>;
   listAccounts(query?:AccountListQuery,signal?:AbortSignal):Promise<AccountListResponse>;
@@ -113,6 +114,7 @@ export function AccountAdministration({api,actorId,t,onAccessLost}: {api:Adminis
     <ul className="space-y-3">{records.map(record=><li key={record.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border p-4"><div className="min-w-0 flex-1 break-words"><h3 className="font-semibold">{record.fullName}</h3><p className="text-sm text-muted-foreground">{record.email}</p><p className="mt-2 text-sm">{t(record.status)} · {record.roles.map(role=>t(role)).join(', ')}</p></div>
       {record.roles.includes('customer')&&record.status==='active'&&record.profileStatus==='active'&&<GuardianAccess api={api} accountId={record.id} t={t} onAccessLost={onAccessLost}/>}
       {record.roles.includes('customer')&&record.status==='active'&&record.profileStatus==='active'&&<FamilyAccess api={api} account={record} management t={t} onAccessLost={onAccessLost} />}
+      <AccountLifecycle api={api} accountId={record.id} fullName={record.fullName} management canDeactivate={record.id!==actorId||record.roles.includes('customer')} self={record.id===actorId} t={t} onAccessLost={onAccessLost} onChanged={()=>setAttempt(v=>v+1)}/>
       <AccountEditor api={api} record={record} actorId={actorId} t={t} onAccessLost={onAccessLost} onSaved={updated=>setRecords(current=>current.map(row=>row.id===updated.id?updated:row))} /></li>)}</ul>
     {!loading&&!error&&<nav aria-label={t('accountPages')} className="mt-5 flex flex-wrap items-center gap-3"><Button variant="outline" disabled={cursors.length===1} onClick={()=>setCursors(previous=>previous.slice(0,-1))}>{t('previousPage')}</Button><span className="text-sm">{t('pageNumber')} {cursors.length}</span><Button variant="outline" disabled={!next} onClick={()=>{if(next)setCursors(previous=>[...previous,next]);}}>{t('nextPage')}</Button></nav>}
   </section>;

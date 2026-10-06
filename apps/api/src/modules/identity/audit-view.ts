@@ -5,7 +5,7 @@ import {identityAuditActions,readIdentityAuditSnapshot} from './audit.js';
 import {childAuditActions,readChildAuditSnapshot} from './child-details.js';
 import {validateSettings} from '../foundation/validation.js';
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
-const actions:readonly string[]=[...identityAuditActions,...childAuditActions,'settings.updated','development.demo_seeded'];
+const actions:readonly string[]=[...identityAuditActions,...childAuditActions,'identity.lifecycle_applied','dependent.deactivated','settings.updated','development.demo_seeded'];
 const time=/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}Z$/;
 function query(value:unknown){
   if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).some(key=>!['limit','cursor'].includes(key)))throw new AuthError('INVALID_REQUEST');
@@ -28,12 +28,13 @@ interface Row {id:string;occurredAt:string;actor_id:string;actor_type:Operationa
   business_unit:OperationalAuditEvent['businessUnit'];correction_of:string|null;changes:unknown;actorName:string|null;targetName:string|null}
 function event(row:Row):OperationalAuditEvent{
   const action=(actions.includes(row.action)?row.action:'other') as OperationalAuditEvent['action'];
-  const targetType=(['account','family','dependent','child_details','business_settings','dataset'].includes(row.target_type)?row.target_type:'other') as OperationalAuditEvent['targetType'];
+  const targetType=(['lifecycle_operation','account','family','dependent','child_details','business_settings','dataset'].includes(row.target_type)?row.target_type:'other') as OperationalAuditEvent['targetType'];
   const changes=row.changes&&typeof row.changes==='object'?row.changes as {before?:unknown;after?:unknown}:{};
   const snapshot=(value:unknown)=>{
     if(action.startsWith('account.'))return readIdentityAuditSnapshot(value);
     if(action.startsWith('family.'))return readIdentityAuditSnapshot(value,true);
     if(action.startsWith('dependent.')||action.startsWith('child_details.'))return readChildAuditSnapshot(value);
+    if(action==='identity.lifecycle_applied')return readChildAuditSnapshot(value);
     if(action==='settings.updated')try{return {...validateSettings(value)};}catch{return null;}
     if(action==='development.demo_seeded'&&value&&typeof value==='object'){
       const result:Record<string,number>={};for(const key of ['createdAccounts','sessions','bookings']){

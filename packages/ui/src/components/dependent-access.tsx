@@ -1,3 +1,4 @@
+import {DependentTransitionRequest,type TransitionRequestApi,type TransitionKey} from './dependent-transition';
 import {useEffect,useId,useRef,useState,type FormEvent} from 'react';
 import type {DependentProfileView,SavedChildView,DependentProfileInput,SavedChildInput,IdentityPage,PublicAccount,Locale} from '@conecta/contracts';
 import {GuardianAccess,type GuardianApi,type GuardianKey} from './guardian-access';
@@ -6,7 +7,7 @@ import {Button} from './button';
 import {Input} from './input';
 import {Dialog,DialogTrigger,DialogContent,DialogHeader,DialogTitle,DialogDescription} from './dialog';
 type Query={limit?:number;cursor?:string};
-export interface DependentApi extends GuardianApi {
+export interface DependentApi extends GuardianApi, TransitionRequestApi {
   listDependents(query?:Query,signal?:AbortSignal):Promise<IdentityPage<DependentProfileView>>;
   listChildDetails(query?:Query,signal?:AbortSignal):Promise<IdentityPage<SavedChildView>>;
   createDependent(input:DependentProfileInput,signal?:AbortSignal):Promise<DependentProfileView>;
@@ -15,7 +16,7 @@ export interface DependentApi extends GuardianApi {
   updateChildDetails(id:string,input:SavedChildInput&{expectedVersion:number},signal?:AbortSignal):Promise<SavedChildView>;
   convertChildDetails(id:string,input:{expectedVersion:number},signal?:AbortSignal):Promise<{child:SavedChildView;dependent:DependentProfileView}>;
 }
-export type DependentKey=GuardianKey|'childrenTitle'|'childrenIntro'|'childrenSaved'|'childrenProfiles'|'childrenName'|'childrenAge'|'childrenAgeHint'|'childrenAddSaved'|'childrenAddProfile'|'childrenSave'|'childrenSaveProfile'|'childrenEditSaved'|'childrenEditProfile'|'childrenConvert'|'childrenConvertConfirm'|'childrenConvertHint'|'childrenLinked'|'childrenGuardians'|'childrenEmptySaved'|'childrenEmptyProfiles'|'childrenLoading'|'childrenSaving'|'childrenSavedMessage'|'childrenConverted'|'childrenUnavailable'|'childrenUncertain'|'childrenConflict'|'childrenMissing'|'childrenInvalid'|'childrenRefresh'|'childrenPrevious'|'childrenNext'|'childrenCancel'|'childrenNoBookings'|'childrenNoLogin'|'childrenNoGuardianship'|'childrenLinkedHint'|'childrenLocale'|'authExpired'|'authForbidden'|'authThrottled'|'close';
+export type DependentKey=TransitionKey|GuardianKey|'childrenTitle'|'childrenIntro'|'childrenSaved'|'childrenProfiles'|'childrenName'|'childrenAge'|'childrenAgeHint'|'childrenAddSaved'|'childrenAddProfile'|'childrenSave'|'childrenSaveProfile'|'childrenEditSaved'|'childrenEditProfile'|'childrenConvert'|'childrenConvertConfirm'|'childrenConvertHint'|'childrenLinked'|'childrenGuardians'|'childrenEmptySaved'|'childrenEmptyProfiles'|'childrenLoading'|'childrenSaving'|'childrenSavedMessage'|'childrenConverted'|'childrenUnavailable'|'childrenUncertain'|'childrenConflict'|'childrenMissing'|'childrenInvalid'|'childrenRefresh'|'childrenPrevious'|'childrenNext'|'childrenCancel'|'childrenNoBookings'|'childrenNoLogin'|'childrenNoGuardianship'|'childrenLinkedHint'|'childrenLocale'|'authExpired'|'authForbidden'|'authThrottled'|'close';
 type Text=(key:DependentKey)=>string;
 type Row=SavedChildView|DependentProfileView;
 const name=(row:Row)=>'childName' in row?row.childName:row.fullName;
@@ -83,6 +84,7 @@ function DependentPanel({api,account,t,onPending,onAccessLost}:{api:DependentApi
           {'guardians' in row&&<><h5 className="text-sm font-medium">{t('childrenGuardians')}</h5><ul className="list-inside list-disc text-sm">{row.guardians.map(guardian=><li className="break-words" key={guardian.accountId}>{guardian.fullName}</li>)}</ul></>}
           {'childName' in row&&row.dependentPersonId&&<p className="text-sm text-muted-foreground">{t('childrenLinked')}</p>}
           <div className="flex flex-wrap gap-2"><Button variant="outline" disabled={disabled} className="min-h-11 whitespace-normal" aria-label={`${t('childName' in row?'childrenEditSaved':'childrenEditProfile')}: ${name(row)}`} onClick={()=>edit('edit',row)}>{t('childName' in row?'childrenEditSaved':'childrenEditProfile')}</Button>
+            {'guardians' in row&&<DependentTransitionRequest api={api} t={t} dependentId={row.id} onPending={value=>{setPending(value);onPending(value);}}/>}
             {'guardians' in row&&<GuardianAccess api={api} t={t} dependent={row} onAccessLost={onAccessLost}/>}
             {'guardians' in row&&<GuardianRemoval api={api} t={t} dependent={row} onAccessLost={onAccessLost} onRemoved={()=>{setData(null);setSelected(null);setForm(null);setMessage('guardianRemoved');setCursors([undefined]);setAttempt(value=>value+1);}}/>}
             {'childName' in row&&row.dependentPersonId===null&&<Button variant="outline" disabled={disabled} className="min-h-11 whitespace-normal" aria-label={`${t('childrenConvert')}: ${name(row)}`} onClick={()=>edit('convert',row)}>{t('childrenConvert')}</Button>}

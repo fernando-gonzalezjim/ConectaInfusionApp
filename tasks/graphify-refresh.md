@@ -2,15 +2,15 @@
 
 Approved October 4, 2026: refresh changed sources automatically after every three completed implementation steps; no user reminders or hooks.
 
-- Last completed refresh: I32, covering I30, I31 and I32, including bilingual dependent UI/client, V11 guardian consent/invitations, guarded self/management removal, safe audit history and verification.
-- Completed steps since that refresh: 0.
-- Next scheduled refresh: after I35 (I33, I34, I35).
-- Snapshot status: current for completed I30-I32 source relationships; approved later steps remain planned. Source files/specification remain authoritative and the graph is not a completeness proof.
+- Last completed refresh: I38, covering I36 deactivation, I37 prior-guardian renewal/reactivation and I38 lifecycle UI/current-state reads.
+- Completed steps since that refresh: 2 (I39 verification runner/regression and I40 documentation/handoff).
+- Next scheduled refresh: after three additional implementation steps (I39, I40, then the next approved capability step).
+- Snapshot status: current through I38 implementation; I39-I40 verification, setup/handoff, README, capability-map and tracking updates are not yet included. No runtime source changed in I39-I40. Source files/specification remain authoritative and the graph is not a completeness proof.
 
-## October 5, 2026 refresh evidence
+## October 5, 2026 I36-I38 refresh evidence
 
-Only 42 changed files were re-extracted: 36 code files and six documents. Unchanged fragments were retained; no full rebuild or hooks were enabled. Sensitive `.npmrc` was excluded. Both PDF snapshots remain unchanged. Structural extraction completed sequentially with an explicit Windows process guard; unchanged source fragments were retained. Host semantic token usage is unavailable, not zero.
+Only 51 changed files were re-extracted: 41 code sources and 10 documents, about 54,400 words before final evidence edits. Unchanged fragments were retained; no full rebuild or hooks were enabled. Sensitive `.npmrc` was excluded. Both PDF snapshots remain unchanged. Structural extraction used the existing sequential Windows process guard; document extraction used host agents without an external API key. Host semantic token usage is unavailable, not zero.
 
-The graph now contains 1928 nodes, 4087 edges and 129 communities. Fresh extraction reports 249 unresolved endpoint edges and 52 undirected edge collapses. The merged graph has 0 missing endpoints after endpoint synthesis; synthesized endpoints and source-name artifacts do not establish implemented relationships. The original extraction's 16 dangling endpoints and 11 undirected collapses remain historical limitations. See [the graph report](../graphify-out/GRAPH_REPORT.md) and [integrity diagnostics](../graphify-out/graph-health.json).
+Final node/edge/community counts and fresh extraction/merged integrity diagnostics are recorded in [the graph report](../graphify-out/GRAPH_REPORT.md) and [integrity diagnostics](../graphify-out/graph-health.json). Missing or synthesized endpoints and undirected collapses do not prove implemented relationships. The original extraction's 16 dangling endpoints and 11 collapses remain historical limitations; consult current source before relying on graph relationships.
 
-At each successful refresh, record included steps and extraction evidence, reset the counter and set the next three-step boundary. Do not count routine documentation/PDF exports or individual sub-slices as separate implementation steps. Preserve graph integrity diagnostics and retain unchanged fragments.
+At each successful refresh, record included steps and evidence, reset the counter and set the next three-step boundary. Routine documentation/PDF exports or sub-slices are not separate steps. Retain unchanged fragments and integrity diagnostics.

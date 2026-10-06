@@ -22,8 +22,8 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     const result = await seedDevelopmentDemo(db.pool,environment);
     assert.equal(result.createdAccounts,26);
     assert.equal(result.families,2);assert.equal(result.familyMemberships,3);
-    assert.equal(result.dependentProfiles,1);assert.equal(result.guardianRelationships,2);assert.equal(result.savedChildDetails,2);
-    const child=(await db.pool.query('SELECT person_id,created_by_account_id FROM dependent_profiles')).rows[0];
+    assert.equal(result.dependentProfiles,2);assert.equal(result.guardianRelationships,3);assert.equal(result.savedChildDetails,2);
+    const child=(await db.pool.query("SELECT d.person_id,d.created_by_account_id FROM dependent_profiles d JOIN people p ON p.id=d.person_id WHERE p.status='active'")).rows[0];
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM accounts WHERE person_id=$1',[child.person_id])).rows[0].n,0);
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM members WHERE person_id=$1',[child.person_id])).rows[0].n,0);
     const additionalGuardian=(await db.pool.query("SELECT id FROM dependent_guardians WHERE dependent_person_id=$1 AND source='accepted_invitation'",[child.person_id])).rows[0].id;
@@ -32,8 +32,14 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     await db.pool.query("UPDATE dependent_guardians SET ended_at=clock_timestamp(),end_reason='self_removed' WHERE id=$1",[additionalGuardian]);
     const savedOnly=(await db.pool.query('SELECT id FROM saved_child_details WHERE dependent_person_id IS NULL')).rows[0].id;
     await db.pool.query("UPDATE saved_child_details SET child_name='Edited saved child',age_text='7 years',version=version+1 WHERE id=$1",[savedOnly]);
+    const inactiveChild=(await db.pool.query("SELECT d.person_id FROM dependent_profiles d JOIN people p ON p.id=d.person_id WHERE p.full_name='Demo Inactive Dependent'")).rows[0].person_id;
+    await db.pool.query("UPDATE dependent_profiles SET age_text='Edited inactive age',version=version+1 WHERE person_id=$1",[inactiveChild]);
     await seedDevelopmentDemo(db.pool,environment);
-    assert.equal((await db.pool.query('SELECT count(*)::int n FROM dependent_profiles')).rows[0].n,1);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM dependent_profiles')).rows[0].n,2);
+    assert.equal((await db.pool.query('SELECT age_text FROM dependent_profiles WHERE person_id=$1',[inactiveChild])).rows[0].age_text,'Edited inactive age');
+    assert.equal((await db.pool.query('SELECT status FROM people WHERE id=$1',[inactiveChild])).rows[0].status,'inactive');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM dependent_prior_guardians WHERE dependent_person_id=$1',[inactiveChild])).rows[0].n,1);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM guardian_reactivation_invitations')).rows[0].n,0);
     assert.equal((await db.pool.query('SELECT age_text FROM dependent_profiles WHERE person_id=$1',[child.person_id])).rows[0].age_text,'9 years');
     assert.equal((await db.pool.query('SELECT full_name FROM people WHERE id=$1',[child.person_id])).rows[0].full_name,'Edited fictional child');
     assert.ok((await db.pool.query('SELECT ended_at FROM dependent_guardians WHERE id=$1',[additionalGuardian])).rows[0].ended_at);

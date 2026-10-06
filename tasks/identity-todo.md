@@ -404,76 +404,88 @@ Delivered in sequential sub-slices: I32a private removal service/routes/contract
 
 ### I33: Independent account transition
 
-- [ ] **Acceptance:** Guardian requests email/password transition; confirmation completes automatically, without minimum age/manual approval; end every guardian's access and preserve identity/family history.
-- [ ] **Verification:** Duplicate-email/concurrent transition tests; former guardians denied after completion. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Guardian requests email/password transition; confirmation completes automatically, without minimum age/manual approval; end every guardian's access and preserve identity/family history.
+- [x] **Verification:** Duplicate-email/concurrent transition tests; former guardians denied after completion. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I32. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/dependent-transition.ts`, `apps/api/src/modules/identity/dependent-routes.ts`, `apps/customer-web/src/`, `apps/api/test/integration/identity-transition.test.mjs`.
 
+Delivered in sequential persistence/service, transport/contracts, client/audit, bilingual UI and verification slices. Verified all 133 backend cases across the regression run and corrected I33 rerun, 66 unit/client/translation checks, 134 controlled Chromium checks and 33 fresh-database live workflows. V12 is applied to the local demo without reset; existing demo child/guardian fixtures suffice. Independent review found no blocker. See the verification record for the HTTP test-environment correction and owning-module boundaries. Graphify counter is one since I32; next scheduled refresh remains I35.
+
 ### Checkpoint after I33
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
 - [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I34: Family/dependent review
 
-- [ ] **Acceptance:** Complete management assistance and consent UI; verify specification coverage and identify remaining owning-module obligations.
-- [ ] **Verification:** Real inbox successor/guardian/transition flows; direct API permission matrix. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Complete management assistance and consent UI; verify specification coverage and identify remaining owning-module obligations.
+- [x] **Verification:** Real inbox successor/guardian/transition flows; direct API permission matrix. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I33. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-relationships.spec.ts`, `tasks/identity-verification.md`.
 
+Completed the existing management/consent review with a real PostgreSQL HTTP matrix covering eight actors and 96 requests, including an instructor/customer family member. Twelve management UI cases cover administrator/manager roles, Spanish/English and all three Foundation widths with axe/overflow checks. All five real inbox successor/guardian/transition workflows passed on a fresh V12 database; workspace typecheck/build passed. No production interface gap or new business decision was found. [The relationship coverage review](../docs/identity-relationships-review.md) identifies remaining lifecycle, booking/credit, notification and instructor-finance obligations. Existing demo data suffice; PDFs remain unchanged. Independent review found no blocker. Graphify counter is two since I32; the scheduled boundary remains I35.
+
 ## Phase 4: Lifecycle and handoff
 
 ### I35: Lifecycle composition guard
 
-- [ ] **Acceptance:** Provide transaction/idempotency/preview coordinator contracts; detect legacy obligations and fail closed when unavailable; never treat missing tables as proof of no obligation.
-- [ ] **Verification:** Legacy booking, stale preview, coordinator failure and rollback integration tests. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Provide transaction/idempotency/preview coordinator contracts; detect legacy obligations and fail closed when unavailable; never treat missing tables as proof of no obligation.
+- [x] **Verification:** Legacy booking, stale preview, coordinator failure and rollback integration tests. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I34. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/lifecycle.ts`, `apps/api/src/composition/identity-lifecycle.ts`, `apps/api/test/integration/identity-lifecycle.test.mjs`.
 
+Completed the internal guard in contract, conservative composition, immutable V13 receipts and regression/documentation slices. Missing schemas/coordinators and unsupported legacy obligations remain blocked; previews are read-only and execution/retries retain atomic rollback and stale-state checks. All 141 backend integration tests and 33 fresh-database live Chromium workflows passed, alongside workspace typecheck/build and 66 unit/client/translation checks. Existing demo fixtures suffice; V13 was applied without reset. Independent review found no remaining I35 blocker and documented authorization/lock/audit requirements for I36. The scheduled changed-only Graphify refresh covers I33-I35; next boundary is I38. No public lifecycle action or owning-module success adapter is enabled.
+
 ### I36: Account deactivation
 
-- [ ] **Acceptance:** Implement privileged/self deactivation through composition guard; accepted guardian transfer or allowed joint dependent deactivation; revoke sessions and preserve history.
-- [ ] **Verification:** Other guardian/dependent stays active; teaching/pay obligations block unsafe changes; cancellation outcomes use coordinator contract. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Implement privileged/self deactivation through composition guard; accepted guardian transfer or allowed joint dependent deactivation; revoke sessions and preserve history.
+- [x] **Verification:** Other guardian/dependent stays active; teaching/pay obligations block unsafe changes; cancellation outcomes use coordinator contract. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I35. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/deactivation.ts`, `apps/api/src/modules/identity/account-routes.ts`, `apps/api/test/integration/identity-deactivation.test.mjs`.
 
+Delivered backend contracts/service, guarded private API, strict bilingual audit/client and PostgreSQL/browser regression slices. The transaction preserves final administration, prior guardian provenance, other guardian/dependent access and family/account history, with atomic domain coordination and freshly authorized retries. Default composition blocks unresolved booking/credit, teaching and payroll obligations. All 150 backend integration tests, 33 fresh-database live Chromium workflows, six controlled audit browser checks and 67 unit/client/translation checks passed; workspace typecheck/build and 166 documentation links passed. Existing demo fixtures suffice. No migration, business-rule/PDF change or commit/push was requested. Independent adversarial review found no remaining blocker. Graphify counter is one since I35; next scheduled refresh remains I38. I37 reactivation is next.
+
 ### Checkpoint after I36
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
 - [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I37: Reactivation
 
-- [ ] **Acceptance:** Privileged reactivation restores access only; relationships need new accepted invitations; dependent restoration requires active accepting prior guardian provenance.
-- [ ] **Verification:** All prior guardians inactive blocks restoration; unrelated former guardian denied; no booking/expired-credit resurrection. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Privileged reactivation restores access only; relationships need new accepted invitations; dependent restoration requires active accepting prior guardian provenance.
+- [x] **Verification:** All prior guardians inactive blocks restoration; unrelated former guardian denied; no booking/expired-credit resurrection. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I36. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/api/src/modules/identity/reactivation.ts`, `apps/api/src/modules/identity/account-routes.ts`, `apps/api/test/integration/identity-reactivation.test.mjs`.
 
+Completed access-only account restoration and latest-prior-guardian renewal/acceptance/management finalization in backend, V14 provenance, safe bilingual audit and repeat-safe demo slices. All eleven focused cases, 161 backend integration cases, 33 live Chromium workflows, eight controlled audit browser cases and 68 unit/client/translation checks passed; workspace typecheck/build, migration validation and 171 local links passed. No booking or expired-credit resurrection, automatic relationship restoration or manufactured consent is introduced. Local demo V14 and the inactive customer18 dependent fixture were installed without reset. Independent security review found no blocker. I38 owns the renewal action page and lifecycle UI. Graphify counter is two since I35; the next scheduled refresh remains I38. PDFs and business rules remain unchanged.
+
 ### I38: Lifecycle UI
 
-- [ ] **Acceptance:** Show preview, explicit choices and honest integration-required states; implement family departure/closure and account/dependent controls only where coordinator proves safety.
-- [ ] **Verification:** No partial mutation; accessible confirm/retry in Spanish/English; unsafe actions remain unavailable. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Show preview, explicit choices and honest integration-required states; implement family departure/closure and account/dependent controls only where coordinator proves safety.
+- [x] **Verification:** No partial mutation; accessible confirm/retry in Spanish/English; unsafe actions remain unavailable. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I37. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `apps/customer-web/src/`, `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-lifecycle.spec.ts`.
 
+Delivered account review/confirmation and restoration, explicit credit/joint-dependent choices, authorized current-state reads, prior-guardian renewal/finalization and bilingual inbox consent in thin contract/backend/interface/verification slices. Family departure/closure remain visibly unavailable until a trusted financial coordinator exists; no standalone dependent-deactivation API is invented. All 163 backend tests, 35 live Chromium workflows, 36 controlled lifecycle/relationship/audit cases and 70 unit/client/translation checks passed, with workspace typecheck/build, migration validation, teardown and 180 local links. Independent review found no remaining blocker after requiring active self credit selection. Existing demo fixtures suffice; PDFs/business rules are unchanged. The scheduled changed-source Graphify refresh covers I36-I38; next boundary is three additional completed implementation steps.
+
 ### I39: Verification runner and regression
 
-- [ ] **Acceptance:** Include every Identity integration test in isolated runner; finish live Chromium, concurrency and Foundation regression coverage with recorded evidence.
-- [ ] **Verification:** Run typecheck/build/unit/integration/Chromium commands from plan; record failures and limitations, never skip invariants. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Include every Identity integration test in isolated runner; finish live Chromium, concurrency and Foundation regression coverage with recorded evidence.
+- [x] **Verification:** Run typecheck/build/unit/integration/Chromium commands from plan; record failures and limitations, never skip invariants. Run focused checks and typecheck/build for affected work.
 
 **Dependencies:** I38. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -481,21 +493,23 @@ Delivered in sequential sub-slices: I32a private removal service/routes/contract
 
 ### Checkpoint after I39
 
-- [ ] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [ ] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
+- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
 - [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I40: Documentation and handoff
 
-- [ ] **Acceptance:** Document bootstrap/local inbox/security configuration and unresolved production/domain integration; review approved-spec coverage and record Graphify snapshot status.
-- [ ] **Verification:** Local links/checklist review; human review before module sign-off; PDFs unchanged and bilingual rules synchronized only if changed. Run focused checks and typecheck/build for affected work.
+- [x] **Acceptance:** Document bootstrap/local inbox/security configuration and unresolved production/domain integration; review approved-spec coverage and record Graphify snapshot status.
+- [x] **Verification:** Local links/checklist review; human review before module sign-off; PDFs unchanged and bilingual rules synchronized only if changed. Run focused checks and typecheck/build for affected work. Technical checks complete; the separate final human sign-off below remains pending.
 
 **Dependencies:** I39. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
 **Likely paths:** `README.md`, `docs/identity-setup.md`, `tasks/identity-verification.md`, `tasks/identity-todo.md`, `CAPABILITY-MAP.md`.
 
+Delivered [the setup and handoff guide](../docs/identity-setup.md), including explicit local inbox delivery, private configuration/bootstrap safeguards, ten-scenario specification coverage, manual review and domain/production requirements. Corrected outdated README authentication/audit statements and recorded the local capability status without claiming complete financial workflows or production readiness. I39 full regression evidence is reused because I40 changes documentation/tracking only. Existing demo fixtures suffice; no seeds, resets, business-rule or PDF changes. Graphify counter is two since I38; changed-source refresh follows the next approved capability step. Human module sign-off remains pending.
+
 ### Final checkpoint after I40
 
 - [ ] Human reviews specification coverage and recorded verification evidence.
-- [ ] Outstanding booking, credit, scheduling and payroll integrations are explicit; no incomplete lifecycle workflow is marked production-ready.
-- [ ] Record Graphify snapshot status and apply the approved changed-source refresh cadence; no reminders, full rebuilds or hooks.
+- [x] Outstanding booking, credit, scheduling and payroll integrations are explicit; no incomplete lifecycle workflow is marked production-ready.
+- [x] Record Graphify snapshot status and apply the approved changed-source refresh cadence; no reminders, full rebuilds or hooks.

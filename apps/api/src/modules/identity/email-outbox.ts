@@ -85,7 +85,9 @@ export function createEmailOutboxWorker(pool: Pool, config: EnabledIdentityConfi
        AND (t.person_id IS NULL OR q.status='active')
        AND (t.purpose <> 'family_invitation' OR identity_family_invitation_valid(t.target_id,t.id,$3))
         AND (t.purpose <> 'family_successor' OR identity_family_successor_valid(t.target_id,t.id,$3))
-        AND (t.purpose <> 'guardian_invitation' OR identity_guardian_invitation_valid(t.target_id,t.id,$3))) AS valid
+        AND (t.purpose <> 'guardian_invitation' OR identity_guardian_invitation_valid(t.target_id,t.id,$3))
+        AND (t.purpose <> 'guardian_reactivation' OR identity_guardian_reactivation_valid(t.target_id,t.id,$3))
+        AND (t.purpose <> 'dependent_transition' OR identity_dependent_transition_valid(t.id,$3))) AS valid
       FROM identity_action_tokens t LEFT JOIN accounts a ON a.id=t.account_id
       LEFT JOIN people p ON p.id=a.person_id LEFT JOIN people q ON q.id=t.person_id WHERE t.id=$1`,
     [row.action_token_id,now(),config.smtp.transport === 'mailpit'])).rows[0];

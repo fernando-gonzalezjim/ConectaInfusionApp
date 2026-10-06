@@ -76,3 +76,19 @@ I30 manual UI checks reuse these same fixtures. Sign in to the customer app as `
 I31 reuses existing child/guardian/customer/manager fixtures for [guardian invitation checks](identity-dependents.md). Invite an unassigned customer such as customer02 and accept through the local inbox; seeding creates no real invitations or consent. V11 marks legacy/synthetic consent exceptions and preserves manual edits. Migrate before seeding; the guarded full reset remains compatible.
 
 I32 reuses the same two current fictional guardians for [removal checks](identity-dependents.md). Removal preserves history; repeat seeding does not restore ended authorizations. To restore access, issue and accept a new invitation through the local inbox. The last active guardian cannot be removed. No additional seed accounts or consent are created.
+
+
+I33 manual verification reuses Demo Dependent Child and its existing guardians; no new seeded identity or synthetic transition consent is needed. Request a new fictional `.test` mailbox from the guardian profile and confirm through the local inbox. After completion, the same dependent becomes an independent customer and both guardians lose authorization. Reseeding preserves the independent state and ended relationships. See [the transition checklist](identity-dependents.md#manual-verification) for commands and expected results. Do not reset a database merely to test this flow; creating a separate fictional dependent permits another run.
+
+
+I35 reuses existing legacy demo members, bookings and teaching identities to exercise conservative lifecycle blocking. V13 adds internal retry-receipt persistence; it seeds no receipt or successful deactivation. No new demo account/data or reset is required, and public lifecycle controls remain assigned to later approved steps. See [the internal lifecycle contract](identity-lifecycle.md).
+
+## I36 deactivation verification
+
+Existing fictional accounts, families, dependents and accepted guardians cover manual guarded-preview checks. No new seed data or manufactured consent is needed. The private preview API returns an integration-required state with default composition; a sole guardian without an explicit joint choice conflicts. No success adapter is seeded, and no reset is required. See [account deactivation](identity-deactivation.md).
+
+## I37 reactivation verification
+
+The seed now also creates **Demo Inactive Dependent** with customer18 as its immediately prior guardian. It records real deactivation provenance and ends the old authorization; it creates no renewal invitation or consent. Existing manually edited/reactivated fixtures are preserved. Migrate before seeding. See [reactivation APIs and the I38 UI boundary](identity-reactivation.md).
+
+I38 uses the existing inactive dependent, customer18, manager and family fixtures; no extra seed data are needed. The [lifecycle screen guide](identity-lifecycle-ui.md) explains blocked deactivation/family controls and the real inbox renewal workflow.

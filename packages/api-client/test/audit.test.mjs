@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import {createApiClient} from '../src/index.ts';
 const id='11111111-1111-4111-a111-111111111111';
 const event={id,occurredAt:'2026-10-04T12:00:00.000001Z',actorType:'staff',actorId:id,actorName:'Manager',action:'account.profile_updated',targetType:'account',targetId:id,targetName:'Customer',businessUnit:null,correctionOf:null,changes:{before:null,after:{fullName:'Customer',password:'never expose'}}};
+test('lifecycle receipts and dependent deactivation accept only reference snapshots',async()=>{
+  for(const [action,targetType] of [['identity.lifecycle_applied','lifecycle_operation'],['dependent.deactivated','dependent']]){
+    const row={...event,action,targetType,targetName:null,changes:{before:null,after:{personId:id,fullName:'Private person',email:'private@example.test',password:'secret',token:'secret'}}};
+    const page=await createApiClient('',async()=>Response.json({events:[row],nextCursor:null})).listOperationalAudit();
+    assert.equal(page.events[0].targetId,id);assert.deepEqual(page.events[0].changes.after,{personId:id});
+  }
+});
 
 test('child audit history retains references without child personal details',async()=>{
   for(const action of ['dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted']){
@@ -35,5 +42,14 @@ test('audit client accepts all successor decisions without exposing email or act
     const successor={...event,action,targetType:'family',targetName:'Family',changes:{before:null,after:{invitationId:id,responsibleMembershipId:id,token:'secret',recipientEmail:'private@example.test'}}};
     const page=await createApiClient('',async()=>Response.json({events:[successor],nextCursor:null})).listOperationalAudit();
     assert.equal(page.events[0].action,action);assert.deepEqual(page.events[0].changes.after,{invitationId:id,responsibleMembershipId:id});
+  }
+});
+
+test('audit client accepts guardian renewal history and strips action secrets', async () => {
+  for (const action of ['dependent.reactivation_invited', 'dependent.reactivation_accepted', 'dependent.reactivated']) {
+    const record = {...event, action, targetType:'dependent', changes:{before:null, after:{personId:id, token:'secret', recipientEmail:'private@example.test'}}};
+    const page = await createApiClient('', async () => Response.json({events:[record], nextCursor:null})).listOperationalAudit();
+    assert.equal(page.events[0].action, action);
+    assert.deepEqual(page.events[0].changes.after, {personId:id});
   }
 });

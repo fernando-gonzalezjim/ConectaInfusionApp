@@ -29,9 +29,20 @@ import {createChildDetailsService} from './modules/identity/child-details.js';
 import {createDependentRouter} from './modules/identity/dependent-routes.js';
 import {createGuardianInvitationService} from './modules/identity/guardian-invitations.js';
 import {createGuardianService} from './modules/identity/guardians.js';
+import {createDependentTransitionService} from './modules/identity/dependent-transition.js';
+import {createDependentTransitionRouter} from './modules/identity/dependent-transition-routes.js';
+import {createDeactivationService} from './modules/identity/deactivation.js';
+import {createDeactivationRouter} from './modules/identity/deactivation-routes.js';
+import type {createIdentityLifecycleComposition} from './composition/identity-lifecycle.js';
+import {createReactivationService} from './modules/identity/reactivation.js';
+import {createGuardianReactivationService} from './modules/identity/guardian-reactivation.js';
+import {createReactivationRouter} from './modules/identity/reactivation-routes.js';
+import {createLifecycleReadService} from './modules/identity/lifecycle-read.js';
+import {createLifecycleReadRouter} from './modules/identity/lifecycle-read-routes.js';
 
 export async function createApplication(options: {
   database?: Pool; identityConfig?: IdentityConfig; environment?: NodeJS.ProcessEnv;
+  identityLifecycle?:ReturnType<typeof createIdentityLifecycleComposition>;
 } = {}) {
   const app = express();
   const database = options.database ?? pool;
@@ -69,6 +80,12 @@ export async function createApplication(options: {
     app.use('/api/v1/me', me);
     const accounts = express.Router();
     accounts.use(protection.originGuard, identityCors);
+    const reactivation=createReactivationService(database,service),guardianReactivation=createGuardianReactivationService(database,identityConfig,service);
+    const lifecycleReads=createLifecycleReadService(database,service);
+    accounts.use(createLifecycleReadRouter(lifecycleReads,'accounts',protection.originGuard));
+    app.use('/api/v1/dependents',identityCors,createLifecycleReadRouter(lifecycleReads,'dependents',protection.originGuard));
+    accounts.use(createReactivationRouter(reactivation,guardianReactivation,protection.sessionMutation,'accounts'));
+    accounts.use(createDeactivationRouter(createDeactivationService(database,service,{composition:options.identityLifecycle,environment:options.environment}),protection.sessionMutation));
     accounts.use(createPhotoRouter(photos, protection.sessionMutation, false));
     accounts.use(createAccountRouter(invitations, protection.sessionMutation, administration, createRoleService(database, service, {environment:options.environment})));
     accounts.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
@@ -81,6 +98,8 @@ export async function createApplication(options: {
     const children=createChildDetailsService(database,service);
     const guardians=createGuardianInvitationService(database,identityConfig,service);
     const guardianRemoval=createGuardianService(database,service);
+    const reactivationRouter=express.Router();reactivationRouter.use(protection.originGuard,identityCors,createReactivationRouter(reactivation,guardianReactivation,protection.sessionMutation,'dependents'));app.use('/api/v1/dependents',reactivationRouter);
+    const transitionRouter=express.Router();transitionRouter.use(protection.originGuard,identityCors,createDependentTransitionRouter(createDependentTransitionService(database,identityConfig,service),protection.sessionMutation,protection.anonymousMutation));app.use('/api/v1/dependents',transitionRouter);
     for(const kind of ['dependents','child-details'] as const){const router=express.Router();router.use(protection.originGuard,identityCors,createDependentRouter(children,protection.sessionMutation,kind,guardians,guardianRemoval));app.use('/api/v1/'+kind,router);}
     const management = express.Router();
     management.use(protection.originGuard, identityCors);

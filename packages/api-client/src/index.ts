@@ -1,5 +1,6 @@
 import type { ApiErrorCode, CsrfResponse, LoginInput, LoginResponse, SessionResponse, PublicSettings, StudioOverview, ManagementAccessResponse, RegistrationInput, ActionAcceptedResponse, EmailConfirmedResponse, PasswordResetInput, PasswordResetResponse, CustomerInvitationInput, PasswordSetupResponse } from '@conecta/contracts';
 import type {AccountListQuery,AccountListResponse,AccountProfile,AccountProfileInput,IdentityRole,RoleChangeInput,RoleChangeResponse} from '@conecta/contracts';
+import {createLifecycleClient} from './lifecycle.ts';
 import {createDependentClient} from './dependents.ts';
 
 const identityRoles: readonly IdentityRole[]=['administrator','manager','reception','cafe_staff','instructor','customer'];
@@ -47,7 +48,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       const code: ApiErrorCode = response.status === 401 ? (body?.code === 'INVALID_CREDENTIALS' ? 'INVALID_CREDENTIALS' : 'UNAUTHENTICATED')
         : response.status === 403 ? (body?.code === 'RECENT_AUTH_REQUIRED' ? 'RECENT_AUTH_REQUIRED' : 'FORBIDDEN') : response.status === 429 ? 'THROTTLED'
         : response.status === 404 ? 'NOT_FOUND' : response.status === 409 ? 'CONFLICT' : response.status >= 500 ? 'UNAVAILABLE'
-        : response.status === 400 && ['/auth/confirmation', '/auth/recovery/reset', '/auth/setup', '/auth/email-change/confirmation','/dependents/guardian-invitations/preview','/dependents/guardian-invitations/accept','/families/invitations/preview','/families/invitations/accept','/families/successor-offers/preview','/families/successor-offers/accept','/families/successor-offers/decline'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
+        : response.status === 400 && ['/dependents/reactivation-invitations/preview','/dependents/reactivation-invitations/accept','/dependents/transitions/complete', '/auth/confirmation', '/auth/recovery/reset', '/auth/setup', '/auth/email-change/confirmation','/dependents/guardian-invitations/preview','/dependents/guardian-invitations/accept','/families/invitations/preview','/families/invitations/accept','/families/successor-offers/preview','/families/successor-offers/accept','/families/successor-offers/decline'].includes(path) && body?.code === 'INVALID_ACTION' ? 'INVALID_ACTION' : 'INVALID_REQUEST';
       const retry = response.headers.get('Retry-After');
       const seconds = retry && /^[1-9][0-9]{0,6}$/.test(retry) ? Number(retry) : undefined;
       throw new ApiError(code, code === 'THROTTLED' ? seconds : undefined);
@@ -56,7 +57,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
     try { return await response.json() as T; }
     catch { throw new ApiError('INTERNAL_ERROR'); }
   }
-  async function anonymousAction<T extends 'ACCEPTED' | 'CONFIRMED' | 'PASSWORD_RESET' | 'PASSWORD_SET' | 'EMAIL_CHANGED'>(path: string, body: unknown, code: T, signal?: AbortSignal): Promise<{ code: T }> {
+  async function anonymousAction<T extends 'ACCEPTED' | 'CONFIRMED' | 'PASSWORD_RESET' | 'PASSWORD_SET' | 'EMAIL_CHANGED' | 'TRANSITIONED'>(path: string, body: unknown, code: T, signal?: AbortSignal): Promise<{ code: T }> {
     const csrf = await send<CsrfResponse>('/auth/csrf', signal);
     const response = await send<{ code: T }>(path, signal, { body, csrfToken: csrfToken(csrf) });
     if (!response || response.code !== code) throw new ApiError('INTERNAL_ERROR');
@@ -97,6 +98,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
   }
   return {
     ...createDependentClient(send,familyMutation,code=>new ApiError(code)),
+    ...createLifecycleClient(send,familyMutation,code=>new ApiError(code)),
     getFamilyResponsibility:async(id:string,signal?:AbortSignal):Promise<import('@conecta/contracts').FamilyResponsibilityState>=>{
       if(!validId(id))throw new ApiError('INVALID_REQUEST');const result=await send<import('@conecta/contracts').FamilyResponsibilityState>(`/families/${id}/responsibility`,signal);
       if(!result||typeof result.canNominate!=='boolean')throw new ApiError('INTERNAL_ERROR');return {canNominate:result.canNominate};
@@ -115,7 +117,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       const params=new URLSearchParams({limit:String(query.limit??25)});if(query.cursor)params.set('cursor',query.cursor);
       const page=await send<import('@conecta/contracts').OperationalAuditPage>(`/audit?${params}`,signal);
       if(!page||!Array.isArray(page.events)||page.events.length>50||!(page.nextCursor===null||typeof page.nextCursor==='string'&&page.nextCursor.length<=200&&/^[A-Za-z0-9_-]+$/.test(page.nextCursor)))throw new ApiError('INTERNAL_ERROR');
-      const actions=['account.created','account.profile_updated','account.roles_changed','account.deactivated','account.reactivated','account.email_changed','account.email_change_requested','account.confirmation_exempted','account.password_set','settings.updated','development.demo_seeded','family.created','family.invitation_sent','family.member_joined','family.member_left','family.member_removed','family.closed','family.responsibility_offered','family.responsibility_accepted','family.responsibility_declined','dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted','dependent.guardian_invited','dependent.guardian_accepted','dependent.guardian_removed','other'];
+      const actions=['identity.lifecycle_applied','dependent.deactivated','account.created','account.profile_updated','account.roles_changed','account.deactivated','account.reactivated','account.email_changed','account.email_change_requested','account.confirmation_exempted','account.password_set','settings.updated','development.demo_seeded','family.created','family.invitation_sent','family.member_joined','family.member_left','family.member_removed','family.closed','family.responsibility_offered','family.responsibility_accepted','family.responsibility_declined','dependent.created','dependent.profile_updated','child_details.created','child_details.updated','child_details.converted','dependent.guardian_invited','dependent.guardian_accepted','dependent.guardian_removed','dependent.reactivation_invited','dependent.reactivation_accepted','dependent.reactivated','dependent.transition_requested','dependent.transitioned','other'];
       const fields=['fullName','phone','preferredLocale','email','photoId','personId','status','confirmationStatus','exemptionSource','roles','displayName','country','currency','timezone','defaultLocale','supportedLocales','defaultCapacity','createdAccounts','sessions','bookings','name','version','membershipId','responsibleMembershipId','memberCount','acceptedInvitationId','invitationId','invitationVersion','guardianAccountId','guardianRelationshipId'];
       const snapshot=(value:Record<string,import('@conecta/contracts').AuditValue>|null,referencesOnly=false)=>{
         if(value===null)return null;if(!value||typeof value!=='object'||Array.isArray(value))throw new ApiError('INTERNAL_ERROR');
@@ -128,12 +130,12 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
       return {nextCursor:page.nextCursor,events:page.events.map(event=>{
         if(!event||!validId(event.id)||typeof event.occurredAt!=='string'||event.occurredAt.length>32||Number.isNaN(Date.parse(event.occurredAt))
           ||!['staff','customer','system'].includes(event.actorType)||!(event.actorId===null||validId(event.actorId)||event.actorId==='development-demo-script')
-          ||!actions.includes(event.action)||!['account','family','dependent','child_details','business_settings','dataset','other'].includes(event.targetType)
+          ||!actions.includes(event.action)||!['lifecycle_operation','account','family','dependent','child_details','business_settings','dataset','other'].includes(event.targetType)
           ||!(event.targetId===null||validId(event.targetId)||event.targetId==='1'||event.targetId==='conecta-development-demo-v1')
           ||![event.actorName,event.targetName].every(name=>name===null||typeof name==='string'&&name.length<=120)
           ||!(event.businessUnit===null||['studio','cafe'].includes(event.businessUnit))||!(event.correctionOf===null||validId(event.correctionOf))||!event.changes)throw new ApiError('INTERNAL_ERROR');
         return {id:event.id,occurredAt:event.occurredAt,actorType:event.actorType,actorId:event.actorId,actorName:event.actorName,action:event.action,targetType:event.targetType,targetId:event.targetId,targetName:event.targetName,
-          businessUnit:event.businessUnit,correctionOf:event.correctionOf,changes:{before:snapshot(event.changes.before,event.targetType==='dependent'||event.targetType==='child_details'),after:snapshot(event.changes.after,event.targetType==='dependent'||event.targetType==='child_details')}};
+          businessUnit:event.businessUnit,correctionOf:event.correctionOf,changes:{before:snapshot(event.changes.before,event.targetType==='lifecycle_operation'||event.targetType==='dependent'||event.targetType==='child_details'),after:snapshot(event.changes.after,event.targetType==='lifecycle_operation'||event.targetType==='dependent'||event.targetType==='child_details')}};
       })};
     },
     getOwnPhoto:(signal?:AbortSignal)=>photo('/me/photo',signal),
@@ -172,6 +174,7 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
     },
     inviteCustomer: (input: CustomerInvitationInput, signal?: AbortSignal) => invitation('/accounts/invitations', input, signal),
     resendInvitation: (input: { email: string }, signal?: AbortSignal) => invitation('/accounts/invitations/resend', input, signal),
+    completeDependentTransition: (input: import('@conecta/contracts').DependentTransitionInput, signal?: AbortSignal): Promise<import('@conecta/contracts').DependentTransitionResponse> => anonymousAction('/dependents/transitions/complete', input, 'TRANSITIONED', signal),
     setupPassword: (input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordSetupResponse> => anonymousAction('/auth/setup', input, 'PASSWORD_SET', signal),
     requestRecovery: (input: { email: string }, signal?: AbortSignal): Promise<ActionAcceptedResponse> => anonymousAction('/auth/recovery', input, 'ACCEPTED', signal),
     resetPassword: (input: PasswordResetInput, signal?: AbortSignal): Promise<PasswordResetResponse> => anonymousAction('/auth/recovery/reset', input, 'PASSWORD_RESET', signal),

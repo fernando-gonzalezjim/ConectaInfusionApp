@@ -23,3 +23,18 @@ for(const [english,width] of [[false,360],[false,768],[true,1440]] as const)test
   fail=false;await region.getByRole('button',{name:english?'Try again':'Intentar de nuevo',exact:true}).click();await expect(region.getByText('Demo Customer',{exact:true})).toBeVisible();
 });
 test('ordinary staff cannot open the operational audit',async({page})=>{await setup(page,'instructor');await page.goto('http://localhost:5174');await expect(page.getByText(/Tu cuenta no tiene/)).toBeVisible();await expect(page.getByRole('heading',{name:'Historial operativo'})).toHaveCount(0);});
+for(const english of [false,true])test(`lifecycle and dependent deactivation audit labels in ${english?'English':'Spanish'}`,async({page})=>{
+  await setup(page,'manager');await page.route('**/audit?*',r=>r.fulfill({json:{events:[{...row,action:'identity.lifecycle_applied',targetType:'lifecycle_operation',changes:{before:null,after:{personId:id}}},{...row,id:'22222222-2222-4222-a222-222222222222',action:'dependent.deactivated',targetType:'dependent',changes:{before:{personId:id},after:{personId:id}}}],nextCursor:null}}));
+  await page.goto('http://localhost:5174');if(english)await page.getByLabel('Idioma',{exact:true}).selectOption('en');
+  const region=page.getByRole('region',{name:english?'Operational history':'Historial operativo'});await region.getByRole('button',{name:english?'View history':'Ver historial',exact:true}).click();
+  await expect(region.getByText(english?'Lifecycle operation completed':'Operación de ciclo de vida completada',{exact:true})).toBeVisible();await expect(region.getByText(english?'Dependent profile deactivated':'Perfil dependiente desactivado',{exact:true})).toBeVisible();
+  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+});
+
+for(const english of [false,true])test(`guardian reactivation audit labels in ${english?'English':'Spanish'}`,async({page})=>{
+  await setup(page,'manager');await page.route('**/audit?*',r=>r.fulfill({json:{events:['dependent.reactivation_invited','dependent.reactivation_accepted','dependent.reactivated'].map((action,index)=>({...row,id:`22222222-2222-4222-a222-22222222222${index}`,action,targetType:'dependent',changes:{before:null,after:{personId:id}}})),nextCursor:null}}));
+  await page.goto('http://localhost:5174');if(english)await page.getByLabel('Idioma',{exact:true}).selectOption('en');
+  const region=page.getByRole('region',{name:english?'Operational history':'Historial operativo'});await region.getByRole('button',{name:english?'View history':'Ver historial',exact:true}).click();
+  for(const label of english?['Guardian renewal requested','Guardian renewal accepted','Dependent profile reactivated']:['Renovaci\u00f3n de tutor\u00eda solicitada','Renovaci\u00f3n de tutor\u00eda aceptada','Perfil dependiente reactivado'])await expect(region.getByText(label,{exact:true})).toBeVisible();
+  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+});

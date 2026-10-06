@@ -9,6 +9,7 @@ import { SelfProfile } from '@conecta/ui/components/self-profile';
 import {FamilyAccess} from '@conecta/ui/components/family-access';
 import {DependentAccess} from '@conecta/ui/components/dependent-access';
 
+import {AccountLifecycle} from '@conecta/ui/components/account-lifecycle';
 const api = createApiClient();
 export function CustomerAccess() {
   const { t } = useLocale();
@@ -20,5 +21,6 @@ export function CustomerAccess() {
     renderProfile={(value,onSaved,onPending,onAccessLost)=><SelfProfile api={api} account={value} t={t} onSaved={onSaved} onPending={onPending} onAccessLost={onAccessLost} />} />
     {account?.roles.includes('customer')&&<FamilyAccess key={'family:'+account.id} api={api} account={account} t={t} onAccessLost={accessLost} />}
     {account?.roles.includes('customer')&&<DependentAccess key={'children:'+account.id} api={api} account={account} t={t} onAccessLost={accessLost} />}
+    {account?.roles.includes('customer')&&<AccountLifecycle api={api} accountId={account.id} fullName={account.fullName} self t={t} onAccessLost={accessLost}/>}
     {!account && <><RegistrationAccess /><RecoveryRequest api={api} t={t} /></>}</div>;
 }

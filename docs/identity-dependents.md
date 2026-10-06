@@ -224,3 +224,27 @@ The customer profile offers **Manage guardian access**. Select **End access**, r
 5. Restore removed access only through a new accepted invitation (I31). Reseeding preserves ended histories and does not restore a removed guardian or manufacture consent. Repeat tests using a new profile if the existing demo child has already been edited. Review the operational audit as management; no child name/age is exposed in removal snapshots.
 
 See [backend permission/concurrency/history tests](../apps/api/test/integration/identity-guardians.test.mjs), [controlled browser tests](../tests/e2e/identity-guardian-removal.spec.ts) and [live consent/removal tests](../tests/integration/identity-guardians.spec.ts). Existing demo seed/reset checks remain applicable. No schema migration or PDF regeneration is needed for I32. Account/dependent deactivation and financial/booking lifecycle composition remain later steps.
+
+
+## I33: Independent account transition
+
+An active, confirmed customer with current guardianship can request independent login from the dependent profile. Management alone cannot initiate this transition. The recipient explicitly confirms the invited email and sets a normal-policy password using the email link. Opening the link performs no mutation. There is no minimum age, manual approval or automatic sign-in.
+
+- `POST /api/v1/dependents/:id/transition`: `{email}` with session CSRF; opaque `202 {code:"ACCEPTED"}` even if the mailbox is unavailable.
+- `POST /api/v1/dependents/transitions/complete`: `{token,email,password}` with anonymous CSRF; `200 {code:"TRANSITIONED"}`. The API never returns account IDs, passwords or tokens.
+
+V12 adds the live transition predicate to the existing action-token persistence. Each 24-hour action binds the issuer account/session version, exact guardian relationship, dependent person/profile version and invited email. Reissuing to an available mailbox replaces outstanding links for that dependent. Cooldowns and persistent public action limits still apply. Profile edits, ended/replaced issuing authorization, issuer suspension or credential changes invalidate the link; another current guardian can request a fresh one. Delivery uses the same predicate, encrypted outbox and fictional Mailpit restrictions.
+
+Under ordered account/person/profile/guardian/token locks, confirmation rechecks email uniqueness and expiry after waiting. One transaction consumes the action, creates a verified customer account on the same person, sets `independent_at`, increments the profile version, ends every current guardian with `transitioned`, and appends reference-only audit history. Failure or a competing confirmation rolls back all effects. Unique account/person constraints prevent duplicate identities and mailbox races. Existing bookings, child snapshots, saved details, family membership and credit ownership are not modified. Guardian accounts retain their own access, but cannot manage or book for this person through the ended relationships. Booking/financial composition belongs to the later owning modules.
+
+The shared bilingual request dialog explains the consequences before sending. The confirmation screen removes the token fragment from browser history, requires email/password/password confirmation, clears secrets after submission and prevents retry after an uncertain result. It exposes no dependent name or age to an anonymous recipient.
+
+### Manual verification
+
+1. Migrate the local demo with `npm run db:migrate:demo`, then start `npm run dev:demo`.
+2. Sign in as a demo guardian, open **Children and dependents**, then **Dependent profiles** and **Independent account** for Demo Dependent Child. Use a new fictional mailbox such as `independent.child@example.test`.
+3. Run `node --env-file=dev.env scripts/identity-delivery.mjs --once`. Open the Mailpit link in a separate browser context. Confirm that opening it leaves guardianship unchanged.
+4. Enter the invited mailbox and a password of 15-128 characters. Confirm explicitly, then sign in with the new login. Both former guardians should no longer find the dependent; history and saved child information remain.
+5. Reopen the link to verify rejection. A normal demo reseed preserves the transition and does not restore guardianship; use another manually created fictional dependent for another run. The full development reset is optional and destructive, as described in [demo documentation](development-demo.md).
+
+Reactivation of inactive profiles uses the separate [I37 renewal workflow](identity-reactivation.md); ordinary guardian invitations cannot substitute for immediately prior guardian provenance.

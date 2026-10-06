@@ -109,7 +109,7 @@ if(process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])
     console.log('Management audit testing: use the demo manager and View history; seeded account events already cover pagination.');
     console.log('Family screen testing: customer.profile/customer01 share a family; open My family and invite unassigned customer02; management can Assist family. See docs/identity-families.md.');
     console.log('Successor testing: the current responsible member can offer responsibility to another current member; customer.profile/customer01 provide the initial scenario. Accept or decline through the local inbox; seeding never creates offers or consent.');
-    console.log('Dependent persistence: one no-login child has customer.profile/customer01 as fictional guardians; customer18 has reusable child details without a profile. No child booking or invitation is created. See docs/identity-dependents.md.');
+    console.log('Dependent persistence: one no-login child has customer.profile/customer01 as fictional guardians; customer18 has reusable child details without a profile. A second inactive child has customer18 as its immediately prior guardian for explicit renewal testing. No child booking or renewal acceptance is seeded. See docs/identity-dependents.md.');
   } catch(error) {
     const known=/^(DEVELOPMENT_FLAG_REQUIRED|DEVELOPMENT_FIXTURES_DISABLED|UNSAFE_DEVELOPMENT_DATABASE|DEVELOPMENT_DATABASE_MISMATCH|DEVELOPMENT_ADMIN_REQUIRED|DEVELOPMENT_DEMO_CONFLICT)$/;
     console.error(known.test(error.message)?error.message:'DEVELOPMENT_DEMO_FAILED');

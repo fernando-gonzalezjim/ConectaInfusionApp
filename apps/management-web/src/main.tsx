@@ -9,6 +9,7 @@ import {GuardianInvitation} from '@conecta/ui/components/guardian-invitation';
 import {FamilyInvitation} from '@conecta/ui/components/family-invitation';
 const api = createApiClient();
 function Root() { const { t, locale, setLocale } = useLocale(); const labels=useAccountLabels();return isActionPage ? <IdentityActionPage api={api} t={t} locale={locale} setLocale={setLocale}
+  renderGuardianReactivation={(token,onCompleted,onInvalid)=><GuardianInvitation renewal api={{...api,previewGuardianInvitation:api.previewGuardianReactivation,acceptGuardianInvitation:api.acceptGuardianReactivation}} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid}/>}
   renderGuardianInvitation={(token,onCompleted,onInvalid)=><GuardianInvitation api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid}/>}
     renderFamilySuccessor={(token,onCompleted,onInvalid)=><FamilyInvitation purpose="responsibility" api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />}
     renderFamilyInvitation={(token,onCompleted,onInvalid)=><FamilyInvitation api={api} token={token} labels={labels} t={t} locale={locale} onCompleted={onCompleted} onInvalid={onInvalid} />} /> : <App />; }

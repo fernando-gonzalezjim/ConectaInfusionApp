@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@conecta/ui/components/alert';
 import { AccountAdministration } from './components/account-administration';
 import { SelfProfile } from '@conecta/ui/components/self-profile';
 import {OperationalAudit} from './components/operational-audit';
+import {DependentReactivation} from '@conecta/ui/components/dependent-reactivation';
 const api = createApiClient();
 export function App() {
   const { locale, setLocale, t } = useLocale();
@@ -60,6 +61,7 @@ export function App() {
         {accessState === 'unavailable' && <Alert variant="destructive"><AlertDescription className="flex flex-wrap items-center justify-between gap-3">{t('managementAccessUnavailable')}<Button variant="outline" onClick={() => setAccessAttempt(value => value+1)}>{t('retry')}</Button></AlertDescription></Alert>}
         {accessState === 'allowed' && account && access?.account.id === account.id && access.capabilities.administerIdentity === true && <>
           <AccountAdministration key={account.id} api={api} actorId={account.id} t={t} onAccessLost={accessLost} />
+          <div className="my-4"><DependentReactivation api={api} t={t} onAccessLost={accessLost}/></div>
           <OperationalAudit key={'audit-'+account.id} api={api} t={t} locale={locale} timezone={settings?.timezone??'America/Mexico_City'} onAccessLost={accessLost} />
         </>}
       </div>
