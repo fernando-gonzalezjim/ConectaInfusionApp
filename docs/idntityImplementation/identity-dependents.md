@@ -2,7 +2,7 @@
 
 
 
-[V10](../database/migrations/V10__identity_dependents.sql) adds Identity-owned persistence for the approved [dependent and guardian rules](../SPEC-identity.md). It creates no real profiles, accounts, fabricated emails, invitations or bookings. Existing people, accounts, families and booking rows retain their identifiers and history. Profile endpoints are implemented in I29 and customer screens in I30; invitation consent is I31, guardian removal is I32, independent transition is I33, and account/dependent lifecycle coordination comes later.
+[V10](../../database/migrations/V10__identity_dependents.sql) adds Identity-owned persistence for the approved [dependent and guardian rules](SPEC-identity.md). It creates no real profiles, accounts, fabricated emails, invitations or bookings. Existing people, accounts, families and booking rows retain their identifiers and history. Profile endpoints are implemented in I29 and customer screens in I30; invitation consent is I31, guardian removal is I32, independent transition is I33, and account/dependent lifecycle coordination comes later.
 
 
 
@@ -62,15 +62,15 @@ The migration follows PostgreSQL's [deferred constraint-trigger semantics](https
 
 
 
-The guarded [demo script](../scripts/development-demo.mjs) adds one no-login **Demo Dependent Child**, with `customer.profile` as initial parent and `customer01` as an additional guardian, plus two reusable child-detail records. The second is **Demo Saved Child**, owned by `customer18`, without a profile. Additional guardian acceptance is clearly synthetic fixture provenance; no email, invitation/token, child booking or financial mutation is generated. The fixture is not a real-user consent bypass.
+The guarded [demo script](../../scripts/development-demo.mjs) adds one no-login **Demo Dependent Child**, with `customer.profile` as initial parent and `customer01` as an additional guardian, plus two reusable child-detail records. The second is **Demo Saved Child**, owned by `customer18`, without a profile. Additional guardian acceptance is clearly synthetic fixture provenance; no email, invitation/token, child booking or financial mutation is generated. The fixture is not a real-user consent bypass.
 
 
 
-After migrating the local development database, run `npm run db:seed:demo`. Inspect `dependent_profiles`, `dependent_guardians` and `saved_child_details` through your local database tool; use the customer dependent screens described below. Reseeding preserves manual child name/age edits, conversions, inactive/independent states and ended guardian history, and does not restore access. The guarded full reset remains compatible and is tested only against a disposable database. See [the development guide](development-demo.md).
+After migrating the local development database, run `npm run db:seed:demo`. Inspect `dependent_profiles`, `dependent_guardians` and `saved_child_details` through your local database tool; use the customer dependent screens described below. Reseeding preserves manual child name/age edits, conversions, inactive/independent states and ended guardian history, and does not restore access. The guarded full reset remains compatible and is tested only against a disposable database. See [the development guide](../development-demo.md).
 
 
 
-The [persistence tests](../apps/api/test/integration/identity-dependents.test.mjs) verify multiple guardians, no fabricated login/member emails, provenance protection, concurrent last-guardian changes, deactivation snapshots, retrospective manufacture denial, reusable detail ownership/conversion, immutable booking snapshots and additive/repeated/failed migrations. I29 tests verify the service permission matrix; booking/financial integrations remain future work.
+The [persistence tests](../../apps/api/test/integration/identity-dependents.test.mjs) verify multiple guardians, no fabricated login/member emails, provenance protection, concurrent last-guardian changes, deactivation snapshots, retrospective manufacture denial, reusable detail ownership/conversion, immutable booking snapshots and additive/repeated/failed migrations. I29 tests verify the service permission matrix; booking/financial integrations remain future work.
 
 
 
@@ -122,7 +122,7 @@ For manual API checks, start `npm run dev:demo` and sign in as `customer.profile
 
 
 
-The [backend integration tests](../apps/api/test/integration/identity-child-details.test.mjs) cover unrelated family-member/manager denial, multiple accepted guardians, ended authorization, bounded pagination, ownership, concurrent conversion, historical booking snapshots, atomic audit rollback, private HTTP guards, input limits and revoked sessions. Guardian invitations/removal, independent login, deactivation/reactivation and booking/payment integration remain later approved steps.
+The [backend integration tests](../../apps/api/test/integration/identity-child-details.test.mjs) cover unrelated family-member/manager denial, multiple accepted guardians, ended authorization, bounded pagination, ownership, concurrent conversion, historical booking snapshots, atomic audit rollback, private HTTP guards, input limits and revoked sessions. Guardian invitations/removal, independent login, deactivation/reactivation and booking/payment integration remain later approved steps.
 
 
 
@@ -150,7 +150,7 @@ Conflicting versions require a fresh read. A missing/inaccessible record clears 
 
 
 
-1. Run `npm run dev:demo` after the existing migration/seed setup. Sign in on the customer app with `customer.profile@demo.conecta.example.test` or `customer01@demo.conecta.example.test`, using the demo password from [the development guide](development-demo.md). Open **Menores y dependientes**, then **Perfiles de dependientes**. Both are current guardians of **Demo Dependent Child**, and both names appear.
+1. Run `npm run dev:demo` after the existing migration/seed setup. Sign in on the customer app with `customer.profile@demo.conecta.example.test` or `customer01@demo.conecta.example.test`, using the demo password from [the development guide](../development-demo.md). Open **Menores y dependientes**, then **Perfiles de dependientes**. Both are current guardians of **Demo Dependent Child**, and both names appear.
 
 2. Edit the profile name/age and select its profile language. Close/reopen or refresh to verify persistence. Another family member without guardian authorization should not see it. Management access alone does not grant this screen access to another person's child.
 
@@ -170,12 +170,12 @@ The screen uses existing shared dialogs, buttons, inputs, focus styles and appro
 
 
 
-Read cancellation follows [React's effect cleanup guidance](https://react.dev/reference/react/useEffect); the shared modal uses the project's [Radix dialog behavior](https://www.radix-ui.com/primitives/docs/components/dialog) for focus containment and dismissal. Chrome DevTools MCP is unavailable in this session, so runtime verification uses the existing Playwright Chromium suites and axe checks. The [controlled browser tests](../tests/e2e/identity-dependents.spec.ts) exercise both languages, mobile/desktop layout, multiple guardians, creation/conversion/editing, conflict, access loss, pagination and error recovery. The [live tests](../tests/integration/identity-dependents.spec.ts) verify browser-to-PostgreSQL conversion and edits, no child login, audit privacy and unchanged historical booking actor/attendee snapshots. Final results are recorded in [Identity verification](../tasks/identity-verification.md).
+Read cancellation follows [React's effect cleanup guidance](https://react.dev/reference/react/useEffect); the shared modal uses the project's [Radix dialog behavior](https://www.radix-ui.com/primitives/docs/components/dialog) for focus containment and dismissal. Chrome DevTools MCP is unavailable in this session, so runtime verification uses the existing Playwright Chromium suites and axe checks. The [controlled browser tests](../../tests/e2e/identity-dependents.spec.ts) exercise both languages, mobile/desktop layout, multiple guardians, creation/conversion/editing, conflict, access loss, pagination and error recovery. The [live tests](../../tests/integration/identity-dependents.spec.ts) verify browser-to-PostgreSQL conversion and edits, no child login, audit privacy and unchanged historical booking actor/attendee snapshots. Final results are recorded in [Identity verification](identity-verification.md).
 
 
 ## Guardian invitation consent (I31)
 
-[V11](../database/migrations/V11__identity_guardian_invitations.sql) adds pending invitation records. Opening or reviewing a link grants no profile access. The intended confirmed customer explicitly accepts; the same transaction consumes the token, records acceptance, creates the guardian relationship and appends safe audit references. Failure rolls everything back. Acceptance grants no personnel role, family membership, credits, child login or booking.
+[V11](../../database/migrations/V11__identity_guardian_invitations.sql) adds pending invitation records. Opening or reviewing a link grants no profile access. The intended confirmed customer explicitly accepts; the same transaction consumes the token, records acceptance, creates the guardian relationship and appends safe audit references. Failure rolls everything back. Acceptance grants no personnel role, family membership, credits, child login or booking.
 
 | Method/path (relative to `/api/v1/dependents`) | Input | Access/result |
 | --- | --- | --- |
@@ -196,11 +196,11 @@ The database binds new accepted-invitation guardian rows to accepted invitations
 
 1. Run `npm run db:migrate:demo`, then `npm run dev:demo`. As customer.profile or customer01, open **Children and dependents**, **Dependent profiles**, then **Invite guardian** for their child.
 2. Invite `customer02@demo.conecta.example.test`. The roster stays unchanged and the receipt explains that acceptance is required. Use fictional local addresses only.
-3. Run `node --env-file=dev.env scripts/identity-delivery.mjs --once` after building the API. Open Mailpit using [the development guide](development-demo.md). In a separate browser profile, sign in as customer02 and open/review the link. The complete child profile stays unavailable before acceptance.
+3. Run `node --env-file=dev.env scripts/identity-delivery.mjs --once` after building the API. Open Mailpit using [the development guide](../development-demo.md). In a separate browser profile, sign in as customer02 and open/review the link. The complete child profile stays unavailable before acceptance.
 4. Choose **Accept and become guardian**. The recipient can now see/edit the child from the customer app. Reusing the link fails safely. Verify Spanish/English, keyboard navigation and narrow layout.
 5. As the demo manager, choose an active customer's **Assist with guardians** action. Choose a dependent name and invite another guardian; management cannot edit the child in this dialog or bypass acceptance.
 
-Existing fixtures cover I31; no extra seeded accounts, invitations or consent are needed. I32 adds the separate removal workflow below; independence (I33) and lifecycle/booking integration remain separate. See [backend tests](../apps/api/test/integration/identity-guardian-invitations.test.mjs), [controlled Chromium tests](../tests/e2e/identity-guardians.spec.ts) and [live inbox tests](../tests/integration/identity-guardians.spec.ts).
+Existing fixtures cover I31; no extra seeded accounts, invitations or consent are needed. I32 adds the separate removal workflow below; independence (I33) and lifecycle/booking integration remain separate. See [backend tests](../../apps/api/test/integration/identity-guardian-invitations.test.mjs), [controlled Chromium tests](../../tests/e2e/identity-guardians.spec.ts) and [live inbox tests](../../tests/integration/identity-guardians.spec.ts).
 
 ## Guardian removal (I32)
 
@@ -223,7 +223,7 @@ The customer profile offers **Manage guardian access**. Select **End access**, r
 4. As the demo manager/admin, choose a customer's **Assist with guardians**, select their child and inspect removal controls. You may remove another guardian only while a different eligible guardian remains. The ordinary reception/instructor role alone cannot do this.
 5. Restore removed access only through a new accepted invitation (I31). Reseeding preserves ended histories and does not restore a removed guardian or manufacture consent. Repeat tests using a new profile if the existing demo child has already been edited. Review the operational audit as management; no child name/age is exposed in removal snapshots.
 
-See [backend permission/concurrency/history tests](../apps/api/test/integration/identity-guardians.test.mjs), [controlled browser tests](../tests/e2e/identity-guardian-removal.spec.ts) and [live consent/removal tests](../tests/integration/identity-guardians.spec.ts). Existing demo seed/reset checks remain applicable. No schema migration or PDF regeneration is needed for I32. Account/dependent deactivation and financial/booking lifecycle composition remain later steps.
+See [backend permission/concurrency/history tests](../../apps/api/test/integration/identity-guardians.test.mjs), [controlled browser tests](../../tests/e2e/identity-guardian-removal.spec.ts) and [live consent/removal tests](../../tests/integration/identity-guardians.spec.ts). Existing demo seed/reset checks remain applicable. No schema migration or PDF regeneration is needed for I32. Account/dependent deactivation and financial/booking lifecycle composition remain later steps.
 
 
 ## I33: Independent account transition
@@ -245,6 +245,6 @@ The shared bilingual request dialog explains the consequences before sending. Th
 2. Sign in as a demo guardian, open **Children and dependents**, then **Dependent profiles** and **Independent account** for Demo Dependent Child. Use a new fictional mailbox such as `independent.child@example.test`.
 3. Run `node --env-file=dev.env scripts/identity-delivery.mjs --once`. Open the Mailpit link in a separate browser context. Confirm that opening it leaves guardianship unchanged.
 4. Enter the invited mailbox and a password of 15-128 characters. Confirm explicitly, then sign in with the new login. Both former guardians should no longer find the dependent; history and saved child information remain.
-5. Reopen the link to verify rejection. A normal demo reseed preserves the transition and does not restore guardianship; use another manually created fictional dependent for another run. The full development reset is optional and destructive, as described in [demo documentation](development-demo.md).
+5. Reopen the link to verify rejection. A normal demo reseed preserves the transition and does not restore guardianship; use another manually created fictional dependent for another run. The full development reset is optional and destructive, as described in [demo documentation](../development-demo.md).
 
 Reactivation of inactive profiles uses the separate [I37 renewal workflow](identity-reactivation.md); ordinary guardian invitations cannot substitute for immediately prior guardian provenance.

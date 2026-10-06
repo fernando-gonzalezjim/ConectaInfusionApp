@@ -1,6 +1,6 @@
 # Manual Identity bootstrap
 
-I04 implements operator tools, not login endpoints. Follow the approved [specification](../SPEC-identity.md) and [implementation plan](../tasks/identity-plan.md). Accounts become usable through the app only after the session/login tasks are implemented.
+I04 implements operator tools, not login endpoints. Follow the approved [specification](SPEC-identity.md) and [implementation plan](identity-plan.md). Accounts become usable through the app only after the session/login tasks are implemented.
 
 ## Prepare the local database
 
@@ -72,4 +72,4 @@ Build first, then run `node --test apps/api/test/identity-passwords.test.mjs app
 
 Errors identify configuration, authentication, conflicting fixture or existing output without printing credentials, connection strings, SQL or raw database failures. `PASSWORD_WORK_BUSY` indicates bounded hash work; retry after current operations finish. Do not lower hash costs or disable guards to clear it.
 
-References: [node-argon2 options](https://github.com/ranisalt/node-argon2/wiki/Options), [node-postgres transactions](https://node-postgres.com/features/transactions), [verification evidence](../tasks/identity-verification.md).
+References: [node-argon2 options](https://github.com/ranisalt/node-argon2/wiki/Options), [node-postgres transactions](https://node-postgres.com/features/transactions), [verification evidence](identity-verification.md).

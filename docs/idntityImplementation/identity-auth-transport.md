@@ -1,6 +1,6 @@
 # Identity authenticated transport
 
-I07 mounts the I06 login/session backend when `IDENTITY_ENABLED=true` and configuration passes validation. Identity remains disabled by default; Foundation-only installations need no new secrets and expose no auth routes. Follow [local setup](identity-local-email.md), [manual bootstrap](identity-bootstrap.md) and [verification evidence](../tasks/identity-verification.md). I08 supplies [customer login controls](identity-customer-login.md); I09 supplies [management login and access checks](identity-management-login.md).
+I07 mounts the I06 login/session backend when `IDENTITY_ENABLED=true` and configuration passes validation. Identity remains disabled by default; Foundation-only installations need no new secrets and expose no auth routes. Follow [local setup](identity-local-email.md), [manual bootstrap](identity-bootstrap.md) and [verification evidence](identity-verification.md). I08 supplies [customer login controls](identity-customer-login.md); I09 supplies [management login and access checks](identity-management-login.md).
 
 ## Endpoints and shared contracts
 
@@ -40,4 +40,4 @@ Focused tests exercise the shared client and real application through disposable
 
 I08 supplies accessible bilingual customer login controls; I09 supplies management login and server-enforced administrative access. No registration, recovery, account administration, production provider or deployment is included. The user authorized a changed-file Graphify refresh after I08, including I07's transport changes. PDF snapshots and product rules remain unchanged.
 
-Sources: [OWASP CSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html), [Express CORS middleware](https://expressjs.com/en/resources/middleware/cors.html), [Node crypto](https://nodejs.org/api/crypto.html) and the [approved implementation plan](../tasks/identity-plan.md).
+Sources: [OWASP CSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html), [Express CORS middleware](https://expressjs.com/en/resources/middleware/cors.html), [Node crypto](https://nodejs.org/api/crypto.html) and the [approved implementation plan](identity-plan.md).

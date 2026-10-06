@@ -1,8 +1,8 @@
 # Spec: Identity and access
 
 Module id: `identity`. Dependency: `foundation`.
-Status: approved by the user on October 3, 2026; interview decisions recorded through October 3, 2026. The [implementation plan](tasks/identity-plan.md) and [task list](tasks/identity-todo.md) were separately approved on October 3, 2026. Local implementation uses `feature/identity-implementation`. No authentication code or accounts have been created by this specification.
-Sources: [capability map](CAPABILITY-MAP.md), [business rules](docs/requirements/agreed-business-rules.md) / [reglas de negocio](docs/requirements/agreed-business-rules.es.md), [Foundation](SPEC-foundation.md).
+Status: approved by the user on October 3, 2026; interview decisions recorded through October 3, 2026. The [implementation plan](identity-plan.md) and [task list](identity-todo.md) were separately approved on October 3, 2026. Local implementation uses `feature/identity-implementation`. No authentication code or accounts have been created by this specification.
+Sources: [capability map](../../CAPABILITY-MAP.md), [business rules](../requirements/agreed-business-rules.md) / [reglas de negocio](../requirements/agreed-business-rules.es.md), [Foundation](../../SPEC-foundation.md).
 
 ## Objective and scope
 
@@ -155,4 +155,4 @@ Confirmed decisions and planning follow-ups:
 
 The next artifact after specification approval is the Identity implementation plan and tasks. Preserve the completed Foundation evidence rather than overwrite it.
 
-Graphify follow-up completed October 3, 2026: after specification approval, the user explicitly invoked `$graphify`. Graphify 0.9.74 generated the project map in `graphify-out/`; see the [tracked task](tasks/todo.md#follow-up-after-identity-implementation). No automatic hooks enabled. The map is a snapshot of code and requirements, not proof of Identity implementation; this completion note was added after extraction.
+Graphify follow-up completed October 3, 2026: after specification approval, the user explicitly invoked `$graphify`. Graphify 0.9.74 generated the project map in `graphify-out/`; see the [tracked task](../../tasks/todo.md#follow-up-after-identity-implementation). No automatic hooks enabled. The map is a snapshot of code and requirements, not proof of Identity implementation; this completion note was added after extraction.

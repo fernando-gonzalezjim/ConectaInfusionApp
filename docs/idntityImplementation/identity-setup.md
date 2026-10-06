@@ -1,10 +1,10 @@
 # Identity setup and handoff
 
-I01-I40 deliver the locally implemented Identity capability under the [approved specification](../SPEC-identity.md) and [plan](../tasks/identity-plan.md). Runtime regression evidence is in [I39 verification](../tasks/identity-verification.md#i39-verification-runner-and-regression-october-5-2026). Final human review is pending; this is not production approval. Some older step guides describe their state at delivery time; this guide records the current handoff.
+I01-I40 deliver the locally implemented Identity capability under the [approved specification](SPEC-identity.md) and [plan](identity-plan.md). Runtime regression evidence is in [I39 verification](identity-verification.md#i39-verification-runner-and-regression-october-5-2026). The user accepted Identity for the current scope on October 5, 2026, and authorized merge into develop; this is not production approval. Some older step guides describe their state at delivery time; this guide records the current handoff.
 
 ## Start the existing development demo
 
-Use Node.js 24, Docker Desktop with Linux containers and installed Chromium for browser tests. The ignored root `dev.env` holds private database, Identity, photo and inbox settings. Do not print it, commit it or replace its encryption keys while messages are pending. For another checkout, prepare private configuration using [local email setup](identity-local-email.md), [the API example](../apps/api/.env.example) and [demo configuration](development-demo.md); `dev.env` is intentionally not distributed through Git. Node env-file values do not override existing process environment values, so remove conflicting overrides before running commands.
+Use Node.js 24, Docker Desktop with Linux containers and installed Chromium for browser tests. The ignored root `dev.env` holds private database, Identity, photo and inbox settings. Do not print it, commit it or replace its encryption keys while messages are pending. For another checkout, prepare private configuration using [local email setup](identity-local-email.md), [the API example](../../apps/api/.env.example) and [demo configuration](../development-demo.md); `dev.env` is intentionally not distributed through Git. Node env-file values do not override existing process environment values, so remove conflicting overrides before running commands.
 
 The existing demo uses Docker project `conecta-demo`, database `conecta_dev`, PostgreSQL port 5433 and local inbox ports 1026/8026. From the root:
 
@@ -47,7 +47,7 @@ Customer: `http://localhost:5173`; management: `http://localhost:5174`; API: `ht
 | `instructor.yoga@demo.conecta.example.test` | `ConectaDemo!2026` | Instructor invitation and own-profile permissions |
 | `customer.profile@demo.conecta.example.test` | `ConectaDemo!2026` | Profile/photo and guardian checks |
 
-The [dataset guide](development-demo.md) lists all fixtures and dependent scenarios. Pending/inactive accounts cannot sign in. Reseeding preserves manual edits, credentials, ended relationships and transitions. `db:clean:demo` deletes the entire development public schema, including manually created administration and audit history; it is not a routine setup or troubleshooting step. No reset or new fictional records are needed for I40.
+The [dataset guide](../development-demo.md) lists all fixtures and dependent scenarios. Pending/inactive accounts cannot sign in. Reseeding preserves manual edits, credentials, ended relationships and transitions. `db:clean:demo` deletes the entire development public schema, including manually created administration and audit history; it is not a routine setup or troubleshooting step. No reset or new fictional records are needed for I40.
 
 ## Deliver local action emails
 
@@ -73,7 +73,7 @@ This processes one bounded batch of up to ten records. Repeat after further acti
 
 ## Approved-specification coverage
 
-Numbers below match the ten [specification acceptance scenarios](../SPEC-identity.md#acceptance-scenarios). Tests and step-by-step evidence remain in the [verification record](../tasks/identity-verification.md); a graph relationship is not proof of implementation.
+Numbers below match the ten [specification acceptance scenarios](SPEC-identity.md#acceptance-scenarios). Tests and step-by-step evidence remain in the [verification record](identity-verification.md); a graph relationship is not proof of implementation.
 
 | Scenario | Delivered and verified locally | Remaining boundary |
 | --- | --- | --- |
@@ -98,7 +98,7 @@ Before production, review SMTP provider/sender/domain and delivery scheduling, H
 
 ## Human review and verification
 
-Use the existing fictional fixtures to review: management versus staff/instructor/customer permissions; customer invitations and inbox setup; profile/email/photo editing; family invitations and responsibility transfer; guardian consent/removal/independent transition; blocked deactivation and access-only restoration. Repeat in Spanish and English and confirm denied direct API operations using the detailed guides. Final module sign-off requires review of this coverage table and [recorded evidence](../tasks/identity-verification.md). Technical I40 completion does not check that human-review box automatically.
+Use the existing fictional fixtures to review: management versus staff/instructor/customer permissions; customer invitations and inbox setup; profile/email/photo editing; family invitations and responsibility transfer; guardian consent/removal/independent transition; blocked deactivation and access-only restoration. Repeat in Spanish and English and confirm denied direct API operations using the detailed guides. The user accepted this coverage and the [recorded evidence](identity-verification.md) for the current Identity scope and authorized merge into develop on October 5, 2026. Future domain integrations and production readiness require their own verification and review.
 
 I39 passed workspace typecheck/build, 70 unit/client/translation checks, 163 backend integration tests, 166 controlled Chromium cases and 35 live Chromium workflows, including migrations and teardown. Commands remain:
 
@@ -110,4 +110,4 @@ npm run test:integration
 npm run test:e2e -- --project=chromium
 ```
 
-Integration uses its own temporary test database and inbox; it does not reset the demo. Graphify remains the I38 snapshot with two completed steps since refresh (I39/I40). New handoff documents are not yet graphed; the next approved capability step triggers the scheduled changed-source refresh. See [cadence and snapshot limits](../tasks/graphify-refresh.md). English/Spanish business rules and the two on-demand PDF snapshots are unchanged.
+Integration uses its own temporary test database and inbox; it does not reset the demo. Graphify remains the I38 snapshot with two completed steps since refresh (I39/I40). New handoff documents are not yet graphed; the next approved capability step triggers the scheduled changed-source refresh. See [cadence and snapshot limits](../../tasks/graphify-refresh.md). English/Spanish business rules and the two on-demand PDF snapshots are unchanged.

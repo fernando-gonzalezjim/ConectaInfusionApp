@@ -1,5 +1,7 @@
 # Agent instructions
 
+Keep each capability's specification, implementation plan, checklist, verification evidence and guides together under `docs/<subject>Implementation/`. Identity uses the user-requested `docs/idntityImplementation/`; studio catalog will use `docs/studioCatalogImplementation/`. Follow this convention for future subjects and update links when moving documents. Runtime source, tests and database migrations stay in their owning directories; shared business rules remain under `docs/requirements/`. Preserve on-demand PDF snapshots when relocating them; do not regenerate without an explicit request.
+
 Respond to the user in English, even when the user writes in Spanish. Write code, identifiers and technical documentation in English unless translation is not practical. Product-facing Spanish and explicitly requested Spanish documents remain Spanish; preserve the synchronized bilingual business rules.
 
 For each implementation step, assess whether manual verification needs new fictional data. If needed, extend `scripts/development-demo.mjs` and its tests/documentation in the same step. Preserve repeat-safe seeding and compatibility with the guarded full development reset; never seed production or overwrite existing manual edits.
@@ -14,4 +16,4 @@ Keep `docs/requirements/agreed-business-rules.md` (English) and `docs/requiremen
 
 The PDF `docs/requirements/agreed-business-rules.es.pdf` is an on-demand snapshot. Regenerate or update it only when the user explicitly requests a PDF update or a new PDF version. Changes to the Markdown business rules do not require updating the PDF.
 
-The same on-demand snapshot rule applies to `docs/requirements/resumen-permisos.es.pdf`. Update it only on explicit request; edits to the permissions summary Markdown do not trigger PDF regeneration.
+The same on-demand snapshot rule applies to `docs/idntityImplementation/resumen-permisos.es.pdf`. Update it only on explicit request; edits to the permissions summary Markdown do not trigger PDF regeneration.

@@ -1,6 +1,6 @@
 # Internal Identity lifecycle composition
 
-I35 provides the internal coordinator boundary for [the approved Identity lifecycle](../SPEC-identity.md). It exposes no deactivation, family departure/removal/closure or reactivation HTTP route. The existing [family financial lifecycle contract](identity-families.md) remains separate and requires its owning coordinator.
+I35 provides the internal coordinator boundary for [the approved Identity lifecycle](SPEC-identity.md). It exposes no deactivation, family departure/removal/closure or reactivation HTTP route. The existing [family financial lifecycle contract](identity-families.md) remains separate and requires its owning coordinator.
 
 ## Request and preview contract
 
@@ -38,4 +38,4 @@ Credits-bookings owns the two-hour cancellation outcomes, reserved credit owners
 
 The dedicated PostgreSQL suite checks missing/unknown schemas and coordinators, legacy matching, stale domain/Identity revisions, concurrent retry receipts, read-only preview, prohibited commits, caught-error rollback, coordinator/Identity/audit failures, immutable receipts and populated V12 upgrade/conflict rollback. The existing full regression checks remain required because V13 adds an Identity-owned table to the guarded role-change allowlist.
 
-Existing demo member, booking and instructor fixtures already exercise conservative blocked obligations; no new seed data or manufactured lifecycle success is appropriate. The local demo receives additive V13 through `npm run db:migrate:demo`; no database reset or real payment/email is needed. Public lifecycle controls remain unavailable until their approved steps are completed. See [the verification record](../tasks/identity-verification.md).
+Existing demo member, booking and instructor fixtures already exercise conservative blocked obligations; no new seed data or manufactured lifecycle success is appropriate. The local demo receives additive V13 through `npm run db:migrate:demo`; no database reset or real payment/email is needed. Public lifecycle controls remain unavailable until their approved steps are completed. See [the verification record](identity-verification.md).

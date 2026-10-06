@@ -30,7 +30,7 @@ Email links open `/auth/action` with their purpose and token in the fragment. Th
 
 Production frontend hosting must serve the SPA for `/auth/action`. Keep third-party analytics and content off this secret-bearing landing page. The existing explicitly invoked delivery worker must run to deliver pending email; these screens do not install a production scheduler or provider.
 
-Verification is recorded in [Identity evidence](../tasks/identity-verification.md), including real Spanish/English Mailpit delivery, resend, revoked and used links, keyboard navigation, accessible errors and responsive layouts. The user approved I12. I13/I14 now provide the recovery backend and shared recovery screens.
+Verification is recorded in [Identity evidence](identity-verification.md), including real Spanish/English Mailpit delivery, resend, revoked and used links, keyboard navigation, accessible errors and responsive layouts. The user approved I12. I13/I14 now provide the recovery backend and shared recovery screens.
 
 Primary references: [node-postgres transactions](https://node-postgres.com/features/transactions) and [OWASP authentication responses](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html).
 

@@ -27,7 +27,7 @@ The explicitly tagged `admin` and `testuser` development fixtures have fixed add
 
 ## Local manual verification
 
-Run `npm run db:seed:demo`, then `npm run dev:demo`. Sign in as `customer.profile@demo.conecta.example.test` with the development-only password documented in [demo setup](development-demo.md). This dedicated fictional account has a synthetic verified state for testing, no bookings, and no development short-password exemption. Profile editing is also available to the other active demo accounts.
+Run `npm run db:seed:demo`, then `npm run dev:demo`. Sign in as `customer.profile@demo.conecta.example.test` with the development-only password documented in [demo setup](../development-demo.md). This dedicated fictional account has a synthetic verified state for testing, no bookings, and no development short-password exemption. Profile editing is also available to the other active demo accounts.
 
 Change the name/phone/language, save, close and reopen the editor. Request a new fictional address such as `profile.changed@example.test`. Deliver queued email with `node --env-file=dev.env scripts/identity-delivery.mjs --once`; inspect the inbox at `http://localhost:8026`. See [local outbox configuration](identity-local-email.md). Opening the link must not apply the change. Press the confirmation button, run delivery again, and verify old sessions are rejected, the prior-address notification is delivered, the old email cannot sign in, and the new email works with the existing password. Reuse of the link must fail. Reseeding preserves the changed address and profile fields; it does not reset the account. The guarded full demo reset remains a separate explicit command.
 

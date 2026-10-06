@@ -16,6 +16,6 @@ On localhost, the host-only HttpOnly cookie is shared across ports 5173 and 5174
 
 ## Verification and handoff
 
-See [verification evidence](../tasks/identity-verification.md) for workspace checks, real PostgreSQL actor denials, controlled accessibility scenarios and actual cross-frontend form login/logout. Fixtures use only the disposable database. No new migration or dependency is needed.
+See [verification evidence](identity-verification.md) for workspace checks, real PostgreSQL actor denials, controlled accessibility scenarios and actual cross-frontend form login/logout. Fixtures use only the disposable database. No new migration or dependency is needed.
 
 The approved plan requires human review after I09 before I10. Graphify currently covers I01–I08; an incremental refresh is needed for these I09 changes and will run only when authorized. Business-rule Markdown and PDF snapshots are unchanged.

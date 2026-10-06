@@ -92,7 +92,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   catch (error) {
     const known = /^(INVALID_BOOTSTRAP_COMMAND|INVALID_BOOTSTRAP_INPUT|INVALID_PASSWORD|PASSWORD_WORK_BUSY|PASSWORD_CONFIRMATION_MISMATCH|INTERACTIVE_PASSWORD_REQUIRED|BOOTSTRAP_CANCELLED|INVALID_DEVELOPMENT_FIXTURE|DEVELOPMENT_FIXTURES_DISABLED|UNSAFE_DEVELOPMENT_DATABASE|DEVELOPMENT_DATABASE_MISMATCH|DEVELOPMENT_ADMIN_REQUIRED|DEVELOPMENT_FIXTURE_CONFLICT)$/;
     const code = known.test(error.message) ? error.message : error.code === 'EEXIST' ? 'OUTPUT_ALREADY_EXISTS' : 'BOOTSTRAP_FAILED';
-    console.error(`${code}. See docs/identity-bootstrap.md. No credentials or database details are printed.`);
+    console.error(`${code}. See docs/idntityImplementation/identity-bootstrap.md. No credentials or database details are printed.`);
     process.exitCode = 1;
   }
 }

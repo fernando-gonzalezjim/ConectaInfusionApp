@@ -1,6 +1,6 @@
 # Identity login backend: I06 checkpoint
 
-I06 implements the backend service and a guarded router factory under the [approved plan](../tasks/identity-plan.md). At the I06 checkpoint the application left auth routes unmounted. I07 adds shared DTOs/client transport, exact origins and anonymous/session-bound CSRF checks before mounting them for explicitly enabled Identity. See [authenticated transport](identity-auth-transport.md) and [verification evidence](../tasks/identity-verification.md). No login UI, registration, recovery or account-administration route is implemented by I06.
+I06 implements the backend service and a guarded router factory under the [approved plan](identity-plan.md). At the I06 checkpoint the application left auth routes unmounted. I07 adds shared DTOs/client transport, exact origins and anonymous/session-bound CSRF checks before mounting them for explicitly enabled Identity. See [authenticated transport](identity-auth-transport.md) and [verification evidence](identity-verification.md). No login UI, registration, recovery or account-administration route is implemented by I06.
 
 ## Session service
 
@@ -44,6 +44,6 @@ Cookies are host-only with path `/`, HttpOnly and SameSite Lax. They are Secure 
 
 ## Review and next step
 
-The user approved the [I04–I06 checkpoint](../tasks/identity-todo.md#checkpoint-after-i06) and continuation to I07. The Graphify refresh requested after I06 includes I05/I06 source changes; future meaningful changes need another authorized incremental refresh. Business rules and both on-demand PDF snapshots are unchanged.
+The user approved the [I04–I06 checkpoint](identity-todo.md#checkpoint-after-i06) and continuation to I07. The Graphify refresh requested after I06 includes I05/I06 source changes; future meaningful changes need another authorized incremental refresh. Business rules and both on-demand PDF snapshots are unchanged.
 
-Primary references: [PostgreSQL atomic UPSERT](https://www.postgresql.org/docs/17/sql-insert.html#SQL-ON-CONFLICT), [Node cryptographic randomness and hashes](https://nodejs.org/api/crypto.html), [Express 5 routing/cookies](https://expressjs.com/en/5x/api/) and the [approved session requirements](../SPEC-identity.md).
+Primary references: [PostgreSQL atomic UPSERT](https://www.postgresql.org/docs/17/sql-insert.html#SQL-ON-CONFLICT), [Node cryptographic randomness and hashes](https://nodejs.org/api/crypto.html), [Express 5 routing/cookies](https://expressjs.com/en/5x/api/) and the [approved session requirements](SPEC-identity.md).

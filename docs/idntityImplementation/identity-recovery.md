@@ -17,7 +17,7 @@ Reset validates the normal Argon2id password policy of 15-128 Unicode code point
 
 Recovery requests have a persistent 30-attempt limit per direct socket IP per 15 minutes. Reset shares the existing `action_ip` limit with email confirmation, preventing either endpoint from bypassing the shared public-action budget. Counters are committed before password/domain work and survive rejected actions or process restarts. Forwarded IP headers are not trusted. HTTP 429 `THROTTLED` includes `Retry-After`; invalid request shape/password returns 400 `INVALID_REQUEST`; unusable links return 400 `INVALID_ACTION`; infrastructure/overload failures return generic 503 `UNAVAILABLE`. The 2 KiB JSON limit and field allowlist reject oversized input and mass assignment.
 
-See [Identity verification](../tasks/identity-verification.md) and [implementation tasks](../tasks/identity-todo.md). Production HTTPS/proxy configuration, email scheduling and wider abuse monitoring remain launch work.
+See [Identity verification](identity-verification.md) and [implementation tasks](identity-todo.md). Production HTTPS/proxy configuration, email scheduling and wider abuse monitoring remain launch work.
 
 Primary references: [OWASP password recovery](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html), [OWASP sessions](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html) and [node-postgres transactions](https://node-postgres.com/features/transactions).
 

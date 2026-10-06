@@ -10,7 +10,7 @@ The user confirmed one active family per customer on October 4, 2026. V7 adds a 
 
 Departure and closure require a supplied domain coordinator using the same PostgreSQL client and locks. Missing coordination fails closed; Identity never treats missing credit tables as evidence of no obligations. The coordinator must enforce purchaser ownership, reserved credits, expiration and explicit donation choices. I27 defines the integration contract without implementing credit disposition or offering a live departure workflow. After a coordinator returns, session expiry is checked again before membership mutation; failure rolls back the complete transaction.
 
-The demo seed creates two fictional groups and three memberships: a shared group for `customer.profile` and `customer01`, and a solo group for `customer18`. Acceptance provenance is synthetic development data, with no email or financial mutation. Reseeding preserves group renames, closure and departures. Existing unassigned `customer02` and the manager/customer account provide the I24 invitation and management-assistance scenarios; no extra fictional accounts or preaccepted consent are needed. See [the demo guide](development-demo.md).
+The demo seed creates two fictional groups and three memberships: a shared group for `customer.profile` and `customer01`, and a solo group for `customer18`. Acceptance provenance is synthetic development data, with no email or financial mutation. Reseeding preserves group renames, closure and departures. Existing unassigned `customer02` and the manager/customer account provide the I24 invitation and management-assistance scenarios; no extra fictional accounts or preaccepted consent are needed. See [the demo guide](../development-demo.md).
 
 ## Invitation API (I24)
 

@@ -1,6 +1,6 @@
 # Account deactivation
 
-I36 implements the backend account-deactivation workflow from [the approved Identity specification](../SPEC-identity.md). Deactivation preserves people, accounts, roles, bookings, payments and audit references. It does not erase personal data. I37 provides reactivation; I38 adds [customer and management lifecycle controls](identity-lifecycle-ui.md).
+I36 implements the backend account-deactivation workflow from [the approved Identity specification](SPEC-identity.md). Deactivation preserves people, accounts, roles, bookings, payments and audit references. It does not erase personal data. I37 provides reactivation; I38 adds [customer and management lifecycle controls](identity-lifecycle-ui.md).
 
 ## Private API
 
@@ -37,4 +37,4 @@ Trusted coordinators receive the canonical affected attendee person IDs plus `de
 
 Account, joint dependent and family changes have reference/status audit records. The operational audit now explicitly projects `identity.lifecycle_applied` with a lifecycle receipt target and `dependent.deactivated`, with Spanish/English labels and safe reference-only snapshots. Domain coordinators must audit their own cancellation and financial outcomes. The generic receipt does not prove those owning modules have been implemented.
 
-Existing fictional demo customers, instructors, families and guardians are sufficient for manual blocked-preview checks. No new seed data, manufactured consent or successful lifecycle adapter is added to the demo. Use an authenticated session and its CSRF token to call the preview route; expect `INTEGRATION_REQUIRED`. A sole guardian without an explicit joint choice instead receives a conflict. No destructive database reset or PDF update is required. See [verification evidence](../tasks/identity-verification.md).
+Existing fictional demo customers, instructors, families and guardians are sufficient for manual blocked-preview checks. No new seed data, manufactured consent or successful lifecycle adapter is added to the demo. Use an authenticated session and its CSRF token to call the preview route; expect `INTEGRATION_REQUIRED`. A sole guardian without an explicit joint choice instead receives a conflict. No destructive database reset or PDF update is required. See [verification evidence](identity-verification.md).

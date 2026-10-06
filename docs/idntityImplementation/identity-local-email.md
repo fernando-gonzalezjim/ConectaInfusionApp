@@ -1,6 +1,6 @@
 # Identity persistence and local email setup
 
-I05 adds storage and configuration under the [approved plan](../tasks/identity-plan.md). Login/session enforcement is implemented, I10 supplies token issuance/redemption and the retry/scrubbing worker, and I11 supplies [customer registration endpoints](identity-registration.md). Enabling configuration does not send queued messages; delivery requires an explicit tick. See [verification evidence](../tasks/identity-verification.md) and the separate [bootstrap procedure](identity-bootstrap.md).
+I05 adds storage and configuration under the [approved plan](identity-plan.md). Login/session enforcement is implemented, I10 supplies token issuance/redemption and the retry/scrubbing worker, and I11 supplies [customer registration endpoints](identity-registration.md). Enabling configuration does not send queued messages; delivery requires an explicit tick. See [verification evidence](identity-verification.md) and the separate [bootstrap procedure](identity-bootstrap.md).
 
 ## Local inbox
 
@@ -24,7 +24,7 @@ docker compose stop mailpit
 
 ## Private configuration
 
-The [API environment example](../apps/api/.env.example) defaults `IDENTITY_ENABLED=false`, preserving Foundation installations without Identity secrets. When explicitly enabled, startup rejects invalid/missing keys, unknown environments, inconsistent frontend origins and unsafe mail settings before opening the HTTP listener.
+The [API environment example](../../apps/api/.env.example) defaults `IDENTITY_ENABLED=false`, preserving Foundation installations without Identity secrets. When explicitly enabled, startup rejects invalid/missing keys, unknown environments, inconsistent frontend origins and unsafe mail settings before opening the HTTP listener.
 
 For local development, use `NODE_ENV=development`, `IDENTITY_MAIL_TRANSPORT=mailpit`, a loopback SMTP host, an unprivileged SMTP port, a normalized sender email and same-host loopback frontend origins. No SMTP authentication/TLS override is accepted in this mode. Keep the encryption and subject-hash keys private and distinct; never use a shared committed development key.
 
@@ -60,7 +60,7 @@ npm run build -w @conecta/api
 node --env-file=.local/identity/email.env apps/api/dist/server.js
 ```
 
-This does not apply migrations. V5 is a forward-only addition; existing data is never reset or automatically baselined. Follow the [migration guide](database-migrations.md) when intentionally applying it to your local database. Production database adoption remains separately reviewed.
+This does not apply migrations. V5 is a forward-only addition; existing data is never reset or automatically baselined. Follow the [migration guide](../database-migrations.md) when intentionally applying it to your local database. Production database adoption remains separately reviewed.
 
 ## Storage and rotation
 

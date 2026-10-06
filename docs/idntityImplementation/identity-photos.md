@@ -25,7 +25,7 @@ This is a local filesystem implementation for one API process and its configured
 
 ## Manual demo
 
-Run `npm run db:seed:demo`, then `npm run dev:demo`. Seeding creates the fictional upload fixture `.local/demo-profile.png` exclusively; reruns preserve it and existing account edits/photos. No extra customer account is needed: use the existing `customer.profile` account or any active demo personnel account from [demo setup](development-demo.md).
+Run `npm run db:seed:demo`, then `npm run dev:demo`. Seeding creates the fictional upload fixture `.local/demo-profile.png` exclusively; reruns preserve it and existing account edits/photos. No extra customer account is needed: use the existing `customer.profile` account or any active demo personnel account from [demo setup](../development-demo.md).
 
 1. Sign in, open **My account → Edit my profile**, choose `.local/demo-profile.png` and save the photo.
 2. Check the preview, close/reopen or reload, then upload another supported image to replace it.

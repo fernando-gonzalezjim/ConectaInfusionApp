@@ -2,9 +2,9 @@
 
 Status: approved by the user on October 3, 2026, together with its ordered task list. Implementation will use branch `feature/identity-implementation` until completed. This approval authorizes local implementation; production deployment, real accounts and real email sending remain separate work.
 
-Module: `identity`; dependency: `foundation`. Sources: [approved specification](../SPEC-identity.md), [capability map](../CAPABILITY-MAP.md), [business rules](../docs/requirements/agreed-business-rules.md) / [Spanish rules](../docs/requirements/agreed-business-rules.es.md). Tasks: [identity-todo.md](identity-todo.md).
+Module: `identity`; dependency: `foundation`. Sources: [approved specification](SPEC-identity.md), [capability map](../../CAPABILITY-MAP.md), [business rules](../requirements/agreed-business-rules.md) / [Spanish rules](../requirements/agreed-business-rules.es.md). Tasks: [identity-todo.md](identity-todo.md).
 
-The existing [Foundation plan](plan.md), [tasks](todo.md) and [verification evidence](foundation-verification.md) remain intact, including the unchecked human-review checkpoint. Identity uses separate files so completed evidence and outstanding review are not overwritten.
+The existing [Foundation plan](../../tasks/plan.md), [tasks](../../tasks/todo.md) and [verification evidence](../../tasks/foundation-verification.md) remain intact, including the unchecked human-review checkpoint. Identity uses separate files so completed evidence and outstanding review are not overwritten.
 
 ## Deliverable and boundaries
 
@@ -16,7 +16,7 @@ Identity will provide active-account/role/guardian facts and transactional membe
 
 ## Evidence informing this plan
 
-The Graphify snapshot has 840 nodes, 1,051 edges and 50 communities. The query using `identity foundation authorization session audit membership credits migration` connects Identity with Foundation audit, the capability map and credits-bookings. Its truncation and [integrity warnings](../graphify-out/graph-health.json) mean direct source checks are required; this plan does not rely on graph-derived claims of implementation.
+The Graphify snapshot has 840 nodes, 1,051 edges and 50 communities. The query using `identity foundation authorization session audit membership credits migration` connects Identity with Foundation audit, the capability map and credits-bookings. Its truncation and [integrity warnings](../../graphify-out/graph-health.json) mean direct source checks are required; this plan does not rely on graph-derived claims of implementation.
 
 Direct checks found:
 
@@ -105,7 +105,7 @@ The [task checklist](identity-todo.md) contains small units, dependencies, likel
 
 Run focused Node tests for changed behavior, real PostgreSQL integration for invariants and rollback, and real Chromium for cookie sharing and UI flows. Clock control must cover exact expiry/cutoff boundaries. Controlled-response browser tests supplement but never substitute for real authentication tests. Cover Spanish/English, keyboard flow and existing 360/768/1440 viewports. No guessed coverage threshold and no skipped assertions to get green.
 
-Final local commands: `npm run typecheck`, `npm run build`, `npm test`, `npm run test:integration`, `npm run test:e2e -- --project=chromium`. Add focused test entrypoints during implementation; until then no invented runnable commands. Record meaningful results in `tasks/identity-verification.md`. Reuse unchanged Foundation evidence, but rerun affected suites after schema/session/audit changes.
+Final local commands: `npm run typecheck`, `npm run build`, `npm test`, `npm run test:integration`, `npm run test:e2e -- --project=chromium`. Add focused test entrypoints during implementation; until then no invented runnable commands. Record meaningful results in `docs/idntityImplementation/identity-verification.md`. Reuse unchanged Foundation evidence, but rerun affected suites after schema/session/audit changes.
 
 ## Risks, limits and launch prerequisites
 
@@ -124,7 +124,7 @@ Before production: choose SMTP provider/sender/domain and verify delivery, confi
 
 ## Graphify and documentation workflow
 
-Use the current graph automatically for context where helpful and verify current sources. The October 4, 2026 workflow approval supersedes the original reminder policy: automatically refresh changed sources after every three completed implementation steps, starting with I24 (first scheduled refresh after I26). Track progress and staleness in [the refresh ledger](graphify-refresh.md), without user reminders, full rebuilds or hooks.
+Use the current graph automatically for context where helpful and verify current sources. The October 4, 2026 workflow approval supersedes the original reminder policy: automatically refresh changed sources after every three completed implementation steps, starting with I24 (first scheduled refresh after I26). Track progress and staleness in [the refresh ledger](../../tasks/graphify-refresh.md), without user reminders, full rebuilds or hooks.
 
 Keep English/Spanish business rules synchronized if a product rule changes during implementation. Both PDFs remain explicit-request snapshots. This plan adds technical decisions without changing approved product permissions. Record approved deviations before coding the affected slice.
 

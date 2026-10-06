@@ -1,6 +1,6 @@
 # Identity implementation decisions
 
-Recorded October 3, 2026 under the approved [Identity plan](../tasks/identity-plan.md). These are local implementation choices; they do not change the [approved account permissions](../SPEC-identity.md).
+Recorded October 3, 2026 under the approved [Identity plan](identity-plan.md). These are local implementation choices; they do not change the [approved account permissions](SPEC-identity.md).
 
 ## Runtime and dependencies
 
@@ -61,4 +61,4 @@ Transactional outbox token payloads use authenticated AES-256-GCM with a random 
 
 I11's [registration contract](identity-registration.md) uses 30 registration/resend attempts per peer IP per fixed 15-minute window and a separate 30-attempt confirmation IP limit. Counters persist before expensive work, including unknown recipients, using existing V5 scopes. Recipient send limits remain 60 seconds and five per hour; their denials share generic HTTP 202 acceptance with unknown/inactive addresses. Duplicate registration never overwrites an account or automatically resends a link. These are local implementation controls; production proxy and abuse monitoring remain launch prerequisites.
 
-Verification evidence: [identity-verification.md](../tasks/identity-verification.md). Refresh Graphify after these meaningful dependency/security decisions; no automatic rebuild is enabled.
+Verification evidence: [identity-verification.md](identity-verification.md). Refresh Graphify after these meaningful dependency/security decisions; no automatic rebuild is enabled.

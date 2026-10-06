@@ -1,6 +1,6 @@
 # Identity family and dependent review
 
-I34 reviews the approved [Identity specification](../SPEC-identity.md), acceptance scenario 10 and the confirmed family/dependent decisions. It consolidates existing I24-I33 behavior; it does not add permissions, replace recipient consent, or sign off the later lifecycle module.
+I34 reviews the approved [Identity specification](SPEC-identity.md), acceptance scenario 10 and the confirmed family/dependent decisions. It consolidates existing I24-I33 behavior; it does not add permissions, replace recipient consent, or sign off the later lifecycle module.
 
 ## Available management and consent flows
 
@@ -42,6 +42,6 @@ The matrix additionally checks that family closure and dependent deactivation ro
 
 ## Manual checks and data
 
-Use [the existing fictional demo](development-demo.md). Its family members, administrators/managers, two guardians and dependent cover this review; no new seeded identity or manufactured consent is required. Use new fictional `.test` mailbox addresses for invitations and confirm through Mailpit. Follow [family consent checks](identity-families.md) and [guardian/transition checks](identity-dependents.md). Reseeding preserves manual changes, accepted/ended relationships and independent transitions.
+Use [the existing fictional demo](../development-demo.md). Its family members, administrators/managers, two guardians and dependent cover this review; no new seeded identity or manufactured consent is required. Use new fictional `.test` mailbox addresses for invitations and confirm through Mailpit. Follow [family consent checks](identity-families.md) and [guardian/transition checks](identity-dependents.md). Reseeding preserves manual changes, accepted/ended relationships and independent transitions.
 
-The bilingual business rules are unchanged. Their PDFs and the permissions-summary PDF remain on-demand snapshots. Verification results are recorded in [the Identity verification log](../tasks/identity-verification.md).
+The bilingual business rules are unchanged. Their PDFs and the permissions-summary PDF remain on-demand snapshots. Verification results are recorded in [the Identity verification log](identity-verification.md).

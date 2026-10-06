@@ -32,5 +32,5 @@ export async function runDeliveryCommand(args, dependencies = {}) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try { await runDeliveryCommand(process.argv.slice(2)); }
-  catch { console.error('Identity delivery failed. Check local settings and docs/identity-action-delivery.md.'); process.exitCode = 1; }
+  catch { console.error('Identity delivery failed. Check local settings and docs/idntityImplementation/identity-action-delivery.md.'); process.exitCode = 1; }
 }

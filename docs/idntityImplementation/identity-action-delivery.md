@@ -1,6 +1,6 @@
 # Single-use actions and email delivery
 
-I10 provides internal token issuance/redemption and a bounded encrypted-outbox worker using the existing V5 tables. It does not add registration, recovery, invitation or confirmation routes/UI; those remain later tasks. No account is automatically activated, and opening a link never redeems it. Follow [local configuration](identity-local-email.md) and see [verification evidence](../tasks/identity-verification.md).
+I10 provides internal token issuance/redemption and a bounded encrypted-outbox worker using the existing V5 tables. It does not add registration, recovery, invitation or confirmation routes/UI; those remain later tasks. No account is automatically activated, and opening a link never redeems it. Follow [local configuration](identity-local-email.md) and see [verification evidence](identity-verification.md).
 
 ## Transaction and authorization contract
 

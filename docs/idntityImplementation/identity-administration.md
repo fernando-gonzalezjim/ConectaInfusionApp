@@ -1,6 +1,6 @@
 # Management account screens
 
-I19 replaces the management placeholder with account browsing and editing. Start the [demo environment](development-demo.md), then open `http://localhost:5174` and sign in as administrator or manager. Administrative access is checked by the server before records are requested. Ordinary reception, cafe staff, instructors and customers retain their permitted invitation/self-account controls, but cannot browse or edit other accounts.
+I19 replaces the management placeholder with account browsing and editing. Start the [demo environment](../development-demo.md), then open `http://localhost:5174` and sign in as administrator or manager. Administrative access is checked by the server before records are requested. Ordinary reception, cafe staff, instructors and customers retain their permitted invitation/self-account controls, but cannot browse or edit other accounts.
 
 The list uses bounded pages of 25 accounts and role/status filters. Next/previous navigate UUID cursors; changing filters returns to the first page. Refresh reloads current records. Pagination is a traversal, not a frozen snapshot. No search or unbounded download is implied. Empty, loading, unavailable and denied states are explicit. The browser keeps account details in component memory only; no profile, credential or action data is stored in browser storage or URLs.
 

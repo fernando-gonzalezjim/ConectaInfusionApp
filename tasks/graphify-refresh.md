@@ -5,7 +5,7 @@ Approved October 4, 2026: refresh changed sources automatically after every thre
 - Last completed refresh: I38, covering I36 deactivation, I37 prior-guardian renewal/reactivation and I38 lifecycle UI/current-state reads.
 - Completed steps since that refresh: 2 (I39 verification runner/regression and I40 documentation/handoff).
 - Next scheduled refresh: after three additional implementation steps (I39, I40, then the next approved capability step).
-- Snapshot status: current through I38 implementation; I39-I40 verification, setup/handoff, README, capability-map and tracking updates are not yet included. No runtime source changed in I39-I40. Source files/specification remain authoritative and the graph is not a completeness proof.
+- Snapshot status: current through I38 implementation; I39-I40 verification, setup/handoff, README, capability-map and tracking updates are not yet included. No runtime source changed in I39-I40. Subsequent Identity documentation relocation and acceptance updates are also not yet represented; graph source paths may point to the former locations. The move is documentation maintenance and does not advance the counter. Source files/specification remain authoritative and the graph is not a completeness proof.
 
 ## October 5, 2026 I36-I38 refresh evidence
 

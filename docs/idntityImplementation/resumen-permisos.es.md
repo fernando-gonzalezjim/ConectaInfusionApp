@@ -2,7 +2,7 @@
 
 Para revisión de la propietaria · 3 de octubre de 2026
 
-Resumen de las decisiones acordadas; no implica que las funciones ya estén implementadas ni sustituye las [reglas completas](agreed-business-rules.es.md) o la [especificación de identidad](../../SPEC-identity.md), aprobada el 3 de octubre de 2026.
+Resumen de las decisiones acordadas; no implica que las funciones ya estén implementadas ni sustituye las [reglas completas](../requirements/agreed-business-rules.es.md) o la [especificación de identidad](SPEC-identity.md), aprobada el 3 de octubre de 2026.
 
 ## ¿Quién puede hacer qué?
 

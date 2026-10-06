@@ -1,6 +1,6 @@
 # Identity implementation tasks
 
-Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01-I26 are complete. The user authorized I26; I27 is next. The user confirmed one active family per customer and authorized an incremental Graphify refresh including demo tooling, I19–I23 and the V7 constraint. Starting with I24, changed-source refreshes run automatically every three completed steps (first after I26); see [the refresh ledger](graphify-refresh.md). Each subsequent task must assess and extend fictional demo data when needed. See [graph report](../graphify-out/GRAPH_REPORT.md) for the last snapshot and integrity limits. Follow [identity-plan.md](identity-plan.md) and [approved specification](../SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
+Status: approved by the user on October 3, 2026. Implementation branch: `feature/identity-implementation`. I01-I26 are complete. The user authorized I26; I27 is next. The user confirmed one active family per customer and authorized an incremental Graphify refresh including demo tooling, I19–I23 and the V7 constraint. Starting with I24, changed-source refreshes run automatically every three completed steps (first after I26); see [the refresh ledger](../../tasks/graphify-refresh.md). Each subsequent task must assess and extend fictional demo data when needed. See [graph report](../../graphify-out/GRAPH_REPORT.md) for the last snapshot and integrity limits. Follow [identity-plan.md](identity-plan.md) and [approved specification](SPEC-identity.md). Preserve the existing Foundation plan and verification evidence.
 
 Task paths are likely areas, not permission to change entire directories. Each task is Small (1–2 substantive files) or Medium (3–5); split further before coding when a slice exceeds five files. Establish actual focused test commands as files are added. API denial tests are mandatory; UI visibility alone is not authorization.
 
@@ -9,11 +9,11 @@ Task paths are likely areas, not permission to change entire directories. Each t
 ### I01: Resolve technical choices
 
 - [x] **Acceptance:** Pin compatible hashing/mail/photo dependencies and local image; record password, recent-auth, upload limits and storage decisions without changing product rules.
-- [x] **Verification:** Windows/Linux dependency smoke checks; review chosen limits. Run focused checks and typecheck/build for affected work. See [decisions](../docs/identity-decisions.md) and [evidence](identity-verification.md).
+- [x] **Verification:** Windows/Linux dependency smoke checks; review chosen limits. Run focused checks and typecheck/build for affected work. See [decisions](identity-decisions.md) and [evidence](identity-verification.md).
 
 **Dependencies:** None. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
-**Likely paths:** `package.json`, `apps/api/package.json`, `docs/identity-decisions.md`.
+**Likely paths:** `package.json`, `apps/api/package.json`, `docs/idntityImplementation/identity-decisions.md`.
 
 ### I02: Account persistence
 
@@ -36,25 +36,25 @@ Task paths are likely areas, not permission to change entire directories. Each t
 ### Checkpoint after I03
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated through isolated persistence/audit scenarios.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviewed I01–I03 and approved continuation to I04. User authorized an incremental Graphify refresh for the implementation changes.
 
 ### I04: Password and bootstrap
 
 Execute as three small sub-slices: I04a password module/unit tests (2 files); I04b operator/bootstrap logic and PostgreSQL integration tests (2 files); I04c CLI, CLI tests, operator guide and ignored local SQL output (at most 4 files). Scope and permissions are unchanged.
 
-- [x] **Acceptance:** Implement approved hashing and manual first-admin procedure; opt-in local-only testuser fixture never overwrites accounts or runs at startup. See [operator guide](../docs/identity-bootstrap.md).
+- [x] **Acceptance:** Implement approved hashing and manual first-admin procedure; opt-in local-only testuser fixture never overwrites accounts or runs at startup. See [operator guide](identity-bootstrap.md).
 - [x] **Verification:** Correct/wrong password tests; reject fixtures outside development and conflicting reruns. Typecheck, build, unit, PostgreSQL and Foundation browser regression checks passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I03. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
-**Likely paths:** `apps/api/src/modules/identity/passwords.ts`, `scripts/identity-bootstrap.mjs`, `docs/identity-bootstrap.md`, `apps/api/test/identity-passwords.test.mjs`.
+**Likely paths:** `apps/api/src/modules/identity/passwords.ts`, `scripts/identity-bootstrap.mjs`, `docs/idntityImplementation/identity-bootstrap.md`, `apps/api/test/identity-passwords.test.mjs`.
 
 ### I05: Session and delivery persistence
 
 Execute as small sub-slices: I05a V5 schema/PostgreSQL tests (2 files); I05b validated configuration/unit tests (2 files); I05c encryption/unit tests (2 files); I05d startup validation/API environment example (2 files); I05e Mailpit Compose files, inbox test and setup guide (4 files). Tracking updates are documentation only. No login route, token redemption or delivery worker is added in this persistence task.
 
-- [x] **Acceptance:** Migrate hashed sessions/action tokens/throttles/encrypted outbox; configure loopback Mailpit and validated env secrets. See [local setup](../docs/identity-local-email.md).
+- [x] **Acceptance:** Migrate hashed sessions/action tokens/throttles/encrypted outbox; configure loopback Mailpit and validated env secrets. See [local setup](identity-local-email.md).
 - [x] **Verification:** Migration constraints, invalid config, encryption/tampering and real local inbox smoke checks passed, together with workspace typecheck/build/unit and isolated integration/browser regressions. See [evidence](identity-verification.md).
 
 **Dependencies:** I04. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -66,7 +66,7 @@ Execute as small sub-slices: I05a V5 schema/PostgreSQL tests (2 files); I05b val
 Execute as small sub-slices: I06a login throttle/PostgreSQL tests (2 files); I06b session service/PostgreSQL tests (2 files); I06c unmounted auth router/HTTP integration tests (2 files); I06d setup/decision/evidence documentation. The auth router is not mounted in the application until I07 supplies the shared transport and CSRF/Origin checks. No new frontend or production deployment is included.
 
 - [x] **Acceptance:** Implement opaque sessions, fixed expiry, session-version checks, logout/all-device logout and generic failures; role/status checked server-side.
-- [x] **Verification:** Expiry boundaries, revoked sessions, multi-role denial, concurrency and rollback checks passed. See [evidence](identity-verification.md) and [backend guide](../docs/identity-login-backend.md).
+- [x] **Verification:** Expiry boundaries, revoked sessions, multi-role denial, concurrency and rollback checks passed. See [evidence](identity-verification.md) and [backend guide](identity-login-backend.md).
 
 **Dependencies:** I05. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -75,14 +75,14 @@ Execute as small sub-slices: I06a login throttle/PostgreSQL tests (2 files); I06
 ### Checkpoint after I06
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] User approved the completed I04–I06 slice and continuation. The authorized incremental Graphify refresh includes I05 and I06.
 
 ### I07: Authenticated transport
 
 Execute as small sub-slices: I07a shared DTOs/client and focused client tests (3 files); I07b validated origin config, CSRF middleware and denial tests (4 files); I07c app/server integration, router/shared model changes and real PostgreSQL transport tests (5 files); I07d isolated Chromium config/transport check and disabled-mode test wording (3 files); I07e documentation/evidence. Keep Identity opt-in. Login UI remains I08/I09. No graph refresh or commit is implied by this checkpoint approval.
 
-- [x] **Acceptance:** Shared DTOs/client mutations, exact origins, credentials and anonymous/session-bound CSRF protection integrated in the opt-in application. See [transport guide](../docs/identity-auth-transport.md).
+- [x] **Acceptance:** Shared DTOs/client mutations, exact origins, credentials and anonymous/session-bound CSRF protection integrated in the opt-in application. See [transport guide](identity-auth-transport.md).
 - [x] **Verification:** Direct missing/foreign CSRF denials, cookie/error contracts, workspace checks, PostgreSQL scenarios and real Chromium transport verified. See [evidence](identity-verification.md).
 
 **Dependencies:** I06. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -93,7 +93,7 @@ Execute as small sub-slices: I07a shared DTOs/client and focused client tests (3
 
 Execute as small sub-slices: I08a shared sign-in form, bilingual labels, customer session container and header integration (4 files); I08b controlled Chromium UI, isolated Foundation auth fixtures and real PostgreSQL browser login tests (3 files); I08c documentation/evidence and authorized changed-file Graphify refresh. Management login remains I09.
 
-- [x] **Acceptance:** Spanish/English sign-in, Remember me and own-account/current-device/all-device logout implemented with shared accessible components. See [customer login guide](../docs/identity-customer-login.md).
+- [x] **Acceptance:** Spanish/English sign-in, Remember me and own-account/current-device/all-device logout implemented with shared accessible components. See [customer login guide](identity-customer-login.md).
 - [x] **Verification:** Real local administrator/customer form login, fixed lifetimes, reload restoration, keyboard/validation, failure states and responsive accessibility verified. See [evidence](identity-verification.md).
 
 **Dependencies:** I07. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -105,7 +105,7 @@ Execute as small sub-slices: I08a shared sign-in form, bilingual labels, custome
 Execute as small sub-slices: I09a shared access contract/client/test (3 files); I09b authorization module/application and PostgreSQL denial tests (3 files); I09c shared account/session controls, customer wrapper and i18n copy adapter (3 files); I09d management UI/copy/controlled browser checks (4 files); I09e real cross-frontend browser tests and documentation/evidence. No account-administration mutation, role assignment, graph refresh or production deployment is included.
 
 - [x] **Acceptance:** Reuse shared session controls and enforce management API/UI capabilities; keep public Foundation behavior working.
-- [x] **Verification:** Both-port shared login/logout and direct non-manager API denial in real Chromium. Workspace, PostgreSQL and both-port Chromium checks passed; see [evidence](identity-verification.md) and [management guide](../docs/identity-management-login.md).
+- [x] **Verification:** Both-port shared login/logout and direct non-manager API denial in real Chromium. Workspace, PostgreSQL and both-port Chromium checks passed; see [evidence](identity-verification.md) and [management guide](identity-management-login.md).
 
 **Dependencies:** I08. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -114,7 +114,7 @@ Execute as small sub-slices: I09a shared access contract/client/test (3 files); 
 ### Checkpoint after I09
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] User approved continuation after I09 by requesting I10. Graphify remains stale for I09 and later changes.
 
 ## Phase 2: Registration and account administration
@@ -123,7 +123,7 @@ Execute as small sub-slices: I09a shared access contract/client/test (3 files); 
 
 Execute as small sub-slices: I10a internal token contract/issuance/redemption and real PostgreSQL tests (2 files); I10b bounded outbox worker/SMTP adapter, delivery tests and existing Mailpit scenario (3 files); I10c operator command/scripts/tests (3 files); I10d operator guides/README; I10e tracking/evidence. No registration/invitation route, real-user email, graph refresh or developer database migration is included.
 
-- [x] **Acceptance:** Implement purpose/recipient/version-bound links, encrypted transactional outbox, bounded retry and scrubbing; GET never consumes. See [delivery guide](../docs/identity-action-delivery.md).
+- [x] **Acceptance:** Implement purpose/recipient/version-bound links, encrypted transactional outbox, bounded retry and scrubbing; GET never consumes. See [delivery guide](identity-action-delivery.md).
 - [x] **Verification:** Concurrent consumption/resend, SMTP outage recovery, stale-worker denial, socket deadline and secret-free operator output passed. Workspace checks, PostgreSQL/Mailpit scenarios and Chromium regressions passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I09. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -134,7 +134,7 @@ Execute as small sub-slices: I10a internal token contract/issuance/redemption an
 
 Execute as small sub-slices: I11a registration/confirmation/resend service and real PostgreSQL tests (2 files); I11b auth-router/application composition (2 files), extending the same tests for actual HTTP denial checks; I11c guide/README and evidence/checklist. No registration UI, migration, production mail or real-user account creation is included. After verification, perform the user-authorized changed-file Graphify refresh, including the stale I09/I10 sources.
 
-- [x] **Acceptance:** Register customer-only pending accounts; confirm email on deliberate POST; apply 24-hour expiry, enumeration-safe replies and resend limits. See [registration contract](../docs/identity-registration.md).
+- [x] **Acceptance:** Register customer-only pending accounts; confirm email on deliberate POST; apply 24-hour expiry, enumeration-safe replies and resend limits. See [registration contract](identity-registration.md).
 - [x] **Verification:** Role injection denial, exact expiry, 60-second/five-per-hour limits, concurrency, rollback and direct HTTP guards passed. Workspace and integration/browser regressions passed; see [evidence](identity-verification.md).
 
 **Dependencies:** I10. **Estimated scope:** Medium, at most five substantive files; split if necessary.
@@ -155,7 +155,7 @@ Delivered as small sub-slices: typed client/contracts and unit test; customer sc
 ### Checkpoint after I12
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviewed the completed slice before the next group.
 
 ### I13: Recovery backend
@@ -192,7 +192,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 ### Checkpoint after I15
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviewed the completed slice before the next group. I15 approved October 4, 2026; graph refresh remains pending.
 
 ### I16: Invitation UI
@@ -225,7 +225,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 ### Checkpoint after I18
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviewed the completed slice before the next group. The user authorized I19 on October 4, 2026; later changes remain pending an authorized incremental graph refresh.
 
 ### I19: Administration UI
@@ -251,7 +251,7 @@ Delivered as typed client/contract/test, shared recovery and action-page compone
 - [x] **Acceptance:** Add bounded verified/re-encoded uploads, private storage identifiers and authorized serving using I01 decisions.
 - [x] **Verification:** Spoofed types, pixel limits, metadata stripping and cross-account access tests. Run focused checks and typecheck/build for affected work.
 
-Completed October 4, 2026 in sequential backend/storage, typed client, bilingual UI and demo-fixture slices. [Photo setup](../docs/identity-photos.md) and [verification evidence](identity-verification.md) record private serving, replacement rollback/retries/reconciliation, actual browser checks and production storage limits.
+Completed October 4, 2026 in sequential backend/storage, typed client, bilingual UI and demo-fixture slices. [Photo setup](identity-photos.md) and [verification evidence](identity-verification.md) record private serving, replacement rollback/retries/reconciliation, actual browser checks and production storage limits.
 
 **Dependencies:** I20. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -260,7 +260,7 @@ Completed October 4, 2026 in sequential backend/storage, typed client, bilingual
 ### Checkpoint after I21
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviewed I21 and approved continuation to I22 and I23 on October 4, 2026. Graphify refresh remains outstanding.
 
 ### I22: Operational audit views
@@ -268,7 +268,7 @@ Completed October 4, 2026 in sequential backend/storage, typed client, bilingual
 - [x] **Acceptance:** Expose paginated privileged sanitized audit and bilingual management view; personal transaction/pay histories remain domain-owned.
 - [x] **Verification:** Customer/staff denial, pagination and no secret exposure. Run focused checks and typecheck/build for affected work.
 
-Completed October 4, 2026. [Audit guide](../docs/identity-audit.md) and [evidence](identity-verification.md) cover private keyset pagination, fresh authorization, safe snapshots, bilingual accessible UI and actual PostgreSQL/browser scenarios. Existing fictional account audit events already exercise pagination; no extra accounts were needed.
+Completed October 4, 2026. [Audit guide](identity-audit.md) and [evidence](identity-verification.md) cover private keyset pagination, fresh authorization, safe snapshots, bilingual accessible UI and actual PostgreSQL/browser scenarios. Existing fictional account audit events already exercise pagination; no extra accounts were needed.
 
 **Dependencies:** I21. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -281,7 +281,7 @@ Completed October 4, 2026. [Audit guide](../docs/identity-audit.md) and [evidenc
 - [x] **Acceptance:** Migrate historical memberships and responsible-member state; define transactional membership commands distinct from credit disposition.
 - [x] **Verification:** Constraint and concurrent duplicate-membership tests. Run focused checks and typecheck/build for affected work.
 
-Completed October 4, 2026. [Family persistence](../docs/identity-families.md) and [evidence](identity-verification.md) record V6 preservation/rollback, historical constraints, current responsibility, concurrency, fresh permission checks and required domain coordination. Demo seeding now includes two fictional groups and three memberships, preserves edits/departures and remains reset-compatible. No public family or uncoordinated financial workflow is exposed.
+Completed October 4, 2026. [Family persistence](identity-families.md) and [evidence](identity-verification.md) record V6 preservation/rollback, historical constraints, current responsibility, concurrency, fresh permission checks and required domain coordination. Demo seeding now includes two fictional groups and three memberships, preserves edits/departures and remains reset-compatible. No public family or uncoordinated financial workflow is exposed.
 
 **Dependencies:** I22. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
@@ -301,7 +301,7 @@ Delivered in smaller sub-slices: I24a invitation schema, authoritative service a
 ### Checkpoint after I24
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated through actual HTTP/transaction/delivery tests and a reproducible manual guide.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] User authorized I25 after reviewing I24; approved three-step Graphify cadence is recorded in `tasks/graphify-refresh.md`.
 
 ### I25: Family UI
@@ -313,7 +313,7 @@ Delivered in smaller sub-slices: I24a invitation schema, authoritative service a
 
 **Likely paths:** `apps/customer-web/src/`, `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-families.spec.ts`.
 
-Completed in sequential slices: typed client and API lookup; shared family dialogs and consent landing; bilingual frontend integration; controlled browser tests; live PostgreSQL/SMTP browser tests and documentation. Existing fictional accounts/groups cover this step; no seed invitation or automatic membership was added. See [family guide](../docs/identity-families.md) and [verification evidence](identity-verification.md).
+Completed in sequential slices: typed client and API lookup; shared family dialogs and consent landing; bilingual frontend integration; controlled browser tests; live PostgreSQL/SMTP browser tests and documentation. Existing fictional accounts/groups cover this step; no seed invitation or automatic membership was added. See [family guide](identity-families.md) and [verification evidence](identity-verification.md).
 
 ### I26: Successor responsibility
 
@@ -338,7 +338,7 @@ Delivered in sequential sub-slices within the planned substantive-file limit: I2
 ### Checkpoint after I27
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 Delivered in sequential sub-slices: I27a typed preview/execution/financial obligations and disposable tests; I27b private mutation boundary and migration of existing family/successor regression fixtures to guarded execution; I27c domain documentation and verification. Execution binds family and financial revisions, preserves verified purchaser consent for application/audit and fails closed without actual coordination. Existing demo families suffice; no balances or consent are seeded. I27 counts once toward Graphify cadence; the next refresh remains after I29. The user's request to proceed with I28 authorizes this checkpoint.
@@ -379,7 +379,7 @@ Delivered as I30a typed child client and contract tests, I30b shared bilingual c
 ### Checkpoint after I30
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
 - [x] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
 
 ### I31: Guardian consent
@@ -416,8 +416,8 @@ Delivered in sequential persistence/service, transport/contracts, client/audit, 
 ### Checkpoint after I33
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
+- [x] Human accepted the delivered Identity scope before merge; the approved three-step Graphify cadence remains in `tasks/graphify-refresh.md`.
 
 ### I34: Family/dependent review
 
@@ -426,9 +426,9 @@ Delivered in sequential persistence/service, transport/contracts, client/audit, 
 
 **Dependencies:** I33. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
-**Likely paths:** `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-relationships.spec.ts`, `tasks/identity-verification.md`.
+**Likely paths:** `apps/management-web/src/`, `packages/i18n/src/`, `tests/e2e/identity-relationships.spec.ts`, `docs/idntityImplementation/identity-verification.md`.
 
-Completed the existing management/consent review with a real PostgreSQL HTTP matrix covering eight actors and 96 requests, including an instructor/customer family member. Twelve management UI cases cover administrator/manager roles, Spanish/English and all three Foundation widths with axe/overflow checks. All five real inbox successor/guardian/transition workflows passed on a fresh V12 database; workspace typecheck/build passed. No production interface gap or new business decision was found. [The relationship coverage review](../docs/identity-relationships-review.md) identifies remaining lifecycle, booking/credit, notification and instructor-finance obligations. Existing demo data suffice; PDFs remain unchanged. Independent review found no blocker. Graphify counter is two since I32; the scheduled boundary remains I35.
+Completed the existing management/consent review with a real PostgreSQL HTTP matrix covering eight actors and 96 requests, including an instructor/customer family member. Twelve management UI cases cover administrator/manager roles, Spanish/English and all three Foundation widths with axe/overflow checks. All five real inbox successor/guardian/transition workflows passed on a fresh V12 database; workspace typecheck/build passed. No production interface gap or new business decision was found. [The relationship coverage review](identity-relationships-review.md) identifies remaining lifecycle, booking/credit, notification and instructor-finance obligations. Existing demo data suffice; PDFs remain unchanged. Independent review found no blocker. Graphify counter is two since I32; the scheduled boundary remains I35.
 
 ## Phase 4: Lifecycle and handoff
 
@@ -457,8 +457,8 @@ Delivered backend contracts/service, guarded private API, strict bilingual audit
 ### Checkpoint after I36
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
+- [x] Human accepted the delivered Identity scope before merge; the approved three-step Graphify cadence remains in `tasks/graphify-refresh.md`.
 
 ### I37: Reactivation
 
@@ -489,13 +489,13 @@ Delivered account review/confirmation and restoration, explicit credit/joint-dep
 
 **Dependencies:** I38. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
-**Likely paths:** `scripts/test-integration.mjs`, `playwright.config.ts`, `tests/e2e/identity-regression.spec.ts`, `tasks/identity-verification.md`.
+**Likely paths:** `scripts/test-integration.mjs`, `playwright.config.ts`, `tests/e2e/identity-regression.spec.ts`, `docs/idntityImplementation/identity-verification.md`.
 
 ### Checkpoint after I39
 
 - [x] Changed tests pass, affected builds succeed, and the completed slice is demonstrated.
-- [x] Record evidence and security/domain integration limits in `tasks/identity-verification.md`.
-- [ ] Human reviews completed slice before the next group; record the approved three-step Graphify cadence in `tasks/graphify-refresh.md`.
+- [x] Record evidence and security/domain integration limits in `docs/idntityImplementation/identity-verification.md`.
+- [x] Human accepted the delivered Identity scope before merge; the approved three-step Graphify cadence remains in `tasks/graphify-refresh.md`.
 
 ### I40: Documentation and handoff
 
@@ -504,12 +504,12 @@ Delivered account review/confirmation and restoration, explicit credit/joint-dep
 
 **Dependencies:** I39. **Estimated scope:** Medium, at most five substantive files; split if necessary.
 
-**Likely paths:** `README.md`, `docs/identity-setup.md`, `tasks/identity-verification.md`, `tasks/identity-todo.md`, `CAPABILITY-MAP.md`.
+**Likely paths:** `README.md`, `docs/idntityImplementation/identity-setup.md`, `docs/idntityImplementation/identity-verification.md`, `docs/idntityImplementation/identity-todo.md`, `CAPABILITY-MAP.md`.
 
-Delivered [the setup and handoff guide](../docs/identity-setup.md), including explicit local inbox delivery, private configuration/bootstrap safeguards, ten-scenario specification coverage, manual review and domain/production requirements. Corrected outdated README authentication/audit statements and recorded the local capability status without claiming complete financial workflows or production readiness. I39 full regression evidence is reused because I40 changes documentation/tracking only. Existing demo fixtures suffice; no seeds, resets, business-rule or PDF changes. Graphify counter is two since I38; changed-source refresh follows the next approved capability step. Human module sign-off remains pending.
+Delivered [the setup and handoff guide](identity-setup.md), including explicit local inbox delivery, private configuration/bootstrap safeguards, ten-scenario specification coverage, manual review and domain/production requirements. Corrected outdated README authentication/audit statements and recorded the local capability status without claiming complete financial workflows or production readiness. I39 full regression evidence is reused because I40 changes documentation/tracking only. Existing demo fixtures suffice; no seeds, resets, business-rule or PDF changes. Graphify counter is two since I38; changed-source refresh follows the next approved capability step. Human module sign-off remains pending.
 
 ### Final checkpoint after I40
 
-- [ ] Human reviews specification coverage and recorded verification evidence.
+- [x] Human accepted Identity for the current scope and authorized its PR/merge into develop on October 5, 2026. Domain and production boundaries remain unchanged.
 - [x] Outstanding booking, credit, scheduling and payroll integrations are explicit; no incomplete lifecycle workflow is marked production-ready.
 - [x] Record Graphify snapshot status and apply the approved changed-source refresh cadence; no reminders, full rebuilds or hooks.

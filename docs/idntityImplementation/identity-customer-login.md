@@ -1,6 +1,6 @@
 # Customer sign-in and account controls
 
-I08 adds customer-web sign-in and own-account controls to the existing public header. It uses the approved [visual direction](design/visual-direction.md), shared `SignInForm`, Button/Input/Dialog components, bilingual i18n messages and the [I07 client/transport](identity-auth-transport.md). The public schedule/café view continues working independently of authentication. I09 supplies [management sign-in and server access checks](identity-management-login.md); registration, password recovery and profile editing remain later tasks.
+I08 adds customer-web sign-in and own-account controls to the existing public header. It uses the approved [visual direction](../design/visual-direction.md), shared `SignInForm`, Button/Input/Dialog components, bilingual i18n messages and the [I07 client/transport](identity-auth-transport.md). The public schedule/café view continues working independently of authentication. I09 supplies [management sign-in and server access checks](identity-management-login.md); registration, password recovery and profile editing remain later tasks.
 
 ## Interaction and states
 
@@ -18,6 +18,6 @@ The shared Radix dialog traps focus, supports Escape and restores focus to its t
 
 Chromium checks cover Spanish/English labels, keyboard order, required/email validation, pending/denial/outage/throttle states, password clearing, session revocation on focus, logout failure, no horizontal overflow at 320/360/768/1440 pixels and axe accessibility checks. Real disposable PostgreSQL browser scenarios sign in normal administrator/customer accounts through the form, verify 7/30-day persisted lifetimes, restore after reload, display own data and perform current/all-device logout. Test accounts exist only in the disposable database; the manual development bootstrap remains separate.
 
-See [verification evidence](../tasks/identity-verification.md). The authorized changed-file Graphify refresh includes I07/I08 after implementation verification. Business rules and PDF snapshots remain unchanged. I09 now shares the account controller with management-web; its access section relies on server permission checks. Human review is required after I09 before I10.
+See [verification evidence](identity-verification.md). The authorized changed-file Graphify refresh includes I07/I08 after implementation verification. Business rules and PDF snapshots remain unchanged. I09 now shares the account controller with management-web; its access section relies on server permission checks. Human review is required after I09 before I10.
 
-References: [React effect cleanup](https://react.dev/reference/react/useEffect), [Radix Dialog accessibility](https://www.radix-ui.com/primitives/docs/components/dialog) and the [approved Identity plan](../tasks/identity-plan.md).
+References: [React effect cleanup](https://react.dev/reference/react/useEffect), [Radix Dialog accessibility](https://www.radix-ui.com/primitives/docs/components/dialog) and the [approved Identity plan](identity-plan.md).

@@ -1,6 +1,6 @@
 # Identity reactivation
 
-I37 implements access restoration from [the approved Identity specification](../SPEC-identity.md). Only administrators and managers may restore accounts or dependent profiles. All endpoints require the existing session, allowed Origin and CSRF token, return `Cache-Control: no-store`, and reject extra fields before applying changes. Mutation bodies are limited to 2 KiB.
+I37 implements access restoration from [the approved Identity specification](SPEC-identity.md). Only administrators and managers may restore accounts or dependent profiles. All endpoints require the existing session, allowed Origin and CSRF token, return `Cache-Control: no-store`, and reject extra fields before applying changes. Mutation bodies are limited to 2 KiB.
 
 ## Account access
 
