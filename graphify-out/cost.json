@@ -1,0 +1,133 @@
+{
+  "runs": [
+    {
+      "date": "2026-10-03T14:47:15.131536+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 94,
+      "accounting": "Host agent usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T15:19:19.492019+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 6,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T16:52:55.042380+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 13,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T17:54:24.562419+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 9,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T18:47:11.687349+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 24,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-03T19:44:27.072084+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 28,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-04T03:25:02.900677+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 34,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-04T04:36:02.193621+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 15,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-04T05:09:39.959399+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 27,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-04T16:29:31.353067+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 28,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-05T01:07:31.134835+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 78,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-05T06:08:21.305368+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 43,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-05T15:19:49.656081+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 29,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-05T20:04:48.168069+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 42,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-05T23:43:03.512642+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 32,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-06T03:54:54.652013+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 51,
+      "mode": "incremental",
+      "accounting": "Host usage unavailable; not zero cost."
+    }
+  ],
+  "total_input_tokens": null,
+  "total_output_tokens": null
+}

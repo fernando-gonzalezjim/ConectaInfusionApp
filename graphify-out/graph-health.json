@@ -1,0 +1,311 @@
+{
+  "node_count": 2221,
+  "unverified_node_count": 0,
+  "raw_edge_count": 4893,
+  "non_object_edges": 0,
+  "missing_endpoint_edges": 0,
+  "dangling_endpoint_edges": 0,
+  "external_reference_edges": 0,
+  "self_loop_edges": 7,
+  "valid_candidate_edges": 4893,
+  "exact_duplicate_edges": 0,
+  "directed_unique_endpoint_pairs": 4893,
+  "directed_same_endpoint_collapsed_edges": 0,
+  "undirected_unique_endpoint_pairs": 4893,
+  "undirected_same_endpoint_collapsed_edges": 0,
+  "same_endpoint_group_count": 0,
+  "relation_variant_groups": 0,
+  "source_file_variant_groups": 0,
+  "source_location_variant_groups": 0,
+  "context_variant_groups": 0,
+  "post_build_graph_type": "Graph",
+  "post_build_node_count": 2221,
+  "post_build_edge_count": 4893,
+  "post_build_error": "",
+  "producer_suppression": {
+    "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+    "total_sites": 12,
+    "sites": [
+      {
+        "line": 1676,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 2209,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 2211,
+        "name": "seen_doc_refs",
+        "tuple_arity": 0,
+        "sample": "seen_doc_refs: set[str] = set()"
+      },
+      {
+        "line": 2628,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 2775,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+      },
+      {
+        "line": 3501,
+        "name": "seen_keys",
+        "tuple_arity": 0,
+        "sample": "seen_keys: set[tuple] = set()"
+      },
+      {
+        "line": 3670,
+        "name": "seen_keys",
+        "tuple_arity": 0,
+        "sample": "seen_keys: set[tuple] = set()"
+      },
+      {
+        "line": 5777,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 5885,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 5964,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 6479,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 6480,
+        "name": "seen_edges",
+        "tuple_arity": 4,
+        "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+      }
+    ],
+    "error": ""
+  },
+  "examples": [],
+  "fresh_extraction": {
+    "node_count": 528,
+    "unverified_node_count": 0,
+    "raw_edge_count": 1487,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 334,
+    "external_reference_edges": 64,
+    "self_loop_edges": 0,
+    "valid_candidate_edges": 1089,
+    "exact_duplicate_edges": 2,
+    "directed_unique_endpoint_pairs": 1042,
+    "directed_same_endpoint_collapsed_edges": 47,
+    "undirected_unique_endpoint_pairs": 1037,
+    "undirected_same_endpoint_collapsed_edges": 52,
+    "same_endpoint_group_count": 44,
+    "relation_variant_groups": 38,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 5,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 724,
+    "post_build_edge_count": 1434,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [
+      {
+        "source": "database_migrations_v14_identity_guardian_reactivation_guardian_reactivation_invitations",
+        "target": "accounts",
+        "edge_count": 3,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "database/migrations/V14__identity_guardian_reactivation.sql"
+        ],
+        "source_locations": [
+          "L2"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "database_migrations_v14_identity_guardian_reactivation_identity_guardian_reactivation_valid",
+        "target": "people",
+        "edge_count": 3,
+        "relations": [
+          "reads_from"
+        ],
+        "source_files": [
+          "database/migrations/V14__identity_guardian_reactivation.sql"
+        ],
+        "source_locations": [
+          "L29",
+          "L32",
+          "L33"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "packages_api_client_src_index_createapiclient",
+        "target": "packages_api_client_src_index_createapiclient_send",
+        "edge_count": 3,
+        "relations": [
+          "calls",
+          "contains",
+          "indirect_call"
+        ],
+        "source_files": [
+          "packages/api-client/src/index.ts"
+        ],
+        "source_locations": [
+          "L100",
+          "L184",
+          "L38"
+        ],
+        "contexts": [
+          "",
+          "argument",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_api_src_composition_identity_lifecycle_createidentitylifecyclecomposition",
+        "target": "apps_api_src_composition_identity_lifecycle_createidentitylifecyclecomposition_inspect",
+        "edge_count": 2,
+        "relations": [
+          "contains",
+          "indirect_call"
+        ],
+        "source_files": [
+          "apps/api/src/composition/identity-lifecycle.ts"
+        ],
+        "source_locations": [
+          "L12",
+          "L35"
+        ],
+        "contexts": [
+          "",
+          "argument"
+        ]
+      },
+      {
+        "source": "apps_api_src_modules_identity_deactivation_createdeactivationservice_transaction",
+        "target": "apps_api_src_modules_identity_deactivation_createdeactivationservice_transaction_authorize",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/src/modules/identity/deactivation.ts"
+        ],
+        "source_locations": [
+          "L52",
+          "L53"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      }
+    ]
+  },
+  "prior_extraction_warning": "Original full extraction reported 16 dangling endpoints and 11 undirected edge collapses; this incremental diagnostic cannot recover information lost in that build."
+}

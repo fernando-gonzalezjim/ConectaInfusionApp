@@ -1,0 +1,26 @@
+import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+const accountId='11111111-1111-4111-a111-111111111111',familyId='22222222-2222-4222-a222-222222222222',childId='33333333-3333-4333-a333-333333333333';
+for(const role of ['administrator','manager'])for(const locale of ['es-MX','en'])for(const width of [360,768,1440])test(`${role} ${locale} ${width}: management assistance preserves explicit recipient consent`,async({page})=>{
+  const en=locale==='en',account={id:accountId,personId:accountId,email:'manager@example.test',fullName:'Management',roles:[role],preferredLocale:locale};
+  const customer={...account,email:'customer@example.test',fullName:'Managed customer',roles:['customer'],phone:null,photoId:null,status:'active',profileStatus:'active',confirmationStatus:'verified'};
+  const family={id:familyId,name:'Managed family',createdByPersonId:accountId,responsibleMembershipId:accountId,status:'active',version:0};
+  let familyWrites=0,successorWrites=0,guardianWrites=0;
+  page.on('pageerror',error=>{throw error;});await page.setViewportSize({width,height:900});
+  await page.route('**/api/v1/settings/public',r=>r.fulfill({json:{displayName:'Conecta Infusion',currency:'MXN',timezone:'America/Mexico_City',units:[]}}));await page.route('**/api/v1/studio/overview',r=>r.fulfill({json:{classes:[],products:[]}}));
+  await page.route('**/api/v1/auth/session',r=>r.fulfill({json:{account,csrfToken:'matrix-csrf'}}));await page.route('**/api/v1/management/access',r=>r.fulfill({json:{account,capabilities:{administerIdentity:true}}}));await page.route('**/api/v1/accounts?*',r=>r.fulfill({json:{accounts:[customer],nextCursor:null}}));
+  await page.route('**/api/v1/families/for-account/*',r=>r.fulfill({json:{family}}));await page.route('**/api/v1/families/*/responsibility',r=>r.fulfill({json:{canNominate:true}}));
+  await page.route('**/api/v1/families/*/invitations',r=>{familyWrites++;expect(r.request().headers()['x-csrf-token']).toBe('matrix-csrf');expect(r.request().postDataJSON()).toEqual({email:'member@example.test'});return r.fulfill({status:202,json:{code:'ACCEPTED'}});});
+  await page.route('**/api/v1/families/*/successor-offers',r=>{successorWrites++;expect(r.request().postDataJSON()).toEqual({email:'successor@example.test'});return r.fulfill({status:202,json:{code:'ACCEPTED'}});});
+  await page.route('**/api/v1/dependents/guardian-invitations/for-account/*',r=>r.fulfill({json:{items:[{id:childId,fullName:'Managed child'}],nextCursor:null}}));
+  await page.route('**/api/v1/dependents/*/guardian-invitations',r=>{guardianWrites++;expect(r.request().headers()['x-csrf-token']).toBe('matrix-csrf');expect(r.request().postDataJSON()).toEqual({email:'guardian@example.test'});return r.fulfill({status:202,json:{code:'ACCEPTED'}});});
+  await page.goto('http://localhost:5174');await page.getByLabel('Idioma',{exact:true}).selectOption(locale);
+  await page.getByRole('button',{name:`${en?'Assist family':'Ayudar con familia'}: Managed customer`,exact:true}).click();const group=page.getByRole('dialog');
+  expect(familyWrites+successorWrites).toBe(0);await group.getByLabel(en?'Member email':'Correo del integrante',{exact:true}).fill('member@example.test');await group.getByRole('button',{name:en?'Send family invitation':'Enviar invitación familiar',exact:true}).click();await expect(group.getByRole('status')).toContainText(en?'accept before joining':'aceptarla antes de unirse');
+  await group.getByLabel(en?'Successor member email':'Correo del integrante sucesor',{exact:true}).fill('successor@example.test');await group.getByRole('button',{name:en?'Offer responsibility':'Ofrecer responsabilidad',exact:true}).click();await expect.poll(()=>successorWrites).toBe(1);
+  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await group.getByRole('button',{name:en?'Close':'Cerrar',exact:true}).click();
+  await page.getByRole('button',{name:en?'Assist with guardians':'Ayudar con tutores',exact:true}).click();const guardians=page.getByRole('dialog');await guardians.getByLabel(en?'Dependent':'Dependiente',{exact:true}).selectOption(childId);
+  await expect(guardians.getByLabel(en?'Age (text)':'Edad (texto)',{exact:true})).toHaveCount(0);await expect(guardians.getByRole('button',{name:en?'Independent account':'Cuenta independiente',exact:true})).toHaveCount(0);
+  await guardians.getByLabel(en?'Guardian email':'Correo del tutor',{exact:true}).fill('guardian@example.test');await guardians.getByRole('button',{name:en?'Send guardian invitation':'Enviar invitación de tutor',exact:true}).click();await expect(guardians.getByRole('status')).toContainText(en?'must accept by email':'deberá aceptar por correo');
+  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(familyWrites).toBe(1);expect(guardianWrites).toBe(1);
+});

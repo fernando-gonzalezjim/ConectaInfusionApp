@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+/dev.env
 .env.*
 !.env.example
 *.log
@@ -8,3 +9,10 @@ dist/
 coverage/
 test-results/
 playwright-report/
+
+# Keep Graphify's portable graph and manifest; omit machine paths and scratch/cache files.
+/graphify-out/.*
+/graphify-out/cache/
+
+# Operator-generated SQL contains sensitive password hashes, never source or migrations.
+/.local/

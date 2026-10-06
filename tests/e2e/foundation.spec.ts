@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+// This controlled-response suite starts only the frontends; auth must also stay local to its fixtures.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/v1/auth/session', route => route.fulfill({ status: 401, json: { code: 'UNAUTHENTICATED' } }));
+});
+
 const settings = { displayName: 'Conecta Infusion', currency: 'MXN', timezone: 'America/Mexico_City', defaultLocale: 'es-MX', supportedLocales: ['es-MX','en'], units: [{ code: 'studio', labels: { 'es-MX':'Estudio',en:'Studio' } },{ code:'cafe', labels:{'es-MX':'Cafetería',en:'Café'} }] };
 const overview = { mode:'live', classes:[{ id:'1',name:'Yoga',instructor:'Ana',startsAt:'2026-10-03T18:00:00Z',durationMinutes:60,capacity:16,booked:16 }], products:[{id:'1',name:'Latte',category:'coffee',priceMinor:5500,currency:'MXN'}] };
 for (const port of [5173,5174]) {

@@ -10,7 +10,7 @@ Sources: [confirmed intent](docs/intent/conecta-infusion.md) and [agreed rules](
 - One business, with separate studio and café financial units; Spanish first, English supported.
 - The proposed module boundaries below organize requirements, not separate deployed services. They can live within the existing application.
 - Audit history, permission enforcement, and bilingual behavior apply throughout the modules that use them.
-- Payment provider, authentication approach, and unresolved business details remain open until their specifications address them.
+- Payment provider and unresolved domain details remain open until their specifications address them. Identity's authentication approach is defined in its approved plan and locally implemented; production configuration remains outstanding.
 
 ## Approved modules
 
@@ -19,14 +19,14 @@ Dependencies mean a consumer relies on a provider's contract. Provider modules m
 | Module id | Responsibility | Depends on | Future spec file |
 | --- | --- | --- | --- |
 | foundation | Business settings, studio/café identifiers, Spanish/English conventions, responsive shared components, audit-record contract | — | SPEC-foundation.md |
-| identity | Customer and staff accounts, roles, permissions, family membership and departure policy | foundation | SPEC-identity.md |
-| studio-catalog | Disciplines, class descriptions/media, instructors, schedules, capacity, single-class and package offers | identity | SPEC-studio-catalog.md |
-| payments | Separate payment-account configuration, online and recorded in-person payments, payment status and reconciliation contracts | identity | SPEC-payments.md |
-| credits-bookings | Purchased and complimentary credits, family pools, renewal/expiry, booking/cancellation, attendance/completion, private demand feedback | studio-catalog, payments | SPEC-credits-bookings.md |
-| instructor-payroll | Assigned percentages, earnings from consumed credit values and completed sessions, payroll periods, payment records and acknowledgments | credits-bookings | SPEC-instructor-payroll.md |
-| cafe-sales | Catalog, prices, same-sale combos, orders, sales and payment records | payments | SPEC-cafe-sales.md |
-| financial-reporting | Separate studio/café financial views, expense records and reporting scope, restricted payroll visibility | instructor-payroll, cafe-sales | SPEC-financial-reporting.md |
-| public-home | Public starting page, studio/café presentation, language switch, navigation to schedules, purchases and account access | studio-catalog, cafe-sales | SPEC-public-home.md |
+| identity | Customer and staff accounts, roles, permissions, family membership and departure policy | foundation | docs/idntityImplementation/SPEC-identity.md |
+| studio-catalog | Disciplines, class descriptions/media, instructors, schedules, capacity, single-class and package offers | identity | docs/studioCatalogImplementation/SPEC-studio-catalog.md |
+| payments | Separate payment-account configuration, online and recorded in-person payments, payment status and reconciliation contracts | identity | docs/paymentsImplementation/SPEC-payments.md |
+| credits-bookings | Purchased and complimentary credits, family pools, renewal/expiry, booking/cancellation, attendance/completion, private demand feedback | studio-catalog, payments | docs/creditsBookingsImplementation/SPEC-credits-bookings.md |
+| instructor-payroll | Assigned percentages, earnings from consumed credit values and completed sessions, payroll periods, payment records and acknowledgments | credits-bookings | docs/instructorPayrollImplementation/SPEC-instructor-payroll.md |
+| cafe-sales | Catalog, prices, same-sale combos, orders, sales and payment records | payments | docs/cafeSalesImplementation/SPEC-cafe-sales.md |
+| financial-reporting | Separate studio/café financial views, expense records and reporting scope, restricted payroll visibility | instructor-payroll, cafe-sales | docs/financialReportingImplementation/SPEC-financial-reporting.md |
+| public-home | Public starting page, studio/café presentation, language switch, navigation to schedules, purchases and account access | studio-catalog, cafe-sales | docs/publicHomeImplementation/SPEC-public-home.md |
 
 ## Approved boundary decisions
 
@@ -49,6 +49,10 @@ All modules are in first-release scope. This ordering is a dependency outline, n
 
 ## Approval and next step
 
-The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](SPEC-identity.md) is now a draft, including development fixtures and the newly confirmed account-management permissions; its open policy questions and approval remain outstanding. Other listed specs have not been written. Plans and implementation follow their own review gates.
+The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](docs/idntityImplementation/SPEC-identity.md) was approved on October 3, 2026, including development fixtures and the confirmed account-management rules. Other listed specs have not been written. Plans and implementation follow their own review gates.
+
+The [Identity implementation plan](docs/idntityImplementation/identity-plan.md) and [ordered checklist](docs/idntityImplementation/identity-todo.md) were approved on October 3, 2026. Local implementation used `feature/identity-implementation`; the approved specification remains unchanged.
+
+Identity I01-I40 are technically complete, with [setup and specification coverage](docs/idntityImplementation/identity-setup.md) and [verification evidence](docs/idntityImplementation/identity-verification.md). The user accepted the current Identity scope on October 5, 2026, for merge into develop. Account access, role/profile administration, consent-based families/guardians and access restoration are locally verified. Financial lifecycle operations remain blocked under default composition until credits-bookings, studio-catalog and instructor-payroll provide trusted transactional coordinators; no complete first-release or production readiness is implied. Scoped customer/instructor financial history and free staff booking/displacement remain owning-module work. The next approved specification topics are studio-catalog and payments, following the order above.
 
 Deferred scope remains unchanged: ingredient inventory, waitlists, mixed studio/café packages, multiple independent businesses, automated instructor payouts, and the shared time-slot demand view.

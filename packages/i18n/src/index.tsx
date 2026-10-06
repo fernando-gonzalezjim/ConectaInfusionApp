@@ -19,3 +19,13 @@ export function useLocale() {
   if (!value) throw new Error('LocaleProvider is required');
   return value;
 }
+export function useAccountLabels() {
+  const { t } = useLocale();
+  return {
+    email: t('email'), password: t('password'), rememberMe: t('rememberMe'), rememberHint: t('rememberHint'),
+    signIn: t('signIn'), signingIn: t('signingIn'), account: t('account'), signInIntro: t('signInIntro'),
+    accountIntro: t('accountIntro'), fullName: t('fullName'), close: t('close'), signingOut: t('signingOut'),
+    signOut: t('signOut'), signOutAll: t('signOutAll'), authInvalid: t('authInvalid'), authThrottled: t('authThrottled'),
+    authExpired: t('authExpired'), authForbidden: t('authForbidden'), authUnavailable: t('authUnavailable')
+  };
+}
