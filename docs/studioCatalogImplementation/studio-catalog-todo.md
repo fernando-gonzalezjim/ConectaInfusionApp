@@ -353,4 +353,3 @@ C04a: backend validation/authority/routes and integration tests; C04b: shared DT
 - [ ] Production media/provider configuration is not presented as deployed or provisioned.
 - [ ] PDFs are untouched; both business-rule languages match; local links work.
 - [ ] Human review of the runnable scope/evidence is recorded without marking missing integrations complete.
-
