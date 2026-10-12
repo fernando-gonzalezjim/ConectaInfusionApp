@@ -1,3 +1,4 @@
+export type {StudioClass,StudioClassInput,StudioClassUpdate,StudioInstructor,StudioInstructorInput,StudioInstructorUpdate,CatalogPage,PublicDiscipline,PublicInstructor,PublicStudioClass,CatalogQuery} from './studio-catalog';
 export interface YogaClass {
   id: string;
   name: string;
@@ -7,6 +8,18 @@ export interface YogaClass {
   capacity: number;
   booked: number;
 }
+export interface StudioDiscipline {
+  id:string; nameEs:string; nameEn:string|null; descriptionEs:string; descriptionEn:string|null;
+  status:'draft'|'published'|'archived'; version:number;
+}
+export interface StudioDisciplineInput {
+  nameEs:string; nameEn?:string|null; descriptionEs?:string; descriptionEn?:string|null;
+  status?:'draft'|'published';
+}
+export interface StudioDisciplineUpdate extends Partial<Omit<StudioDisciplineInput,'status'>> {
+  status?:StudioDiscipline['status'];expectedVersion:number;reason?:string;
+}
+export interface StudioDisciplineList {items:StudioDiscipline[];nextCursor:string|null}
 export interface CafeProduct {
   id: string;
   name: string;

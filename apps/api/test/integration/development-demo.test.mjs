@@ -21,6 +21,31 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     await createAuthAccount(db.pool,'operator@example.test',['administrator']);
     const result = await seedDevelopmentDemo(db.pool,environment);
     assert.equal(result.createdAccounts,26);
+    assert.equal(result.catalogDisciplines,3);
+    assert.equal(result.catalogClasses,6);
+    const disciplines=(await db.pool.query('SELECT id,name_es,status,version FROM studio_disciplines ORDER BY name_es')).rows;
+    assert.deepEqual(disciplines.filter(row=>row.name_es!=='Demo Wellness').map(({name_es,status,version})=>({name_es,status,version})),[
+      {name_es:'Demo Ballet',status:'draft',version:1},{name_es:'Demo Yoga',status:'draft',version:1}
+    ]);
+    const classes=(await db.pool.query('SELECT id,name_es,audience,level,min_age,max_age,color,duration_minutes,status FROM studio_classes ORDER BY name_es')).rows;
+    assert.deepEqual(classes.filter(row=>['Demo Adult Yoga',"Demo Children's Ballet"].includes(row.name_es)).map(({id,...facts})=>facts),[
+      {name_es:'Demo Adult Yoga',audience:'adults',level:'all',min_age:null,max_age:null,color:'#336699',duration_minutes:55,status:'draft'},
+      {name_es:"Demo Children's Ballet",audience:'children',level:'beginner',min_age:6,max_age:12,color:'#8855AA',duration_minutes:55,status:'draft'}
+    ]);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM class_sessions WHERE class_id IS NOT NULL')).rows[0].n,0,'Catalog fixtures must not silently adopt legacy sessions');
+    assert.equal((await db.pool.query("SELECT count(*)::int n FROM class_sessions WHERE status='legacy'")).rows[0].n,3);
+    await db.pool.query("UPDATE studio_disciplines SET name_es='Manually edited discipline',status='published',version=version+1 WHERE id=$1",[disciplines[0].id]);
+    await db.pool.query("UPDATE studio_classes SET name_es='Manually edited class',color='#112233',discipline_id=$2 WHERE id=$1",[classes[0].id,disciplines[1].id]);
+    assert.equal(result.catalogInstructors,2);
+    assert.deepEqual([...new Set(classes.map(c=>c.level))].sort(),['advanced','all','beginner','intermediate']);
+    assert.ok(classes.every(c=>c.duration_minutes===55&&/^#[a-f0-9]{6}$/i.test(c.color)));
+    assert.ok(classes.some(c=>c.status==='published'));assert.ok(classes.some(c=>c.status==='archived'));
+    const publicInstructor=(await db.pool.query("SELECT instructor_id FROM studio_instructor_profiles WHERE public_name='Demo Public Yoga Teacher'")).rows[0];
+    assert.ok(publicInstructor);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_instructor_photos WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].n,1);
+    await db.pool.query('DELETE FROM studio_instructor_photos WHERE instructor_id=$1',[publicInstructor.instructor_id]);
+    await db.pool.query("UPDATE studio_instructor_profiles SET public_name='Manually approved name',biography_es='Manually reviewed biography',version=version+1 WHERE instructor_id=$1",[publicInstructor.instructor_id]);
+    await db.pool.query('DELETE FROM studio_instructor_disciplines WHERE instructor_id=$1',[publicInstructor.instructor_id]);
     assert.equal(result.families,2);assert.equal(result.familyMemberships,3);
     assert.equal(result.dependentProfiles,2);assert.equal(result.guardianRelationships,3);assert.equal(result.savedChildDetails,2);
     const child=(await db.pool.query("SELECT d.person_id,d.created_by_account_id FROM dependent_profiles d JOIN people p ON p.id=d.person_id WHERE p.status='active'")).rows[0];
@@ -68,6 +93,9 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     assert.equal(pending.status,'pending');assert.equal(pending.password_hash,null);
     const inactive=(await db.pool.query("SELECT status,deactivated_at FROM accounts WHERE email='customer.inactive@demo.conecta.example.test'")).rows[0];
     assert.equal(inactive.status,'inactive');assert.ok(inactive.deactivated_at);
+    assert.equal((await db.pool.query('SELECT public_name FROM studio_instructor_profiles WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].public_name,'Manually approved name');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_instructor_disciplines WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].n,0,'Removed manual qualifications must not be reinserted');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_instructor_photos WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].n,0,'Removed manual portrait must not be restored');
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM bookings')).rows[0].n,23);
     const childClient=await db.pool.connect();await childClient.query('BEGIN');
     try{
@@ -86,16 +114,25 @@ test('demo seed is atomic, repeat-safe, preserves edits and links fictional book
     assert.equal((await db.pool.query('SELECT person_id FROM instructors WHERE person_id=$1',[account.person_id])).rowCount,1);
     await db.pool.query("UPDATE people SET full_name='Edited manually' WHERE id=$1",[account.person_id]);
     const again=await seedDevelopmentDemo(db.pool,environment); assert.equal(again.createdAccounts,0);
+    assert.deepEqual((await db.pool.query('SELECT name_es,status,version FROM studio_disciplines WHERE id=$1',[disciplines[0].id])).rows[0],{name_es:'Manually edited discipline',status:'published',version:2});
+    assert.deepEqual((await db.pool.query('SELECT name_es,color,discipline_id FROM studio_classes WHERE id=$1',[classes[0].id])).rows[0],{name_es:'Manually edited class',color:'#112233',discipline_id:disciplines[1].id});
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_disciplines')).rows[0].n,3);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_classes')).rows[0].n,6);
     assert.equal((await db.pool.query('SELECT name FROM families WHERE id=$1',[shared.id])).rows[0].name,'Manually renamed family');
     assert.equal((await db.pool.query('SELECT end_reason FROM family_memberships WHERE id=$1',[departed.id])).rows[0].end_reason,'left');
     assert.equal((await db.pool.query("SELECT count(*)::int n FROM audit_events WHERE actor_id='development-demo-script'")).rows[0].n,auditCount);
     assert.equal((await db.pool.query('SELECT email FROM accounts WHERE id=$1',[profileCustomer.id])).rows[0].email,'profile.changed@example.test');
     assert.equal((await db.pool.query('SELECT full_name FROM people WHERE id=$1',[account.person_id])).rows[0].full_name,'Edited manually');
+    assert.equal((await db.pool.query('SELECT public_name FROM studio_instructor_profiles WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].public_name,'Manually approved name');
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_instructor_disciplines WHERE instructor_id=$1',[publicInstructor.instructor_id])).rows[0].n,0,'Removed manual qualifications must not be reinserted');
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM bookings')).rows[0].n,23);
     await cleanDevelopmentDatabase(db.pool,environment);
+    assert.deepEqual((await db.pool.query("SELECT to_regclass('public.studio_disciplines') disciplines,to_regclass('public.studio_classes') classes")).rows[0],{disciplines:null,classes:null});
     assert.equal((await db.pool.query("SELECT count(*)::int n FROM pg_tables WHERE schemaname='public'")).rows[0].n,0);
     migrate(db.name);
     assert.equal((await db.pool.query('SELECT count(*)::int n FROM accounts')).rows[0].n,0);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_disciplines')).rows[0].n,0);
+    assert.equal((await db.pool.query('SELECT count(*)::int n FROM studio_classes')).rows[0].n,0);
   } finally {await db.pool.end();}
 });
 

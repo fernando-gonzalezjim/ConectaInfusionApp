@@ -11,6 +11,10 @@ import { AccountAdministration } from './components/account-administration';
 import { SelfProfile } from '@conecta/ui/components/self-profile';
 import {OperationalAudit} from './components/operational-audit';
 import {DependentReactivation} from '@conecta/ui/components/dependent-reactivation';
+import {StudioDisciplines} from './studio/disciplines';
+import {StudioClasses} from './studio/classes';
+import {StudioInstructors} from './studio/instructors';
+import {StudioStaffCatalog} from './studio/staff-catalog';
 const api = createApiClient();
 export function App() {
   const { locale, setLocale, t } = useLocale();
@@ -58,9 +62,13 @@ export function App() {
         {accessState === 'signed-out' && <p className="text-sm text-muted-foreground">{t('managementSignedOut')}</p>}
         {accessState === 'loading' && <p role="status">{t('managementAccessLoading')}</p>}
         {accessState === 'denied' && <Alert><AlertDescription>{t('managementDenied')}</AlertDescription></Alert>}
+        {accessState==='denied'&&account&&account.roles.some(role=>role!=='customer')&&<StudioStaffCatalog key={'staff-'+account.id} api={api} t={t} locale={locale} instructor={account.roles.includes('instructor')} onAccessLost={accessLost}/>}
         {accessState === 'unavailable' && <Alert variant="destructive"><AlertDescription className="flex flex-wrap items-center justify-between gap-3">{t('managementAccessUnavailable')}<Button variant="outline" onClick={() => setAccessAttempt(value => value+1)}>{t('retry')}</Button></AlertDescription></Alert>}
         {accessState === 'allowed' && account && access?.account.id === account.id && access.capabilities.administerIdentity === true && <>
           <AccountAdministration key={account.id} api={api} actorId={account.id} t={t} onAccessLost={accessLost} />
+          <StudioDisciplines key={'studio-'+account.id} api={api} t={t} locale={locale} onAccessLost={accessLost}/>
+          <StudioClasses key={'classes-'+account.id} api={api} t={t} locale={locale} onAccessLost={accessLost}/>
+          <StudioInstructors key={'instructors-'+account.id} api={api} t={t} locale={locale} onAccessLost={accessLost}/>
           <div className="my-4"><DependentReactivation api={api} t={t} onAccessLost={accessLost}/></div>
           <OperationalAudit key={'audit-'+account.id} api={api} t={t} locale={locale} timezone={settings?.timezone??'America/Mexico_City'} onAccessLost={accessLost} />
         </>}

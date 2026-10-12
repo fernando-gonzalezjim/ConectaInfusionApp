@@ -62,9 +62,29 @@ export function createAccountService(pool: Pool, sessions: SessionService, optio
     return row;
   }
   return {
-    async withManagementRead<T>(token:unknown,read:(client:PoolClient)=>Promise<T>):Promise<T>{
+    async withStaffRead<T>(token:unknown,read:(client:PoolClient,context:SessionContext)=>Promise<T>):Promise<T>{
+      const context=await sessions.resolve(token,['administrator','manager','reception','cafe_staff','instructor']);
+      return transaction(async client=>{
+        const currentRoles=await authorize(client,context,context.account.id);
+        if(!currentRoles.some(role=>role!=='customer'))throw new AuthError('FORBIDDEN');
+        return read(client,{...context,account:{...context.account,roles:currentRoles as IdentityRole[]}});
+      });
+    },
+    async withInstructorRead<T>(token:unknown,read:(client:PoolClient,context:SessionContext)=>Promise<T>):Promise<T>{
+      const context=await sessions.resolve(token,['instructor']);
+      return transaction(async client=>{
+        const currentRoles=await authorize(client,context,context.account.id);
+        if(!currentRoles.includes('instructor'))throw new AuthError('FORBIDDEN');
+        return read(client,{...context,account:{...context.account,roles:currentRoles as IdentityRole[]}});
+      });
+    },
+    async withManagementRead<T>(token:unknown,read:(client:PoolClient,context:SessionContext)=>Promise<T>,targetAccountId?:string):Promise<T>{
       const context=await sessions.resolve(token,['administrator','manager']);
-      return transaction(async client=>{await authorize(client,context);return read(client);});
+      return transaction(async client=>{
+        const currentRoles=await authorize(client,context,targetAccountId);
+        if(!currentRoles.some(role=>role==='administrator'||role==='manager'))throw new AuthError('FORBIDDEN');
+        return read(client,{...context,account:{...context.account,roles:currentRoles as IdentityRole[]}});
+      });
     },
     async readAuthorized(target: unknown, token: unknown): Promise<AccountProfile> {
       const context = await sessions.resolve(token);

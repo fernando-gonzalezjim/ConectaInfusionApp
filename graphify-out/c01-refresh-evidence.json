@@ -1,0 +1,658 @@
+{
+  "completed_through": "C01",
+  "counter": 0,
+  "next_refresh": "C04",
+  "selected_files": {
+    "code": [
+      "F:\\Code\\ConectaInfusionApp\\scripts\\development-demo.mjs",
+      "F:\\Code\\ConectaInfusionApp\\scripts\\identity-bootstrap.mjs",
+      "F:\\Code\\ConectaInfusionApp\\scripts\\identity-delivery.mjs"
+    ],
+    "document": [
+      "F:\\Code\\ConectaInfusionApp\\AGENTS.md",
+      "F:\\Code\\ConectaInfusionApp\\CAPABILITY-MAP.md",
+      "F:\\Code\\ConectaInfusionApp\\README.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\development-demo.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\SPEC-identity.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-accounts.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-action-delivery.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-administration.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-audit.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-auth-transport.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-bootstrap.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-customer-login.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-deactivation.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-decisions.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-dependents.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-families.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-invitations.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-lifecycle-ui.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-lifecycle.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-local-email.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-login-backend.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-management-login.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-photos.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-plan.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-profiles.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-reactivation.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-recovery.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-registration.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-relationships-review.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-roles.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-setup.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-todo.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-verification.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\resumen-permisos.es.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\requirements\\agreed-business-rules.es.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\requirements\\agreed-business-rules.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\SPEC-studio-catalog.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-decisions.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-demo.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-plan.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-todo.md",
+      "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-verification.md",
+      "F:\\Code\\ConectaInfusionApp\\tasks\\graphify-refresh.md",
+      "F:\\Code\\ConectaInfusionApp\\tasks\\todo.md"
+    ],
+    "paper": [],
+    "image": [],
+    "video": []
+  },
+  "changed_files": 46,
+  "raw_detected_changes": 205,
+  "pruned_paths": [
+    "F:\\Code\\ConectaInfusionApp\\SPEC-identity.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\requirements\\resumen-permisos.es.md",
+    "F:\\Code\\ConectaInfusionApp\\tasks\\identity-plan.md",
+    "F:\\Code\\ConectaInfusionApp\\tasks\\identity-todo.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-decisions.md",
+    "F:\\Code\\ConectaInfusionApp\\tasks\\identity-verification.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-bootstrap.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-local-email.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-login-backend.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-auth-transport.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-customer-login.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-action-delivery.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-management-login.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-registration.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-recovery.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-accounts.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-invitations.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-roles.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-administration.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-audit.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-families.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-photos.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-profiles.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-dependents.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-lifecycle.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-relationships-review.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-deactivation.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-lifecycle-ui.md",
+    "F:\\Code\\ConectaInfusionApp\\docs\\identity-reactivation.md"
+  ],
+  "pdf_provenance_remap": {
+    "docs/requirements/resumen-permisos.es.pdf": "docs/idntityImplementation/resumen-permisos.es.pdf"
+  },
+  "not_stamped_in_progress": [
+    "F:\\Code\\ConectaInfusionApp\\scripts\\development-demo.mjs",
+    "F:\\Code\\ConectaInfusionApp\\docs\\studioCatalogImplementation\\studio-catalog-demo.md"
+  ],
+  "semantic_cache_files": 43,
+  "before_nodes": 2221,
+  "after_nodes": 2225,
+  "edges": 4733,
+  "communities": 164,
+  "fresh_health": {
+    "node_count": 645,
+    "unverified_node_count": 0,
+    "raw_edge_count": 1292,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 8,
+    "external_reference_edges": 19,
+    "self_loop_edges": 18,
+    "valid_candidate_edges": 1265,
+    "exact_duplicate_edges": 2,
+    "directed_unique_endpoint_pairs": 947,
+    "directed_same_endpoint_collapsed_edges": 318,
+    "undirected_unique_endpoint_pairs": 901,
+    "undirected_same_endpoint_collapsed_edges": 364,
+    "same_endpoint_group_count": 191,
+    "relation_variant_groups": 1,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 188,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 666,
+    "post_build_edge_count": 928,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [
+      {
+        "source": "docs_idntityimplementation_identity_todo_identity_implementation_tasks",
+        "target": "docs_idntityimplementation_identity_verification_identity_verification_evidence",
+        "edge_count": 17,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-todo.md"
+        ],
+        "source_locations": [
+          "line 108",
+          "line 12",
+          "line 127",
+          "line 138",
+          "line 21",
+          "line 234",
+          "line 243",
+          "line 254",
+          "line 271",
+          "line 284",
+          "line 30",
+          "line 316",
+          "line 47",
+          "line 58",
+          "line 69",
+          "line 86",
+          "line 97"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "docs_development_demo_fictional_development_dataset",
+        "target": "docs_idntityimplementation_identity_dependents_dependent_persistence_backend_and_screens_i28_i31",
+        "edge_count": 6,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\docs\\development-demo.md"
+        ],
+        "source_locations": [
+          "line 5",
+          "line 72",
+          "line 74",
+          "line 76",
+          "line 78",
+          "line 81"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "docs_idntityimplementation_identity_dependents_dependent_persistence_backend_and_screens_i28_i31",
+        "target": "docs_development_demo_fictional_development_dataset",
+        "edge_count": 4,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-dependents.md"
+        ],
+        "source_locations": [
+          "line 153",
+          "line 199",
+          "line 248",
+          "line 69"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "docs_idntityimplementation_spec_identity_spec_identity_and_access",
+        "target": "docs_idntityimplementation_spec_identity_acceptance_scenarios",
+        "edge_count": 3,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\SPEC-identity.md"
+        ],
+        "source_locations": [
+          "",
+          "line 1",
+          "line 122"
+        ],
+        "contexts": [
+          ""
+        ]
+      },
+      {
+        "source": "docs_idntityimplementation_spec_identity_spec_identity_and_access",
+        "target": "docs_idntityimplementation_spec_identity_boundaries_and_decisions_still_needed",
+        "edge_count": 3,
+        "relations": [
+          "references"
+        ],
+        "source_files": [
+          "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\SPEC-identity.md"
+        ],
+        "source_locations": [
+          "",
+          "line 1",
+          "line 139"
+        ],
+        "contexts": [
+          ""
+        ]
+      }
+    ]
+  },
+  "merged_health": {
+    "node_count": 2225,
+    "unverified_node_count": 0,
+    "raw_edge_count": 4733,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 0,
+    "external_reference_edges": 0,
+    "self_loop_edges": 7,
+    "valid_candidate_edges": 4733,
+    "exact_duplicate_edges": 0,
+    "directed_unique_endpoint_pairs": 4733,
+    "directed_same_endpoint_collapsed_edges": 0,
+    "undirected_unique_endpoint_pairs": 4733,
+    "undirected_same_endpoint_collapsed_edges": 0,
+    "same_endpoint_group_count": 0,
+    "relation_variant_groups": 0,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 0,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 2225,
+    "post_build_edge_count": 4733,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [],
+    "fresh_extraction": {
+      "node_count": 645,
+      "unverified_node_count": 0,
+      "raw_edge_count": 1292,
+      "non_object_edges": 0,
+      "missing_endpoint_edges": 0,
+      "dangling_endpoint_edges": 8,
+      "external_reference_edges": 19,
+      "self_loop_edges": 18,
+      "valid_candidate_edges": 1265,
+      "exact_duplicate_edges": 2,
+      "directed_unique_endpoint_pairs": 947,
+      "directed_same_endpoint_collapsed_edges": 318,
+      "undirected_unique_endpoint_pairs": 901,
+      "undirected_same_endpoint_collapsed_edges": 364,
+      "same_endpoint_group_count": 191,
+      "relation_variant_groups": 1,
+      "source_file_variant_groups": 0,
+      "source_location_variant_groups": 188,
+      "context_variant_groups": 0,
+      "post_build_graph_type": "Graph",
+      "post_build_node_count": 666,
+      "post_build_edge_count": 928,
+      "post_build_error": "",
+      "producer_suppression": {
+        "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+        "total_sites": 12,
+        "sites": [
+          {
+            "line": 1676,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2209,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2211,
+            "name": "seen_doc_refs",
+            "tuple_arity": 0,
+            "sample": "seen_doc_refs: set[str] = set()"
+          },
+          {
+            "line": 2628,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2775,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+          },
+          {
+            "line": 3501,
+            "name": "seen_keys",
+            "tuple_arity": 0,
+            "sample": "seen_keys: set[tuple] = set()"
+          },
+          {
+            "line": 3670,
+            "name": "seen_keys",
+            "tuple_arity": 0,
+            "sample": "seen_keys: set[tuple] = set()"
+          },
+          {
+            "line": 5777,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 5885,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 5964,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 6479,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 6480,
+            "name": "seen_edges",
+            "tuple_arity": 4,
+            "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+          }
+        ],
+        "error": ""
+      },
+      "examples": [
+        {
+          "source": "docs_idntityimplementation_identity_todo_identity_implementation_tasks",
+          "target": "docs_idntityimplementation_identity_verification_identity_verification_evidence",
+          "edge_count": 17,
+          "relations": [
+            "references"
+          ],
+          "source_files": [
+            "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-todo.md"
+          ],
+          "source_locations": [
+            "line 108",
+            "line 12",
+            "line 127",
+            "line 138",
+            "line 21",
+            "line 234",
+            "line 243",
+            "line 254",
+            "line 271",
+            "line 284",
+            "line 30",
+            "line 316",
+            "line 47",
+            "line 58",
+            "line 69",
+            "line 86",
+            "line 97"
+          ],
+          "contexts": [
+            ""
+          ]
+        },
+        {
+          "source": "docs_development_demo_fictional_development_dataset",
+          "target": "docs_idntityimplementation_identity_dependents_dependent_persistence_backend_and_screens_i28_i31",
+          "edge_count": 6,
+          "relations": [
+            "references"
+          ],
+          "source_files": [
+            "F:\\Code\\ConectaInfusionApp\\docs\\development-demo.md"
+          ],
+          "source_locations": [
+            "line 5",
+            "line 72",
+            "line 74",
+            "line 76",
+            "line 78",
+            "line 81"
+          ],
+          "contexts": [
+            ""
+          ]
+        },
+        {
+          "source": "docs_idntityimplementation_identity_dependents_dependent_persistence_backend_and_screens_i28_i31",
+          "target": "docs_development_demo_fictional_development_dataset",
+          "edge_count": 4,
+          "relations": [
+            "references"
+          ],
+          "source_files": [
+            "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\identity-dependents.md"
+          ],
+          "source_locations": [
+            "line 153",
+            "line 199",
+            "line 248",
+            "line 69"
+          ],
+          "contexts": [
+            ""
+          ]
+        },
+        {
+          "source": "docs_idntityimplementation_spec_identity_spec_identity_and_access",
+          "target": "docs_idntityimplementation_spec_identity_acceptance_scenarios",
+          "edge_count": 3,
+          "relations": [
+            "references"
+          ],
+          "source_files": [
+            "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\SPEC-identity.md"
+          ],
+          "source_locations": [
+            "",
+            "line 1",
+            "line 122"
+          ],
+          "contexts": [
+            ""
+          ]
+        },
+        {
+          "source": "docs_idntityimplementation_spec_identity_spec_identity_and_access",
+          "target": "docs_idntityimplementation_spec_identity_boundaries_and_decisions_still_needed",
+          "edge_count": 3,
+          "relations": [
+            "references"
+          ],
+          "source_files": [
+            "F:\\Code\\ConectaInfusionApp\\docs\\idntityImplementation\\SPEC-identity.md"
+          ],
+          "source_locations": [
+            "",
+            "line 1",
+            "line 139"
+          ],
+          "contexts": [
+            ""
+          ]
+        }
+      ]
+    },
+    "prior_extraction_warning": "Original full extraction had 16 dangling endpoints and 11 undirected collapses. Unselected I38 runtime/hash differences remain unresolved; current source is authoritative."
+  },
+  "token_usage": null,
+  "token_accounting": "Host semantic usage unavailable, not zero",
+  "limitations": "Untouched historical runtime/hash differences remain stale; changed-only completed-step scope, no full rebuild or hooks.",
+  "unchanged_node_identities_preserved": 1859,
+  "pdf_sha256_unchanged_vs_HEAD": {
+    "docs/requirements/agreed-business-rules.es.pdf": "2880e47be68ef1d6daeec4b31b63f3988f8bf6f9423ba935612f93bfd2070542",
+    "docs/idntityImplementation/resumen-permisos.es.pdf": "9e89f55504b0733b6be03eec3867fbfd2c38c0de965fbb221f4d737b5244573c"
+  }
+}

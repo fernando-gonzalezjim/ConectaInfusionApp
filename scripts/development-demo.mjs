@@ -8,6 +8,7 @@ import { appendIdentityAudit } from '../apps/api/dist/modules/identity/audit.js'
 import {createDemoPhotoFixture} from './development-photo-fixture.mjs';
 import {seedDevelopmentFamilies} from './development-families.mjs';
 import {seedDevelopmentDependents} from './development-dependents.mjs';
+import {seedDevelopmentCatalog} from './development-catalog.mjs';
 
 // Fictional local-only credentials. Never use this dataset in a deployed database.
 export const demoPassword = 'ConectaDemo!2026';
@@ -88,10 +89,11 @@ export async function seedDevelopmentDemo(pool, environment = process.env) {
     }
     const familyFixtures=await seedDevelopmentFamilies(client,id);
     const dependentFixtures=await seedDevelopmentDependents(client,id);
+    const catalogFixtures=await seedDevelopmentCatalog(client,id);
     if(createdAccounts) await client.query(`INSERT INTO audit_events(actor_id,actor_type,action,target_type,target_id,changes,reason,correlation_id)
       VALUES ('development-demo-script','system','development.demo_seeded','dataset','conecta-development-demo-v1',$1,'Fictional local data only',$2)`,[JSON.stringify({createdAccounts,sessions:3,bookings:23}),randomUUID()]);
     await client.query('COMMIT');
-    return {createdAccounts,accounts:26,instructors:2,customers:21,sessions:3,bookings:23,...familyFixtures,...dependentFixtures};
+    return {createdAccounts,accounts:26,instructors:2,customers:21,sessions:3,bookings:23,...familyFixtures,...dependentFixtures,...catalogFixtures};
   } catch(error) {await client.query('ROLLBACK');throw error;}
   finally {client.release();}
 }

@@ -1,0 +1,594 @@
+{
+  "completed_through": "C04",
+  "completed_steps": [
+    "C02",
+    "C03",
+    "C04"
+  ],
+  "counter": 0,
+  "next_refresh": "C07",
+  "selected_files": {
+    "code": [
+      "F:\\Code\\ConectaInfusionApp\\database\\migrations\\V15__studio_catalog.sql",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\disciplines.ts",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\discipline-routes.ts",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\classes.ts",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\class-routes.ts",
+      "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\disciplines.tsx",
+      "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\classes.tsx",
+      "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\catalog-list.ts",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-migrations.test.mjs",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-disciplines.test.mjs",
+      "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-classes.test.mjs",
+      "F:\\Code\\ConectaInfusionApp\\tests\\integration\\studio-disciplines.spec.ts"
+    ],
+    "document": [],
+    "paper": [],
+    "image": [],
+    "video": []
+  },
+  "source_sha256": {
+    "F:\\Code\\ConectaInfusionApp\\database\\migrations\\V15__studio_catalog.sql": "a9f8397b079f84c01729039b779cb8e315b2eafe5fa9ab0b36a89d302f1bb767",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\disciplines.ts": "acf16577608c30d8a1ac2cff90699c4ce8d1065e495dcf221aac78af4cf6aa02",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\discipline-routes.ts": "213e5780d4e465b829b1eee40e00e7c594a959679a786f2d56b1fbf34a874d12",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\classes.ts": "c87f362ea9f67219274ee5872f6813cbd230c4b3a2a73dddc2fe29ad86b810e6",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\src\\modules\\studio\\class-routes.ts": "9cbc6e6887e9bd4d2f1063b1e3c74009bce75b0beb1c34addfbc8648e72276d7",
+    "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\disciplines.tsx": "dc00c34b369fd816af29416283c61f61bf01e6561be1f041376f4f7d1f92d944",
+    "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\classes.tsx": "663152ed4136b32cd10d268a27a874e9c9d405a8135a71d9e2c47a098d674a67",
+    "F:\\Code\\ConectaInfusionApp\\apps\\management-web\\src\\studio\\catalog-list.ts": "9b6f7d5646ccd55b71d4b28faf3c4076b4adc08d12e0edd2e28ed72c9834edcf",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-migrations.test.mjs": "17a583f283d7345420b6bb77d61c8a7f3231b9df399ed4b1877e2d906380d086",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-disciplines.test.mjs": "269d6f1a4342f995ed4de2938bc8a518d9d99e38584f22a1db27c5246d54aca5",
+    "F:\\Code\\ConectaInfusionApp\\apps\\api\\test\\integration\\studio-classes.test.mjs": "a5b257dd96ca89eeba349583a762406b8aa0b387815099e39cc58e659169ec07",
+    "F:\\Code\\ConectaInfusionApp\\tests\\integration\\studio-disciplines.spec.ts": "d83ab1254f45efacc8038a555d86e0b42218993813e55f781fa08da64046ff50"
+  },
+  "changed_files": 12,
+  "raw_detected_changes": 209,
+  "excluded_overlap_sources": [
+    "apps/api/src/app.ts",
+    "apps/api/src/modules/identity/accounts.ts",
+    "apps/api/src/modules/identity/roles.ts",
+    "apps/api/src/composition/identity-lifecycle.ts",
+    "apps/management-web/src/App.tsx",
+    "packages/contracts/index.d.ts",
+    "packages/api-client/src/studio.ts",
+    "packages/api-client/src/index.ts",
+    "packages/i18n/src/messages.ts",
+    "scripts/development-demo.mjs",
+    "scripts/development-catalog.mjs",
+    "apps/api/test/integration/development-demo.test.mjs"
+  ],
+  "excluded_documents": "Current implementation/demo/checklist/evidence documents contain in-progress C05/C06 or pending batch completion edits; retained unstamped until C07.",
+  "before_nodes": 2225,
+  "after_nodes": 2304,
+  "edges": 4914,
+  "communities": 163,
+  "untouched_node_identities_preserved": 2225,
+  "fresh_health": {
+    "node_count": 69,
+    "unverified_node_count": 0,
+    "raw_edge_count": 192,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 80,
+    "external_reference_edges": 23,
+    "self_loop_edges": 0,
+    "valid_candidate_edges": 89,
+    "exact_duplicate_edges": 0,
+    "directed_unique_endpoint_pairs": 80,
+    "directed_same_endpoint_collapsed_edges": 9,
+    "undirected_unique_endpoint_pairs": 80,
+    "undirected_same_endpoint_collapsed_edges": 9,
+    "same_endpoint_group_count": 9,
+    "relation_variant_groups": 9,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 0,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 122,
+    "post_build_edge_count": 181,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [
+      {
+        "source": "apps_api_src_modules_studio_disciplines_input",
+        "target": "apps_api_src_modules_studio_disciplines_input_text",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/src/modules/studio/disciplines.ts"
+        ],
+        "source_locations": [
+          "L18",
+          "L24"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_api_src_modules_studio_classes_input",
+        "target": "apps_api_src_modules_studio_classes_input_age",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/src/modules/studio/classes.ts"
+        ],
+        "source_locations": [
+          "L31",
+          "L32"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_management_web_src_studio_catalog_list_usecataloglist",
+        "target": "apps_management_web_src_studio_catalog_list_usecataloglist_handle",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/management-web/src/studio/catalog-list.ts"
+        ],
+        "source_locations": [
+          "L5",
+          "L7"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      },
+      {
+        "source": "apps_management_web_src_studio_catalog_list_usecataloglist",
+        "target": "apps_management_web_src_studio_catalog_list_usecataloglist_more",
+        "edge_count": 2,
+        "relations": [
+          "contains",
+          "indirect_call"
+        ],
+        "source_files": [
+          "apps/management-web/src/studio/catalog-list.ts"
+        ],
+        "source_locations": [
+          "L10",
+          "L11"
+        ],
+        "contexts": [
+          "",
+          "collection"
+        ]
+      },
+      {
+        "source": "apps_api_test_integration_studio_migrations_test",
+        "target": "apps_api_test_integration_studio_migrations_test_catalog",
+        "edge_count": 2,
+        "relations": [
+          "calls",
+          "contains"
+        ],
+        "source_files": [
+          "apps/api/test/integration/studio-migrations.test.mjs"
+        ],
+        "source_locations": [
+          "L20",
+          "L6"
+        ],
+        "contexts": [
+          "",
+          "call"
+        ]
+      }
+    ]
+  },
+  "merged_health": {
+    "node_count": 2304,
+    "unverified_node_count": 0,
+    "raw_edge_count": 4914,
+    "non_object_edges": 0,
+    "missing_endpoint_edges": 0,
+    "dangling_endpoint_edges": 0,
+    "external_reference_edges": 0,
+    "self_loop_edges": 7,
+    "valid_candidate_edges": 4914,
+    "exact_duplicate_edges": 0,
+    "directed_unique_endpoint_pairs": 4914,
+    "directed_same_endpoint_collapsed_edges": 0,
+    "undirected_unique_endpoint_pairs": 4914,
+    "undirected_same_endpoint_collapsed_edges": 0,
+    "same_endpoint_group_count": 0,
+    "relation_variant_groups": 0,
+    "source_file_variant_groups": 0,
+    "source_location_variant_groups": 0,
+    "context_variant_groups": 0,
+    "post_build_graph_type": "Graph",
+    "post_build_node_count": 2304,
+    "post_build_edge_count": 4914,
+    "post_build_error": "",
+    "producer_suppression": {
+      "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+      "total_sites": 12,
+      "sites": [
+        {
+          "line": 1676,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2209,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2211,
+          "name": "seen_doc_refs",
+          "tuple_arity": 0,
+          "sample": "seen_doc_refs: set[str] = set()"
+        },
+        {
+          "line": 2628,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+        },
+        {
+          "line": 2775,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+        },
+        {
+          "line": 3501,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 3670,
+          "name": "seen_keys",
+          "tuple_arity": 0,
+          "sample": "seen_keys: set[tuple] = set()"
+        },
+        {
+          "line": 5777,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5885,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 5964,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6479,
+          "name": "seen_ids",
+          "tuple_arity": 0,
+          "sample": "seen_ids: set[str] = set()"
+        },
+        {
+          "line": 6480,
+          "name": "seen_edges",
+          "tuple_arity": 4,
+          "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+        }
+      ],
+      "error": ""
+    },
+    "examples": [],
+    "fresh_extraction": {
+      "node_count": 69,
+      "unverified_node_count": 0,
+      "raw_edge_count": 192,
+      "non_object_edges": 0,
+      "missing_endpoint_edges": 0,
+      "dangling_endpoint_edges": 80,
+      "external_reference_edges": 23,
+      "self_loop_edges": 0,
+      "valid_candidate_edges": 89,
+      "exact_duplicate_edges": 0,
+      "directed_unique_endpoint_pairs": 80,
+      "directed_same_endpoint_collapsed_edges": 9,
+      "undirected_unique_endpoint_pairs": 80,
+      "undirected_same_endpoint_collapsed_edges": 9,
+      "same_endpoint_group_count": 9,
+      "relation_variant_groups": 9,
+      "source_file_variant_groups": 0,
+      "source_location_variant_groups": 0,
+      "context_variant_groups": 0,
+      "post_build_graph_type": "Graph",
+      "post_build_node_count": 122,
+      "post_build_edge_count": 181,
+      "post_build_error": "",
+      "producer_suppression": {
+        "path": "C:\\Users\\sirto\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+        "total_sites": 12,
+        "sites": [
+          {
+            "line": 1676,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2209,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2211,
+            "name": "seen_doc_refs",
+            "tuple_arity": 0,
+            "sample": "seen_doc_refs: set[str] = set()"
+          },
+          {
+            "line": 2628,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+          },
+          {
+            "line": 2775,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+          },
+          {
+            "line": 3501,
+            "name": "seen_keys",
+            "tuple_arity": 0,
+            "sample": "seen_keys: set[tuple] = set()"
+          },
+          {
+            "line": 3670,
+            "name": "seen_keys",
+            "tuple_arity": 0,
+            "sample": "seen_keys: set[tuple] = set()"
+          },
+          {
+            "line": 5777,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 5885,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 5964,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 6479,
+            "name": "seen_ids",
+            "tuple_arity": 0,
+            "sample": "seen_ids: set[str] = set()"
+          },
+          {
+            "line": 6480,
+            "name": "seen_edges",
+            "tuple_arity": 4,
+            "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+          }
+        ],
+        "error": ""
+      },
+      "examples": [
+        {
+          "source": "apps_api_src_modules_studio_disciplines_input",
+          "target": "apps_api_src_modules_studio_disciplines_input_text",
+          "edge_count": 2,
+          "relations": [
+            "calls",
+            "contains"
+          ],
+          "source_files": [
+            "apps/api/src/modules/studio/disciplines.ts"
+          ],
+          "source_locations": [
+            "L18",
+            "L24"
+          ],
+          "contexts": [
+            "",
+            "call"
+          ]
+        },
+        {
+          "source": "apps_api_src_modules_studio_classes_input",
+          "target": "apps_api_src_modules_studio_classes_input_age",
+          "edge_count": 2,
+          "relations": [
+            "calls",
+            "contains"
+          ],
+          "source_files": [
+            "apps/api/src/modules/studio/classes.ts"
+          ],
+          "source_locations": [
+            "L31",
+            "L32"
+          ],
+          "contexts": [
+            "",
+            "call"
+          ]
+        },
+        {
+          "source": "apps_management_web_src_studio_catalog_list_usecataloglist",
+          "target": "apps_management_web_src_studio_catalog_list_usecataloglist_handle",
+          "edge_count": 2,
+          "relations": [
+            "calls",
+            "contains"
+          ],
+          "source_files": [
+            "apps/management-web/src/studio/catalog-list.ts"
+          ],
+          "source_locations": [
+            "L5",
+            "L7"
+          ],
+          "contexts": [
+            "",
+            "call"
+          ]
+        },
+        {
+          "source": "apps_management_web_src_studio_catalog_list_usecataloglist",
+          "target": "apps_management_web_src_studio_catalog_list_usecataloglist_more",
+          "edge_count": 2,
+          "relations": [
+            "contains",
+            "indirect_call"
+          ],
+          "source_files": [
+            "apps/management-web/src/studio/catalog-list.ts"
+          ],
+          "source_locations": [
+            "L10",
+            "L11"
+          ],
+          "contexts": [
+            "",
+            "collection"
+          ]
+        },
+        {
+          "source": "apps_api_test_integration_studio_migrations_test",
+          "target": "apps_api_test_integration_studio_migrations_test_catalog",
+          "edge_count": 2,
+          "relations": [
+            "calls",
+            "contains"
+          ],
+          "source_files": [
+            "apps/api/test/integration/studio-migrations.test.mjs"
+          ],
+          "source_locations": [
+            "L20",
+            "L6"
+          ],
+          "contexts": [
+            "",
+            "call"
+          ]
+        }
+      ]
+    },
+    "prior_extraction_warning": "Historical full extraction reported 16 dangling endpoints and 11 undirected collapses; C01 fresh extraction had 8 dangling endpoints and 364 repeated-pair collapses. Unselected runtime/document fragments remain stale; current source is authoritative."
+  },
+  "pdf_sha256_unchanged_from_HEAD": {
+    "docs/requirements/agreed-business-rules.es.pdf": "2880e47be68ef1d6daeec4b31b63f3988f8bf6f9423ba935612f93bfd2070542",
+    "docs/idntityImplementation/resumen-permisos.es.pdf": "9e89f55504b0733b6be03eec3867fbfd2c38c0de965fbb221f4d737b5244573c"
+  },
+  "token_usage": {
+    "input": 0,
+    "output": 0
+  },
+  "token_accounting": "Pure-code structural extraction: no semantic host/external API calls. Historical usage unavailable, not zero.",
+  "limitations": "Bounded isolated-source refresh. Shared C02-C04 changes overlapping C05/C06 deliberately unstamped; unselected historical runtime/document hash discrepancies remain stale. No full rebuild or automatic hooks."
+}

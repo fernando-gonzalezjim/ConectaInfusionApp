@@ -8,6 +8,10 @@ test.beforeEach(async({page})=>{
   await page.route('**/api/v1/auth/session',r=>r.fulfill({json:{account:actor,csrfToken:'fresh'}}));
   await page.route('**/api/v1/management/access',r=>r.fulfill({json:{account:actor,capabilities:{administerIdentity:true}}}));
   await page.route('**/api/v1/accounts?*',r=>r.fulfill({json:{accounts:[target],nextCursor:null}}));
+  await page.route('**/api/v1/management/studio/disciplines?*',r=>r.fulfill({json:{items:[],nextCursor:null}}));
+  await page.route('**/api/v1/management/studio/classes?*',r=>r.fulfill({json:{items:[],nextCursor:null}}));
+  await page.route('**/api/v1/management/studio/instructors?*',r=>r.fulfill({json:{items:[],nextCursor:null}}));
+  await page.route('**/api/v1/management/studio/instructors/candidates?*',r=>r.fulfill({json:{items:[],nextCursor:null}}));
 });
 test('management edits approved profile fields and assigns roles with customer retention',async({page})=>{
   await page.goto('http://localhost:5174');await page.getByLabel('Idioma',{exact:true}).selectOption('en');

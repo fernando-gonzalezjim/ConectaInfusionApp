@@ -12,11 +12,34 @@ These are requirements for future implementation. Examples illustrate the rules;
 
 - The studio supports multiple disciplines, including yoga, ballet, functional training, and K-pop.
 - Management creates customer-facing class information, including descriptions, photos, and videos, and manages schedules.
+- Only admins/managers may create, edit, publish or archive disciplines, class descriptions/media and scheduled sessions. Ordinary staff and instructors may view the catalog and their relevant schedules; personal-profile editing does not grant catalog editing rights. Staff may edit class colors only; class creation remains management-only.
+- Each discipline contains reusable classes, and each class can have scheduled sessions. Class fields are discipline, name, description, audience, level and duration; translation and media requirements are detailed below.
+- Class audiences are children and adults only. Children's classes support minimum and maximum ages; no numeric age boundaries have been agreed. Explicit age eligibility limits are defined when needed; otherwise audience information is guidance. Booking enforcement belongs to credits-bookings.
+- Class levels are beginner, intermediate, advanced and all levels. Levels are guidance; no enforced prerequisites have been agreed.
+- All classes and scheduled sessions last 55 minutes, with no duration overrides. Audience, age range and level belong to the reusable class and cannot be overridden per session; management may change these class properties even when reservations exist, without requiring a separate class. Existing reservations remain valid when eligibility changes; new explicit limits apply to new bookings. For example, Ballet can contain Children's Ballet and Adult Ballet, each with its own sessions.
 - Spanish is the primary app language; English is supported from the start.
 - Initial operation is in Mexico using MXN. Country/currency settings should allow future configuration; actual provider/country support must be assessed separately.
-- Initial class capacity is 16, stored in app settings and changeable by management. Per-session overrides and the effect on already scheduled classes still need specification.
+- Initial default class capacity and studio maximum are both 16, configurable by management. Default changes affect existing future sessions starting the next studio-local day, preserving same-day and past sessions and explicit custom overrides. Management can edit one occurrence or future occurrences; capacity increases after reservations preserve those reservations.
+- Ordinary capacity reductions below existing reservations are blocked until reservations are resolved through credits-bookings. For a default reduction that conflicts with reservations in an affected future session, offer explicit session cancellation or preservation of its higher capacity as a custom override. Never silently cancel or displace anyone; agreed cancellation effects apply, with credit-expiry details pending.
+- The management-configured studio maximum initially is 16. Maximum reductions apply from the next studio-local day, preserving same-day sessions. Management may explicitly preserve higher custom capacity for an existing affected session, even above the reduced maximum. This session-specific exception preserves that capacity; it does not allow additional places beyond it or authorize other sessions to exceed the maximum. This decision supersedes the earlier unconditional hard-maximum rule.
+- Show the numeric remaining-place count only when fewer than five places are available; otherwise omit the count. Show Full when no place is available under the credits-bookings availability rules, including replacement of complimentary reservations.
 - Initial single-class price is 150 MXN and is editable by authorized management.
 - Public home page, navigation, visual style, and responsive layouts will be specified next.
+- Scheduling supports individual sessions and weekly recurrence on selected weekdays, with required start and end dates. Management can skip dates or change an individual occurrence, and can edit one session or future sessions while preserving past sessions. Changes affecting reservations follow the agreed publication/change rules.
+- Each session has one instructor. Unassigned drafts are allowed; publication requires an instructor whose management-defined teaching disciplines match the class. Overlapping assignments for the same instructor are blocked, including across spaces if spaces are introduced later.
+- Studio time slots are exclusive: the first class scheduled into a time slot blocks it for other classes. This is management scheduling, not a customer reservation, and does not introduce parallel teaching spaces. Require five minutes between sessions in the same teaching space, allowing 55-minute classes to start hourly.
+- Customers see published sessions in a weekly calendar, placed on their assigned days/times, with navigation between the current and next calendar week, even when management has scheduled further ahead. Booking eligibility remains governed by credit validity. Display schedules in the configured studio business timezone, clearly identified, even when customers travel.
+- Each class has a color selected at creation or randomly generated when omitted, stored and reused across sessions with readable labels/contrast. Management selects colors at class creation; staff may edit colors only and cannot create classes. Calendar weeks run Monday-Sunday, defaulting to the current week with switching to next week.
+- Disciplines/classes support draft, published and archived states; customers see published content only. Session publication requires published parent content, an instructor and valid scheduling/capacity. Recurring series may be published after validating every occurrence. Archives preserve history and are blocked until future sessions are explicitly cancelled or moved to an appropriate published class.
+- Published names, descriptions and media may be edited immediately with audit and existing reservations preserved. Management may edit audience, age eligibility and level with reservations already present; existing reservations remain valid and new explicit limits apply to new bookings. Notify booked attendees of audience, age-limit or level changes and allow cancellation without losing their credit.
+- Booked sessions may be rescheduled with explicit confirmation, notifications and coordinated booking checks; customers unable to attend may cancel without losing their credit. Instructor replacement requires a qualified, available instructor, preserves reservations and notifies attendees.
+- Studio cancellation cancels reservations, releases reserved credits without penalty and notifies attendees. Extending expired-credit validity remains a credits-bookings decision. Cancellation can target one or all future occurrences with confirmation showing affected sessions/reservations; preserve history.
+- Notify attendees of cancellation, date/time changes, instructor replacement and relocation if locations are introduced; description/media edits need no notification. Operational changes/cancellations have no fixed cutoff; require a reason for changes affecting booked sessions and audit the actor.
+- Publication requires Spanish names/descriptions; English is optional with Spanish fallback. Management manually supplies and reviews translations in the first version.
+- Photos/videos belong to reusable classes and are shared across sessions. Allow up to five JPEG, PNG or WebP photos per class, up to 5 MB each, optimized for display, with a selected cover and management-controlled ordering. Support YouTube links and uploaded MP4 files. There is no maximum video count; above three videos per class (links and uploads combined), show a browsing-complexity advisory without blocking saving or publication. There is no product file-size limit; an MP4 above 200 MB triggers an advisory, not a size rejection. Uploaded videos have a five-minute duration limit. Vimeo support is not inferred. Infrastructure limits and upload recovery must be documented during planning, not silently imposed as product policy.
+- Photos/videos are optional for publication; use a branded placeholder without a cover. Require Spanish alternative text for meaningful photos, with optional English translation. Captions are not required for linked or uploaded videos; caption upload is not required. This supersedes the earlier caption requirement; caption-related accessibility acceptance cannot be claimed for uncaptioned speech videos.
+- Management alone adds, replaces, reorders or removes media. Removal immediately removes media from the public class page and preserves an audit record; storage cleanup belongs in planning. Staff color permission does not grant media authority.
+- Customers see an approved public instructor display name, optional biography and optional public photo, separate from private Identity information. Published uploaded catalog photos may be accessed without login; draft media stays restricted. Upload only material authorized for public use; uploaded-video playback access will be defined during planning.
 
 ## 2. Financial separation and payment collection
 
@@ -33,14 +56,46 @@ These are requirements for future implementation. Examples illustrate the rules;
 - A class credit can be used for any discipline; packages are not discipline-restricted.
 - Packages provide discounted per-class values. Each credit retains its original purchase value for instructor-pay calculations, including when shared or extended.
 - The entry/test package is **three classes for the price of two**. This corrects the early three-for-one example.
-- Credits expire after 30 days.
-- Buying a qualifying package, meaning any package other than the entry/test package, combines still-valid remaining credits with new credits and gives the combined balance a new 30-day expiration from the purchase date.
+- Ordinary, first-visit and returning-package credits expire after 30 days. Quarterly credits expire three calendar months after payment confirmation; semester credits expire six calendar months after payment confirmation, at the corresponding purchase-time anniversary. Define exact month-end/timezone calculation in credits-bookings.
+- Qualifying ordinary and returning-package purchases combine still-valid eligible 30-day credits with new credits and give them a new 30-day expiration from purchase. Quarterly/semester purchases also renew eligible 30-day credits for 30 days, but quarterly/semester credits retain their original fixed expiration and are never shortened or extended by another purchase. Single-class purchases do not renew existing credits.
 - Purchasing the entry/test package does not extend existing credits.
 - Expired credits do not automatically carry forward. Staff may restore them manually.
 - Renewal changes expiration, not the original monetary value of existing credits.
 - Booking uses the credit that expires soonest. If expiration dates match, use the oldest purchased credit first.
 - Credits must remain valid on the date of the booked class, not merely on the booking date.
 - Booking reserves the credit; attendance, late cancellation, or no-show consumes it according to the rules below.
+
+### 3.1. Studio offer catalog
+
+Confirmed October 11, 2026. All amounts are MXN, based on 150 MXN per class. The user authorizes correcting arithmetic errors. These are current normal prices, not an assumed temporary opening promotion. Returning offers add five percentage points to the corresponding ordinary discount; they do not multiply the discounted price by 95%.
+
+| Offer | Total credits | Discount | Total MXN |
+| --- | ---: | ---: | ---: |
+| Single class | 1 | 0% | 150 |
+| Ordinary 4 | 4 | 5% | 570 |
+| Ordinary 8 | 8 | 5% | 1,140 |
+| Ordinary 12 | 12 | 10% | 1,620 |
+| Ordinary 16 | 16 | 12% | 2,112 |
+| Ordinary 20 | 20 | 15% | 2,550 |
+| First visit, three for two | 3 | Three for two | 300 |
+| Returning 8 | 8 | 10% | 1,080 |
+| Returning 12 | 12 | 15% | 1,530 |
+| Returning 16 | 16 | 17% | 1,992 |
+| Quarterly 8-class reference | 24 | 25% | 2,700 |
+| Quarterly 12-class reference | 36 | 25% | 4,050 |
+| Quarterly 16-class reference | 48 | 25% | 5,400 |
+| Semester 8-class reference | 48 | 35% | 4,680 |
+| Semester 12-class reference | 72 | 35% | 7,020 |
+| Semester 16-class reference | 96 | 35% | 9,360 |
+
+- The semester 72-credit amount is corrected from 8,640 to 7,020 MXN: 72 × 150 × 65%. All other listed totals match the stated discounts.
+- Include all listed offers at launch, individually publishable by management, usable across disciplines. Quarterly/semester reference counts are not monthly allocation caps: grant the full credit amount upfront after confirmed payment. Staff, management and instructors should be reminded to explain that customers who use all credits early must buy another package.
+- Payment is upfront. Interest-free monthly installments, if offered by the card/payment method, belong to that provider rather than studio installments; provider support is not promised here.
+- Remind purchasers that quarterly/semester credits expire if unused within the purchased term. Semester offers have no continuous-customer eligibility restriction.
+- First visit is once per customer who has never attended a class. Returning packages have 30-day validity and are usable once per purchase anniversary per purchaser, with a shared gate across all returning variants and no attendance-gap requirement. Eligibility returns on the anniversary of the last returning-package purchase, rather than resetting January 1 or using a fixed 365-day interval. No complex management-approval gate is required; present available offers in a menu/chart before purchase and enforce the agreed simple eligibility rules.
+- Eligibility is per purchaser, not per family; all purchased credits, including quarterly/semester credits, follow existing family-sharing rules. No additional sales quotas or purchase limits beyond first-visit/returning eligibility.
+- Management maintains offer names, descriptions, credit counts and discounts. Calculate percentage-based totals from the current single-class price and applicable discount; three-for-two follows twice that price. Changing the single-class price automatically recalculates package prices for future purchases only. This supersedes the earlier fixed-total recommendation. Display calculated discounts/effective per-class values. Preserve each purchase's original price, credit amount, full allocation, validity and renewal terms; later offer or base-price changes never alter existing purchases or credit values.
+- Offers support draft, published and retired states and optional availability dates. Retirement stops new purchases and preserves purchase history and valid credits. Show total price/credits, upfront allocation, validity, eligibility and renewal conditions before purchase.
 
 ## 4. Booking, cancellation, and capacity
 
@@ -189,7 +244,7 @@ These questions do not invalidate the confirmed intent and should not be answere
 - Restored-credit expiry, late-cancellation exceptions, and a released credit whose original expiration has passed.
 - Provider selection, account connection, payment confirmation/failure handling, refunds, and financial reconciliation.
 - Booking horizon, schedule recurrence, instructor substitutions, studio-cancelled sessions, and whether a session with no attendees took place for payroll purposes.
-- Package catalog, entry/test eligibility and repeat-purchase limits, and how package cost is apportioned across credits when amounts do not divide evenly.
+- Month-end/leap-day handling for calendar-month expiry and annual returning eligibility, monetary rounding after future base-price changes, and how package cost is apportioned across credits when amounts do not divide evenly. The catalog, eligibility, renewal, validity and future base-price policy are agreed in sections 3 and 3.1.
 - Effective dates of instructor percentage changes, rounding, payroll period boundaries, and adjustments after payroll has been acknowledged or paid.
 - Expense entry/reporting depth and café sale correction/refund workflows.
 - Deployment, accessibility criteria, numeric success measures, and eventual migration from the owner's other system.

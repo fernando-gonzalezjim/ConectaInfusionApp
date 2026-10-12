@@ -17,7 +17,7 @@ for (const locale of ['es-MX','en'] as const) {
     const managementContext=await browser.newContext();const recoveryContext=await browser.newContext();let started=false;
     const management=await managementContext.newPage();const recovery=await recoveryContext.newPage();const errors:string[]=[];
     for(const p of [page,management,recovery])p.on('pageerror',e=>errors.push(e.message));
-    async function language(p:Page){await p.getByRole('combobox').selectOption(locale);}
+    async function language(p:Page){await p.getByRole('combobox',{name:/^(Idioma|Language)$/}).selectOption(locale);}
     async function signIn(p:Page,port:number,password:string){
       await p.goto(`http://localhost:${port}`);await language(p);await p.getByRole('button',{name:english?'Sign in':'Iniciar sesión',exact:true}).click();
       await p.getByLabel(english?'Email':'Correo electrónico',{exact:true}).fill(email);await p.getByLabel(english?'Password':'Contraseña',{exact:true}).fill(password);

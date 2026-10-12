@@ -126,6 +126,22 @@
       "files": 51,
       "mode": "incremental",
       "accounting": "Host usage unavailable; not zero cost."
+    },
+    {
+      "date": "2026-10-11T23:17:07.685464+00:00",
+      "input_tokens": null,
+      "output_tokens": null,
+      "files": 46,
+      "mode": "incremental",
+      "accounting": "Host semantic usage unavailable, not zero; numerical totals retain previously known usage only."
+    },
+    {
+      "date": "2026-10-12T01:45:28.455428+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 12,
+      "mode": "incremental-structural-only",
+      "accounting": "No semantic dispatch; pure AST extraction. Historical host semantic usage remains unavailable, not zero."
     }
   ],
   "total_input_tokens": null,

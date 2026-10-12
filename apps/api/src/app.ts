@@ -2,6 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { getStudioOverview } from './modules/studio/repository.js';
+import {createDisciplineService} from './modules/studio/disciplines.js';
+import {createClassService} from './modules/studio/classes.js';
+import {createClassRouter} from './modules/studio/class-routes.js';
+import {createInstructorService} from './modules/studio/instructors.js';
+import {createInstructorRouter} from './modules/studio/instructor-routes.js';
+import {createPublicCatalogService} from './modules/studio/public-read.js';
+import {createPublicCatalogRouter} from './modules/studio/public-routes.js';
+import {createInstructorPhotoService} from './modules/studio/instructor-photos.js';
+import {createInstructorPhotoRouter,createPublicInstructorPhotoRouter} from './modules/studio/instructor-photo-routes.js';
+import {createDisciplineRouter} from './modules/studio/discipline-routes.js';
 import { pool } from './db.js';
 import { readPublicSettings } from './modules/foundation/settings.js';
 import type { Pool } from 'pg';
@@ -104,12 +114,19 @@ export async function createApplication(options: {
     const management = express.Router();
     management.use(protection.originGuard, identityCors);
     management.use(createManagementRouter(service));
+    management.use('/studio/disciplines',createDisciplineRouter(createDisciplineService(administration),protection.sessionMutation));
+    management.use('/studio/classes',createClassRouter(createClassService(administration),protection.sessionMutation));
+    const instructorPhotos=createInstructorPhotoService(database,administration);
+    management.use('/studio/instructors',createInstructorPhotoRouter(instructorPhotos,protection.sessionMutation));
+    management.use('/studio/instructors',createInstructorRouter(createInstructorService(database,administration),protection.sessionMutation));
+    app.use('/api/v1/studio/catalog',createPublicInstructorPhotoRouter(instructorPhotos));
     management.use((_req, res) => { res.status(404).json({ code: 'NOT_FOUND' }); });
     app.use('/api/v1/management', management);
   }
   const origins = (process.env.WEB_ORIGINS ?? process.env.WEB_ORIGIN ?? 'http://localhost:5173,http://localhost:5174').split(',').map(value => value.trim());
   app.use(cors({ origin: origins }));
   app.use(express.json({ limit: '100kb' }));
+  app.use('/api/v1/studio/catalog',createPublicCatalogRouter(createPublicCatalogService(database)));
   app.get('/api/v1/health', (_req, res) => res.json({ status: 'ok' }));
   app.get('/api/v1/settings/public', async (_req, res) => {
     try { res.json(await readPublicSettings(database)); }

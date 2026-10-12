@@ -7,6 +7,7 @@ import { Input } from '@conecta/ui/components/input';
 import { Alert, AlertDescription } from '@conecta/ui/components/alert';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader } from '@conecta/ui/components/dialog';
 import { CustomerAccess } from './CustomerAccess';
+import {PublicCatalog} from './studio/catalog';
 
 const api = createApiClient();
 export function FoundationApp() {
@@ -43,6 +44,7 @@ export function FoundationApp() {
       </div>
       {loading && <p role="status" className="my-5">{t('loading')}</p>}
       {failed && <Alert variant="destructive"><AlertDescription className="flex flex-wrap items-center justify-between gap-4">{t('unavailable')}<Button variant="outline" onClick={() => setRetry(value => value+1)}>{t('retry')}</Button></AlertDescription></Alert>}
+      <PublicCatalog api={api} t={t} locale={locale}/>
       <div className="grid gap-10 md:grid-cols-2">
         <section aria-labelledby="schedule"><h2 id="schedule" className="mb-5 text-2xl font-semibold">{t('schedule')}</h2>
           <label htmlFor="class-search" className="mb-2 block text-sm font-medium">{t('search')}</label><Input id="class-search" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('searchPlaceholder')} />

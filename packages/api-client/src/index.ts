@@ -2,6 +2,8 @@ import type { ApiErrorCode, CsrfResponse, LoginInput, LoginResponse, SessionResp
 import type {AccountListQuery,AccountListResponse,AccountProfile,AccountProfileInput,IdentityRole,RoleChangeInput,RoleChangeResponse} from '@conecta/contracts';
 import {createLifecycleClient} from './lifecycle.ts';
 import {createDependentClient} from './dependents.ts';
+import {createStudioClient} from './studio.ts';
+import {createCatalogClient} from './studio-catalog.ts';
 
 const identityRoles: readonly IdentityRole[]=['administrator','manager','reception','cafe_staff','instructor','customer'];
 const validId=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
@@ -98,6 +100,8 @@ export function createApiClient(baseUrl = '/api/v1', request: typeof fetch = fet
   }
   return {
     ...createDependentClient(send,familyMutation,code=>new ApiError(code)),
+    ...createStudioClient(send,familyMutation,code=>new ApiError(code)),
+    ...createCatalogClient(send,familyMutation,code=>new ApiError(code)),
     ...createLifecycleClient(send,familyMutation,code=>new ApiError(code)),
     getFamilyResponsibility:async(id:string,signal?:AbortSignal):Promise<import('@conecta/contracts').FamilyResponsibilityState>=>{
       if(!validId(id))throw new ApiError('INVALID_REQUEST');const result=await send<import('@conecta/contracts').FamilyResponsibilityState>(`/families/${id}/responsibility`,signal);

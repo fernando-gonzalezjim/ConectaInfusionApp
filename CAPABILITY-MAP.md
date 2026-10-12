@@ -49,7 +49,7 @@ All modules are in first-release scope. This ordering is a dependency outline, n
 
 ## Approval and next step
 
-The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](docs/idntityImplementation/SPEC-identity.md) was approved on October 3, 2026, including development fixtures and the confirmed account-management rules. Other listed specs have not been written. Plans and implementation follow their own review gates.
+The map is approved. [SPEC-foundation.md](SPEC-foundation.md) is implemented and technically verified. [SPEC-identity.md](docs/idntityImplementation/SPEC-identity.md) was approved on October 3, 2026, including development fixtures and the confirmed account-management rules. [SPEC-studio-catalog.md](docs/studioCatalogImplementation/SPEC-studio-catalog.md) was approved on October 11, 2026; its [implementation plan](docs/studioCatalogImplementation/studio-catalog-plan.md) and [C01-C33 checklist](docs/studioCatalogImplementation/studio-catalog-todo.md) were also approved on October 11, 2026, and C01-C06 implementation is complete; C07-C09 is the next batch. Other listed specs have not been written. Plans and implementation follow their own review gates.
 
 The [Identity implementation plan](docs/idntityImplementation/identity-plan.md) and [ordered checklist](docs/idntityImplementation/identity-todo.md) were approved on October 3, 2026. Local implementation used `feature/identity-implementation`; the approved specification remains unchanged.
 
